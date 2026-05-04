@@ -1,0 +1,48 @@
+import uuid
+from datetime import date, datetime, timezone
+from sqlalchemy import String, ForeignKey, Date, DateTime, Enum as SAEnum, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.dialects.postgresql import UUID
+from app.db.base import Base, TimestampMixin, UUIDPrimaryKey
+import enum
+
+
+class AttendanceStatus(str, enum.Enum):
+    PRESENT = "present"
+    ABSENT = "absent"
+    LATE = "late"
+    EXCUSED = "excused"
+
+
+class SessionStatus(str, enum.Enum):
+    OPEN = "open"
+    CLOSED = "closed"
+
+
+class AttendanceSession(UUIDPrimaryKey, TimestampMixin, Base):
+    __tablename__ = "attendance_sessions"
+    __table_args__ = (
+        UniqueConstraint("section_id", "subject_id", "session_date"),
+    )
+
+    section_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("sections.id"), nullable=False, index=True)
+    subject_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("subjects.id"), nullable=False)
+    teacher_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("teachers.id"), nullable=False)
+    academic_year_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=False)
+    session_date: Mapped[date] = mapped_column(Date, nullable=False)
+    status: Mapped[SessionStatus] = mapped_column(SAEnum(SessionStatus), default=SessionStatus.OPEN, nullable=False)
+
+    records: Mapped[list["AttendanceRecord"]] = relationship(back_populates="session", cascade="all, delete-orphan")
+
+
+class AttendanceRecord(UUIDPrimaryKey, Base):
+    __tablename__ = "attendance_records"
+    __table_args__ = (UniqueConstraint("session_id", "student_id"),)
+
+    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("attendance_sessions.id"), nullable=False, index=True)
+    student_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("students.id"), nullable=False, index=True)
+    status: Mapped[AttendanceStatus] = mapped_column(SAEnum(AttendanceStatus), nullable=False)
+    remarks: Mapped[str | None] = mapped_column(String(200))
+
+    session: Mapped["AttendanceSession"] = relationship(back_populates="records")
+    student: Mapped["Student"] = relationship()
