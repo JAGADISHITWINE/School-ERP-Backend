@@ -63,6 +63,16 @@ class StudentOut(BaseModel):
     guardian_phone: str | None
     full_name: str
     email: str
+    role_slug: str | None = None
+    current_branch_id: uuid.UUID | None = None
+    current_branch_name: str | None = None
+    current_class_id: uuid.UUID | None = None
+    current_class_name: str | None = None
+    current_section_id: uuid.UUID | None = None
+    current_section_name: str | None = None
+    current_academic_year_id: uuid.UUID | None = None
+    current_academic_year_label: str | None = None
+    current_status: StudentStatus | None = None
     created_at: datetime
 
     class Config:

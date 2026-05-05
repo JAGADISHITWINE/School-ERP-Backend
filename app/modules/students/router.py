@@ -6,6 +6,9 @@ from app.db.session import get_db
 from app.modules.students import service
 from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate, StudentOut, AcademicRecordOut
 from app.modules.users.model import User
+from app.modules.students.model import StudentAcademicRecord
+from app.modules.academic.model import Branch, Class, Section, AcademicYear
+from app.modules.roles.model import Role, UserRole
 from app.core.dependencies import CurrentUser, require_permission
 from app.constants.permissions import STUDENT_CREATE, STUDENT_READ, STUDENT_UPDATE
 from app.utils.response import ok, paginated
@@ -15,6 +18,58 @@ router = APIRouter(prefix="/students", tags=["Students"])
 
 DB = Annotated[AsyncSession, Depends(get_db)]
 Pagination = Annotated[PaginationParams, Depends()]
+
+
+async def _current_academic_snapshot(db: AsyncSession, student_id):
+    row = (
+        await db.execute(
+            select(
+                StudentAcademicRecord.branch_id,
+                Branch.name,
+                StudentAcademicRecord.section_id,
+                Section.name,
+                Class.id,
+                Class.name,
+                StudentAcademicRecord.academic_year_id,
+                AcademicYear.label,
+                StudentAcademicRecord.status,
+            )
+            .join(Branch, Branch.id == StudentAcademicRecord.branch_id)
+            .join(Section, Section.id == StudentAcademicRecord.section_id)
+            .join(Class, Class.id == Section.class_id)
+            .join(AcademicYear, AcademicYear.id == StudentAcademicRecord.academic_year_id)
+            .where(
+                StudentAcademicRecord.student_id == student_id,
+                StudentAcademicRecord.exited_at == None,
+            )
+            .limit(1)
+        )
+    ).first()
+    if not row:
+        return {}
+    return {
+        "current_branch_id": str(row[0]) if row[0] else None,
+        "current_branch_name": row[1],
+        "current_section_id": str(row[2]) if row[2] else None,
+        "current_section_name": row[3],
+        "current_class_id": str(row[4]) if row[4] else None,
+        "current_class_name": row[5],
+        "current_academic_year_id": str(row[6]) if row[6] else None,
+        "current_academic_year_label": row[7],
+        "current_status": row[8],
+    }
+
+
+async def _user_role_slug(db: AsyncSession, user_id):
+    row = (
+        await db.execute(
+            select(Role.slug)
+            .join(UserRole, UserRole.role_id == Role.id)
+            .where(UserRole.user_id == user_id)
+            .limit(1)
+        )
+    ).first()
+    return row[0] if row else None
 
 
 @router.post("", response_model=dict, dependencies=[Depends(require_permission(STUDENT_CREATE))])
@@ -31,9 +86,22 @@ async def list_students(current_user: CurrentUser, db: DB, pagination: Paginatio
     out = []
     for s in students:
         user = (await db.execute(select(User).where(User.id == s.user_id))).scalar_one()
-        d = StudentOut.model_validate(s).model_dump()
-        d["full_name"] = user.full_name
-        d["email"] = user.email
+        current = await _current_academic_snapshot(db, s.id)
+        role_slug = await _user_role_slug(db, s.user_id)
+        d = {
+            "id": str(s.id),
+            "user_id": str(s.user_id),
+            "roll_number": s.roll_number,
+            "date_of_birth": s.date_of_birth,
+            "gender": s.gender,
+            "guardian_name": s.guardian_name,
+            "guardian_phone": s.guardian_phone,
+            "full_name": user.full_name,
+            "email": user.email,
+            "role_slug": role_slug,
+            "created_at": s.created_at,
+            **current,
+        }
         out.append(d)
     return paginated(out, total, pagination.page, pagination.page_size)
 
@@ -42,9 +110,22 @@ async def list_students(current_user: CurrentUser, db: DB, pagination: Paginatio
 async def get_student(student_id: str, db: DB):
     student = await service.get_student(db, student_id)
     user = (await db.execute(select(User).where(User.id == student.user_id))).scalar_one()
-    d = StudentOut.model_validate(student).model_dump()
-    d["full_name"] = user.full_name
-    d["email"] = user.email
+    current = await _current_academic_snapshot(db, student.id)
+    role_slug = await _user_role_slug(db, student.user_id)
+    d = {
+        "id": str(student.id),
+        "user_id": str(student.user_id),
+        "roll_number": student.roll_number,
+        "date_of_birth": student.date_of_birth,
+        "gender": student.gender,
+        "guardian_name": student.guardian_name,
+        "guardian_phone": student.guardian_phone,
+        "full_name": user.full_name,
+        "email": user.email,
+        "role_slug": role_slug,
+        "created_at": student.created_at,
+        **current,
+    }
     return ok(data=d)
 
 

@@ -117,7 +117,12 @@ async def list_subjects(db, branch_id, offset, limit):
     return await _list(db, Subject, Subject.branch_id, branch_id, offset, limit)
 
 async def update_subject(db, id_, data: SubjectUpdate):
-    return await _update(db, Subject, id_, data)
+    obj = await _get_or_404(db, Subject, id_)
+    incoming = data.model_dump(exclude_unset=True)
+    for k, v in incoming.items():
+        setattr(obj, k, v)
+    await db.flush()
+    return obj
 
 
 # ─── Class ─────────────────────────────────────────────────────────────────
@@ -131,7 +136,12 @@ async def list_classes(db, branch_id, offset, limit):
     return await _list(db, Class, Class.branch_id, branch_id, offset, limit)
 
 async def update_class(db, id_, data: ClassUpdate):
-    return await _update(db, Class, id_, data)
+    obj = await _get_or_404(db, Class, id_)
+    incoming = data.model_dump(exclude_unset=True)
+    for k, v in incoming.items():
+        setattr(obj, k, v)
+    await db.flush()
+    return obj
 
 
 # ─── Section ───────────────────────────────────────────────────────────────

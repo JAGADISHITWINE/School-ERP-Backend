@@ -47,7 +47,13 @@ MENU_DEFS = [
     ("Subjects",     "/academic/subjects",  "BookMarked",      3,  "Academic"),
     ("Classes",      "/academic/classes",   "School",          4,  "Academic"),
     ("Sections",     "/academic/sections",  "Layers",          5,  "Academic"),
-    ("Students",     "/students",           "Users",           3,  None),
+    ("Students",     None,                  "Users",           3,  None),
+    ("Registry",     "/students/registry",  "Users",           1,  "Students"),
+    ("Admissions",   "/students/admissions","UserPlus",        2,  "Students"),
+    ("Academic Records","/students/academic-records","History",3,  "Students"),
+    ("Guardians",    "/students/guardians", "Phone",           4,  "Students"),
+    ("Documents",    "/students/documents", "FileText",        5,  "Students"),
+    ("Status",       "/students/status",    "ShieldCheck",     6,  "Students"),
     ("Teachers",     "/teachers",           "UserCheck",       4,  None),
     ("Attendance",   "/attendance",         "CalendarCheck",   5,  None),
     ("Exams",        "/exams",              "ClipboardList",   6,  None),
@@ -128,6 +134,7 @@ async def seed():
         superadmin_role = await get_or_create_role("Super Admin", "superadmin", "Full access")
         admin_role = await get_or_create_role("Admin", "admin", "Institution admin")
         teacher_role = await get_or_create_role("Teacher", "teacher", "Teaching staff")
+        student_role = await get_or_create_role("Student", "student", "Student account")
 
         async def ensure_role_perm(role_id, perm_id):
             rp = await get_one(db, RolePermission, RolePermission.role_id == role_id, RolePermission.permission_id == perm_id)

@@ -55,8 +55,8 @@ class Subject(UUIDPrimaryKey, TimestampMixin, Base):
     branch_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("branches.id"), nullable=False, index=True
     )
-    academic_year_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=False, index=True
+    academic_year_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=True, index=True
     )
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     code: Mapped[str] = mapped_column(String(20), nullable=False)
@@ -72,8 +72,8 @@ class Class(UUIDPrimaryKey, TimestampMixin, Base):
     branch_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("branches.id"), nullable=False, index=True
     )
-    academic_year_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=False, index=True
+    academic_year_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=True, index=True
     )
     name: Mapped[str] = mapped_column(String(100), nullable=False)  # e.g. "Second Year"
     semester: Mapped[int] = mapped_column(Integer, nullable=False)

@@ -5,6 +5,7 @@ from app.db.session import get_db
 from app.modules.auth import service
 from app.modules.auth.schema import LoginRequest, TokenResponse, RefreshRequest
 from app.modules.users.model import User
+from app.modules.roles.model import Role, UserRole
 from app.core.dependencies import CurrentUser
 from app.utils.response import ok
 from sqlalchemy import select
@@ -40,6 +41,16 @@ async def me(
     row = result.first()
     user, organization = row
 
+    role_row = (
+        await db.execute(
+            select(Role.slug, Role.name)
+            .join(UserRole, UserRole.role_id == Role.id)
+            .where(UserRole.user_id == user.id)
+            .limit(1)
+        )
+    ).first()
+    role_slug, role_name = role_row if role_row else (None, None)
+
     return ok(
         data={
             "id": str(user.id),
@@ -50,5 +61,7 @@ async def me(
             "organization_id": str(organization.id),
             "organization_name": organization.name,
             "is_superuser": user.is_superuser,
+            "role": role_slug,
+            "role_name": role_name,
         }
     )
