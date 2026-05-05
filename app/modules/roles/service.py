@@ -1,8 +1,19 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, delete, func
-from app.modules.roles.model import Role, UserRole, RolePermission, Permission
+from app.modules.roles.model import Role, UserRole, RolePermission, Permission, RoleMenu, Menu
 from app.modules.roles.schema import RoleCreate, RoleUpdate
-from app.core.exceptions import NotFoundError, ConflictError
+from app.core.exceptions import NotFoundError, ConflictError, ValidationError
+
+
+async def get_role_for_institution(db: AsyncSession, role_id: str, institution_id: str) -> Role:
+    role = (
+        await db.execute(
+            select(Role).where(Role.id == role_id, Role.institution_id == institution_id)
+        )
+    ).scalar_one_or_none()
+    if not role:
+        raise NotFoundError("Role not found")
+    return role
 
 
 async def create_role(db: AsyncSession, data: RoleCreate) -> Role:
@@ -36,12 +47,55 @@ async def update_role(db: AsyncSession, role_id: str, data: RoleUpdate) -> Role:
     return role
 
 
-async def assign_permissions(db: AsyncSession, role_id: str, permission_ids: list[str]):
+async def get_role_access(db: AsyncSession, role_id: str, institution_id: str):
+    role = await get_role_for_institution(db, role_id, institution_id)
+    permission_ids = (
+        await db.execute(
+            select(RolePermission.permission_id).where(RolePermission.role_id == role.id)
+        )
+    ).scalars().all()
+    menu_ids = (
+        await db.execute(select(RoleMenu.menu_id).where(RoleMenu.role_id == role.id))
+    ).scalars().all()
+    return role, permission_ids, menu_ids
+
+
+async def assign_permissions(
+    db: AsyncSession, role_id: str, institution_id: str, permission_ids: list[str]
+):
+    role = await get_role_for_institution(db, role_id, institution_id)
+    if permission_ids:
+        existing = (
+            await db.execute(select(Permission.id).where(Permission.id.in_(permission_ids)))
+        ).scalars().all()
+        if len(set(existing)) != len(set(permission_ids)):
+            raise ValidationError("One or more permissions are invalid")
+
     await db.execute(delete(RolePermission).where(RolePermission.role_id == role_id))
     if permission_ids:
         await db.execute(
             insert(RolePermission),
-            [{"role_id": role_id, "permission_id": pid} for pid in permission_ids],
+            [{"role_id": role.id, "permission_id": pid} for pid in permission_ids],
+        )
+    await db.flush()
+
+
+async def assign_menus(
+    db: AsyncSession, role_id: str, institution_id: str, menu_ids: list[str]
+):
+    role = await get_role_for_institution(db, role_id, institution_id)
+    if menu_ids:
+        existing = (
+            await db.execute(select(Menu.id).where(Menu.id.in_(menu_ids)))
+        ).scalars().all()
+        if len(set(existing)) != len(set(menu_ids)):
+            raise ValidationError("One or more menus are invalid")
+
+    await db.execute(delete(RoleMenu).where(RoleMenu.role_id == role.id))
+    if menu_ids:
+        await db.execute(
+            insert(RoleMenu),
+            [{"role_id": role.id, "menu_id": mid} for mid in menu_ids],
         )
     await db.flush()
 

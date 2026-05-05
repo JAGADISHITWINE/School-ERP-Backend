@@ -39,6 +39,12 @@ class RoleOut(BaseModel):
         from_attributes = True
 
 
+class RoleAccessOut(BaseModel):
+    role: RoleOut
+    permission_ids: list[uuid.UUID]
+    menu_ids: list[uuid.UUID]
+
+
 class AssignPermissionsRequest(BaseModel):
     permission_ids: list[uuid.UUID]
 

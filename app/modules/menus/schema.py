@@ -18,6 +18,19 @@ class MenuUpdate(BaseModel):
     is_active: bool | None = None
 
 
+class MenuOut(BaseModel):
+    id: uuid.UUID
+    parent_id: uuid.UUID | None
+    label: str
+    route: str | None
+    icon: str | None
+    order_no: int
+    is_active: bool
+
+    class Config:
+        from_attributes = True
+
+
 class MenuNode(BaseModel):
     id: uuid.UUID
     parent_id: uuid.UUID | None

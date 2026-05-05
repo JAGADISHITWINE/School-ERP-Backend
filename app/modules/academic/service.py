@@ -56,7 +56,23 @@ async def list_academic_years(db, institution_id, offset, limit):
     return await _list(db, AcademicYear, AcademicYear.institution_id, institution_id, offset, limit)
 
 async def update_academic_year(db, id_, data: AcademicYearUpdate):
-    return await _update(db, AcademicYear, id_, data)
+    obj = await _get_or_404(db, AcademicYear, id_)
+    incoming = data.model_dump(exclude_none=True)
+    if incoming.get("is_current") is True:
+        others = (await db.execute(
+            select(AcademicYear).where(
+                AcademicYear.institution_id == obj.institution_id,
+                AcademicYear.id != obj.id,
+                AcademicYear.is_current == True,
+            )
+        )).scalars().all()
+        for other in others:
+            other.is_current = False
+
+    for k, v in incoming.items():
+        setattr(obj, k, v)
+    await db.flush()
+    return obj
 
 
 # ─── Course ────────────────────────────────────────────────────────────────
