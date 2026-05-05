@@ -8,7 +8,8 @@ from app.modules.users.model import User
 from app.core.dependencies import CurrentUser
 from app.utils.response import ok
 from sqlalchemy import select
-
+from app.modules.organizations.model import Organization
+from app.modules.institutions.model import Institution
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
@@ -25,9 +26,20 @@ async def refresh(payload: RefreshRequest, db: Annotated[AsyncSession, Depends(g
 
 
 @router.get("/me", response_model=dict, summary="Get current user profile")
-async def me(current_user: CurrentUser, db: Annotated[AsyncSession, Depends(get_db)]):
-    result = await db.execute(select(User).where(User.id == current_user["id"]))
-    user = result.scalar_one()
+async def me(
+    current_user: CurrentUser,
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
+    result = await db.execute(
+        select(User, Organization)
+        .join(Institution, User.institution_id == Institution.id)
+        .join(Organization, Institution.org_id == Organization.id)
+        .where(User.id == current_user["id"])
+    )
+
+    row = result.first()
+    user, organization = row
+
     return ok(
         data={
             "id": str(user.id),
@@ -35,6 +47,8 @@ async def me(current_user: CurrentUser, db: Annotated[AsyncSession, Depends(get_
             "username": user.username,
             "full_name": user.full_name,
             "institution_id": str(user.institution_id),
+            "organization_id": str(organization.id),
+            "organization_name": organization.name,
             "is_superuser": user.is_superuser,
         }
     )
