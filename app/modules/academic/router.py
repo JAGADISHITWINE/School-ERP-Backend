@@ -33,7 +33,7 @@ async def create_academic_year(payload: AcademicYearCreate, db: DB):
     obj = await service.create_academic_year(db, payload)
     return ok(data=AcademicYearOut.model_validate(obj).model_dump(), message="Academic year created")
 
-@router.get("/academic-years", response_model=dict)
+@router.get("/academic-years", response_model=dict, dependencies=[perm(ACADEMIC_YEAR_MANAGE)])
 async def list_academic_years(institution_id: str, db: DB, pagination: Pagination):
     items, total = await service.list_academic_years(db, institution_id, pagination.offset, pagination.page_size)
     return paginated([AcademicYearOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
@@ -51,7 +51,7 @@ async def create_course(payload: CourseCreate, db: DB):
     obj = await service.create_course(db, payload)
     return ok(data=CourseOut.model_validate(obj).model_dump(), message="Course created")
 
-@router.get("/courses", response_model=dict)
+@router.get("/courses", response_model=dict, dependencies=[perm(COURSE_MANAGE)])
 async def list_courses(institution_id: str, db: DB, pagination: Pagination):
     items, total = await service.list_courses(db, institution_id, pagination.offset, pagination.page_size)
     return paginated([CourseOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
@@ -69,7 +69,7 @@ async def create_branch(payload: BranchCreate, db: DB):
     obj = await service.create_branch(db, payload)
     return ok(data=BranchOut.model_validate(obj).model_dump(), message="Branch created")
 
-@router.get("/branches", response_model=dict)
+@router.get("/branches", response_model=dict, dependencies=[perm(BRANCH_MANAGE)])
 async def list_branches(course_id: str, db: DB, pagination: Pagination):
     items, total = await service.list_branches(db, course_id, pagination.offset, pagination.page_size)
     return paginated([BranchOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
@@ -87,7 +87,7 @@ async def create_subject(payload: SubjectCreate, db: DB):
     obj = await service.create_subject(db, payload)
     return ok(data=SubjectOut.model_validate(obj).model_dump(), message="Subject created")
 
-@router.get("/subjects", response_model=dict)
+@router.get("/subjects", response_model=dict, dependencies=[perm(SUBJECT_MANAGE)])
 async def list_subjects(branch_id: str, db: DB, pagination: Pagination):
     items, total = await service.list_subjects(db, branch_id, pagination.offset, pagination.page_size)
     return paginated([SubjectOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
@@ -105,7 +105,7 @@ async def create_class(payload: ClassCreate, db: DB):
     obj = await service.create_class(db, payload)
     return ok(data=ClassOut.model_validate(obj).model_dump(), message="Class created")
 
-@router.get("/classes", response_model=dict)
+@router.get("/classes", response_model=dict, dependencies=[perm(CLASS_MANAGE)])
 async def list_classes(branch_id: str, db: DB, pagination: Pagination):
     items, total = await service.list_classes(db, branch_id, pagination.offset, pagination.page_size)
     return paginated([ClassOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
@@ -123,7 +123,7 @@ async def create_section(payload: SectionCreate, db: DB):
     obj = await service.create_section(db, payload)
     return ok(data=SectionOut.model_validate(obj).model_dump(), message="Section created")
 
-@router.get("/sections", response_model=dict)
+@router.get("/sections", response_model=dict, dependencies=[perm(SECTION_MANAGE)])
 async def list_sections(class_id: str, db: DB, pagination: Pagination):
     items, total = await service.list_sections(db, class_id, pagination.offset, pagination.page_size)
     return paginated([SectionOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)

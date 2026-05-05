@@ -5,6 +5,7 @@ from datetime import datetime
 
 class UserCreate(BaseModel):
     institution_id: uuid.UUID
+    role_id: uuid.UUID | None = None
     email: EmailStr
     username: str
     password: str
@@ -13,6 +14,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
+    role_id: uuid.UUID | None = None
     full_name: str | None = None
     phone: str | None = None
     is_active: bool | None = None
@@ -21,6 +23,8 @@ class UserUpdate(BaseModel):
 class UserOut(BaseModel):
     id: uuid.UUID
     institution_id: uuid.UUID
+    role_id: uuid.UUID | None = None
+    role_name: str | None = None
     email: str
     username: str
     full_name: str

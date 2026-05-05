@@ -28,6 +28,11 @@ def _build_tree(menus: list[Menu]) -> list[dict]:
     return sorted(roots, key=lambda x: x["order_no"])
 
 
+async def list_menus(db: AsyncSession) -> list[Menu]:
+    result = await db.execute(select(Menu).order_by(Menu.order_no, Menu.label))
+    return result.scalars().all()
+
+
 async def get_user_menus(db: AsyncSession, user_id: str, is_superuser: bool) -> list[dict]:
     if is_superuser:
         result = await db.execute(
