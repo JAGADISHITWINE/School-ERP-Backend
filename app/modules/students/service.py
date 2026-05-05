@@ -3,9 +3,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from app.modules.students.model import Student, StudentAcademicRecord, StudentStatus
 from app.modules.users.model import User
+from app.modules.roles.model import Role, UserRole
 from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate
 from app.core.security import hash_password
 from app.core.exceptions import NotFoundError, ConflictError, BusinessRuleError
+
+
+async def _get_student_role(db: AsyncSession, institution_id) -> Role | None:
+    return (
+        await db.execute(
+            select(Role).where(
+                Role.institution_id == institution_id,
+                Role.slug == "student",
+            )
+        )
+    ).scalar_one_or_none()
 
 
 async def create_student(db: AsyncSession, data: StudentCreate) -> Student:
@@ -29,6 +41,11 @@ async def create_student(db: AsyncSession, data: StudentCreate) -> Student:
     )
     db.add(user)
     await db.flush()
+
+    student_role = await _get_student_role(db, data.institution_id)
+    if student_role:
+        db.add(UserRole(user_id=user.id, role_id=student_role.id))
+        await db.flush()
 
     # Create student profile
     student = Student(

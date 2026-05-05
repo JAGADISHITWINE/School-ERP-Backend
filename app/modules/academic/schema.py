@@ -88,14 +88,16 @@ class BranchOut(BaseModel):
 # Subject
 class SubjectCreate(BaseModel):
     branch_id: uuid.UUID
-    academic_year_id: uuid.UUID
+    academic_year_id: uuid.UUID | None = None
     name: str
     code: str
     credits: int = 0
 
 
 class SubjectUpdate(BaseModel):
+    academic_year_id: uuid.UUID | None = None
     name: str | None = None
+    code: str | None = None
     credits: int | None = None
     is_active: bool | None = None
 
@@ -103,7 +105,7 @@ class SubjectUpdate(BaseModel):
 class SubjectOut(BaseModel):
     id: uuid.UUID
     branch_id: uuid.UUID
-    academic_year_id: uuid.UUID
+    academic_year_id: uuid.UUID | None
     name: str
     code: str
     credits: int
@@ -116,12 +118,13 @@ class SubjectOut(BaseModel):
 # Class
 class ClassCreate(BaseModel):
     branch_id: uuid.UUID
-    academic_year_id: uuid.UUID
+    academic_year_id: uuid.UUID | None = None
     name: str
     semester: int
 
 
 class ClassUpdate(BaseModel):
+    academic_year_id: uuid.UUID | None = None
     name: str | None = None
     semester: int | None = None
 
@@ -129,7 +132,7 @@ class ClassUpdate(BaseModel):
 class ClassOut(BaseModel):
     id: uuid.UUID
     branch_id: uuid.UUID
-    academic_year_id: uuid.UUID
+    academic_year_id: uuid.UUID | None
     name: str
     semester: int
 
