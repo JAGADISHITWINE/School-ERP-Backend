@@ -23,6 +23,7 @@ class RoleCreate(BaseModel):
 
 class RoleUpdate(BaseModel):
     name: str | None = None
+    slug: str | None = None
     description: str | None = None
 
 
