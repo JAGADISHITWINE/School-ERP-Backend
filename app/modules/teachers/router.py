@@ -16,6 +16,12 @@ from app.modules.teachers.schema import (
     TeacherTimetableCreate,
     TeacherTimetableUpdate,
     TeacherTimetableOut,
+    HODLinkCreate,
+    HODLinkUpdate,
+    HODLinkOut,
+    TeacherHODSubjectLinkCreate,
+    TeacherHODSubjectLinkUpdate,
+    TeacherHODSubjectLinkOut,
 )
 from app.modules.users.model import User
 from app.core.dependencies import CurrentUser, require_permission
@@ -53,6 +59,12 @@ async def list_teacher_candidates(current_user: CurrentUser, db: DB):
         for user in users
     ]
     return ok(data=items)
+
+
+@router.get("/hod-candidates", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def list_hod_candidates(current_user: CurrentUser, db: DB):
+    rows = await service.list_hod_teacher_candidates(db, current_user["institution_id"])
+    return ok(data=rows)
 
 
 @router.get("", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
@@ -125,6 +137,103 @@ async def assign_class(teacher_id: str, payload: TeacherClassAssignRequest, db: 
 async def remove_class(teacher_id: str, class_id: str, db: DB):
     await service.remove_class(db, teacher_id, class_id)
     return ok(message="Class unlinked from teacher")
+
+
+@router.post("/links/hod", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def create_hod_link(payload: HODLinkCreate, db: DB):
+    link = await service.create_hod_link(
+        db,
+        payload.hod_teacher_id,
+        payload.institution_id,
+        payload.course_id,
+        payload.branch_id,
+        payload.hod_user_id,
+    )
+    return ok(data={"id": str(link.id)}, message="HOD linked")
+
+
+@router.get("/links/hod", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def list_hod_links(
+    db: DB,
+    institution_id: str | None = None,
+    course_id: str | None = None,
+    branch_id: str | None = None,
+):
+    rows = await service.list_hod_links(db, institution_id=institution_id, course_id=course_id, branch_id=branch_id)
+    return ok(data=[HODLinkOut(**row).model_dump() for row in rows])
+
+
+@router.delete("/links/hod/{link_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def remove_hod_link(link_id: str, db: DB):
+    await service.remove_hod_link(db, link_id)
+    return ok(message="HOD link removed")
+
+
+@router.patch("/links/hod/{link_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def update_hod_link(link_id: str, payload: HODLinkUpdate, db: DB):
+    link = await service.update_hod_link(
+        db,
+        link_id,
+        payload.hod_teacher_id,
+        payload.institution_id,
+        payload.course_id,
+        payload.branch_id,
+        payload.hod_user_id,
+    )
+    return ok(data={"id": str(link.id)}, message="HOD link updated")
+
+
+@router.post("/links/teacher-hod-subjects", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def create_teacher_hod_subject_links(payload: TeacherHODSubjectLinkCreate, db: DB):
+    links = await service.create_teacher_hod_subject_links(
+        db,
+        payload.teacher_id,
+        payload.hod_link_id,
+        payload.subject_ids,
+    )
+    return ok(
+        data={"created_ids": [str(link.id) for link in links], "created_count": len(links)},
+        message="Teacher linked with HOD subjects",
+    )
+
+
+@router.get("/links/teacher-hod-subjects", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def list_teacher_hod_subject_links(
+    db: DB,
+    institution_id: str | None = None,
+    course_id: str | None = None,
+    branch_id: str | None = None,
+):
+    rows = await service.list_teacher_hod_subject_links(
+        db, institution_id=institution_id, course_id=course_id, branch_id=branch_id
+    )
+    return ok(data=[TeacherHODSubjectLinkOut(**row).model_dump() for row in rows])
+
+
+@router.delete(
+    "/links/teacher-hod-subjects/{link_id}",
+    response_model=dict,
+    dependencies=[Depends(require_permission(TEACHER_UPDATE))],
+)
+async def remove_teacher_hod_subject_link(link_id: str, db: DB):
+    await service.remove_teacher_hod_subject_link(db, link_id)
+    return ok(message="Teacher-HOD subject link removed")
+
+
+@router.patch(
+    "/links/teacher-hod-subjects/{link_id}",
+    response_model=dict,
+    dependencies=[Depends(require_permission(TEACHER_UPDATE))],
+)
+async def update_teacher_hod_subject_link(link_id: str, payload: TeacherHODSubjectLinkUpdate, db: DB):
+    link = await service.update_teacher_hod_subject_link(
+        db,
+        link_id,
+        payload.teacher_id,
+        payload.hod_link_id,
+        payload.subject_id,
+    )
+    return ok(data={"id": str(link.id)}, message="Teacher-HOD subject link updated")
 
 
 @router.get("/{teacher_id}/timetable", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])

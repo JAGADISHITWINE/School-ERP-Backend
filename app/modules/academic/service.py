@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, or_
 from app.modules.academic.model import AcademicYear, Course, Branch, Subject, Class, Section
 from app.modules.academic.schema import (
     AcademicYearCreate, AcademicYearUpdate,
@@ -116,7 +116,14 @@ async def create_subject(db, data: SubjectCreate):
 async def list_subjects(db, class_id, offset, limit, branch_id=None):
     if class_id:
         return await _list(db, Subject, Subject.class_id, class_id, offset, limit)
-    return await _list(db, Subject, Subject.branch_id, branch_id, offset, limit)
+    q = select(Subject)
+    if branch_id:
+        q = q.join(Class, Class.id == Subject.class_id).where(
+            or_(Subject.branch_id == branch_id, Class.branch_id == branch_id)
+        )
+    total = (await db.execute(select(func.count()).select_from(q.subquery()))).scalar()
+    result = await db.execute(q.offset(offset).limit(limit))
+    return result.scalars().all(), total
 
 async def update_subject(db, id_, data: SubjectUpdate):
     obj = await _get_or_404(db, Subject, id_)

@@ -136,3 +136,70 @@ class TeacherOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class HODLinkCreate(BaseModel):
+    hod_teacher_id: uuid.UUID | None = None
+    hod_user_id: uuid.UUID | None = None
+    institution_id: uuid.UUID
+    course_id: uuid.UUID
+    branch_id: uuid.UUID
+
+    @model_validator(mode="after")
+    def validate_hod_source(self):
+        if not self.hod_teacher_id and not self.hod_user_id:
+            raise ValueError("Provide hod_teacher_id or hod_user_id")
+        return self
+
+
+class HODLinkUpdate(BaseModel):
+    hod_teacher_id: uuid.UUID | None = None
+    hod_user_id: uuid.UUID | None = None
+    institution_id: uuid.UUID
+    course_id: uuid.UUID
+    branch_id: uuid.UUID
+
+    @model_validator(mode="after")
+    def validate_hod_source(self):
+        if not self.hod_teacher_id and not self.hod_user_id:
+            raise ValueError("Provide hod_teacher_id or hod_user_id")
+        return self
+
+
+class HODLinkOut(BaseModel):
+    id: uuid.UUID
+    hod_teacher_id: uuid.UUID
+    hod_teacher_name: str
+    institution_id: uuid.UUID
+    course_id: uuid.UUID
+    course_name: str
+    branch_id: uuid.UUID
+    branch_name: str
+
+
+class TeacherHODSubjectLinkCreate(BaseModel):
+    teacher_id: uuid.UUID
+    hod_link_id: uuid.UUID
+    subject_ids: list[uuid.UUID] = Field(default_factory=list, min_length=1)
+
+
+class TeacherHODSubjectLinkUpdate(BaseModel):
+    teacher_id: uuid.UUID
+    hod_link_id: uuid.UUID
+    subject_id: uuid.UUID
+
+
+class TeacherHODSubjectLinkOut(BaseModel):
+    id: uuid.UUID
+    teacher_id: uuid.UUID
+    teacher_name: str
+    hod_link_id: uuid.UUID
+    hod_teacher_id: uuid.UUID
+    hod_teacher_name: str
+    institution_id: uuid.UUID
+    course_id: uuid.UUID
+    course_name: str
+    branch_id: uuid.UUID
+    branch_name: str
+    subject_id: uuid.UUID
+    subject_name: str

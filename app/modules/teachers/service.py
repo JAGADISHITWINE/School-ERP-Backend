@@ -1,9 +1,19 @@
 from datetime import date, time
+import uuid
 from io import BytesIO, StringIO
 import csv
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, literal, or_
-from app.modules.teachers.model import Teacher, TeacherSubject, TeacherClass, TeacherTimetable, TimetableDay
+from sqlalchemy.orm import aliased
+from app.modules.teachers.model import (
+    Teacher,
+    TeacherSubject,
+    TeacherClass,
+    TeacherTimetable,
+    TimetableDay,
+    HODLink,
+    TeacherHODSubjectLink,
+)
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
 from app.modules.academic.model import Class, Branch, Course, AcademicYear, Section, Subject
@@ -122,6 +132,36 @@ async def list_teacher_candidates(db: AsyncSession, institution_id: str):
         )
     ).scalars().all()
     return rows
+
+
+async def list_hod_teacher_candidates(db: AsyncSession, institution_id: str):
+    rows = (
+        await db.execute(
+            select(User.id, Teacher.id, User.full_name, Teacher.employee_code)
+            .select_from(User)
+            .outerjoin(Teacher, Teacher.user_id == User.id)
+            .join(UserRole, UserRole.user_id == User.id)
+            .join(Role, Role.id == UserRole.role_id)
+            .where(
+                User.institution_id == institution_id,
+                or_(
+                    func.lower(Role.slug) == "hod",
+                    func.lower(Role.name) == "hod",
+                    func.lower(Role.name).like("%hod%"),
+                ),
+            )
+            .order_by(User.full_name.asc())
+        )
+    ).all()
+    return [
+        {
+            "user_id": str(row[0]),
+            "teacher_id": str(row[1]) if row[1] else None,
+            "full_name": row[2],
+            "employee_code": row[3] or "-",
+        }
+        for row in rows
+    ]
 
 
 async def assign_subject(db: AsyncSession, teacher_id: str, data: SubjectAssignRequest) -> TeacherSubject:
@@ -449,6 +489,352 @@ async def remove_class(db: AsyncSession, teacher_id: str, class_id: str) -> None
         raise BusinessRuleError("Remove timetable entries for this class before unlinking it")
 
     await db.delete(teacher_class)
+
+
+async def create_hod_link(
+    db: AsyncSession,
+    hod_teacher_id,
+    institution_id,
+    course_id,
+    branch_id,
+    hod_user_id=None,
+) -> HODLink:
+    hod_teacher = None
+    hod_user = None
+    if hod_teacher_id:
+        hod_teacher = await get_teacher(db, str(hod_teacher_id))
+        hod_user = (await db.execute(select(User).where(User.id == hod_teacher.user_id))).scalar_one()
+    elif hod_user_id:
+        hod_user = (await db.execute(select(User).where(User.id == hod_user_id))).scalar_one_or_none()
+        if not hod_user:
+            raise NotFoundError("HOD user not found")
+        hod_teacher = (await db.execute(select(Teacher).where(Teacher.user_id == hod_user.id))).scalar_one_or_none()
+        if not hod_teacher:
+            base = f"HOD-{str(hod_user.id).replace('-', '')[:8]}".upper()
+            employee_code = base
+            while True:
+                exists = (
+                    await db.execute(select(Teacher.id).where(Teacher.employee_code == employee_code))
+                ).first()
+                if not exists:
+                    break
+                employee_code = f"{base}-{uuid.uuid4().hex[:4].upper()}"
+            hod_teacher = Teacher(user_id=hod_user.id, employee_code=employee_code, designation="HOD")
+            db.add(hod_teacher)
+            await db.flush()
+    else:
+        raise ValidationError("Provide hod_teacher_id or hod_user_id")
+
+    course = (
+        await db.execute(select(Course).where(Course.id == course_id))
+    ).scalar_one_or_none()
+    if not course:
+        raise NotFoundError("Course not found")
+    if course.institution_id != institution_id:
+        raise ValidationError("Course does not belong to selected institution")
+
+    branch = (
+        await db.execute(select(Branch).where(Branch.id == branch_id))
+    ).scalar_one_or_none()
+    if not branch:
+        raise NotFoundError("Branch not found")
+    if branch.course_id != course.id:
+        raise ValidationError("Branch does not belong to selected course")
+    if hod_user.institution_id != institution_id:
+        raise ValidationError("Selected HOD teacher does not belong to selected institution")
+
+    existing = (
+        await db.execute(
+            select(HODLink).where(
+                HODLink.hod_teacher_id == hod_teacher.id,
+                HODLink.institution_id == institution_id,
+                HODLink.course_id == course.id,
+                HODLink.branch_id == branch.id,
+            )
+        )
+    ).scalar_one_or_none()
+    if existing:
+        raise ConflictError("HOD link already exists")
+
+    link = HODLink(
+        hod_teacher_id=hod_teacher.id,
+        institution_id=institution_id,
+        course_id=course.id,
+        branch_id=branch.id,
+    )
+    db.add(link)
+    await db.flush()
+    await db.refresh(link)
+    return link
+
+
+async def list_hod_links(
+    db: AsyncSession,
+    institution_id: str | None = None,
+    course_id: str | None = None,
+    branch_id: str | None = None,
+) -> list[dict]:
+    q = (
+        select(
+            HODLink.id,
+            HODLink.hod_teacher_id,
+            User.full_name.label("hod_teacher_name"),
+            HODLink.institution_id,
+            HODLink.course_id,
+            Course.name.label("course_name"),
+            HODLink.branch_id,
+            Branch.name.label("branch_name"),
+        )
+        .join(Teacher, Teacher.id == HODLink.hod_teacher_id)
+        .join(User, User.id == Teacher.user_id)
+        .join(Course, Course.id == HODLink.course_id)
+        .join(Branch, Branch.id == HODLink.branch_id)
+    )
+    if institution_id:
+        q = q.where(HODLink.institution_id == institution_id)
+    if course_id:
+        q = q.where(HODLink.course_id == course_id)
+    if branch_id:
+        q = q.where(HODLink.branch_id == branch_id)
+
+    rows = (await db.execute(q.order_by(User.full_name.asc()))).mappings().all()
+    return [dict(row) for row in rows]
+
+
+async def remove_hod_link(db: AsyncSession, link_id: str) -> None:
+    link = (await db.execute(select(HODLink).where(HODLink.id == link_id))).scalar_one_or_none()
+    if not link:
+        raise NotFoundError("HOD link not found")
+    await db.delete(link)
+
+
+async def update_hod_link(
+    db: AsyncSession,
+    link_id: str,
+    hod_teacher_id,
+    institution_id,
+    course_id,
+    branch_id,
+    hod_user_id=None,
+) -> HODLink:
+    link = (await db.execute(select(HODLink).where(HODLink.id == link_id))).scalar_one_or_none()
+    if not link:
+        raise NotFoundError("HOD link not found")
+
+    hod_teacher = None
+    hod_user = None
+    if hod_teacher_id:
+        hod_teacher = await get_teacher(db, str(hod_teacher_id))
+        hod_user = (await db.execute(select(User).where(User.id == hod_teacher.user_id))).scalar_one()
+    elif hod_user_id:
+        hod_user = (await db.execute(select(User).where(User.id == hod_user_id))).scalar_one_or_none()
+        if not hod_user:
+            raise NotFoundError("HOD user not found")
+        hod_teacher = (await db.execute(select(Teacher).where(Teacher.user_id == hod_user.id))).scalar_one_or_none()
+        if not hod_teacher:
+            base = f"HOD-{str(hod_user.id).replace('-', '')[:8]}".upper()
+            employee_code = base
+            while True:
+                exists = (
+                    await db.execute(select(Teacher.id).where(Teacher.employee_code == employee_code))
+                ).first()
+                if not exists:
+                    break
+                employee_code = f"{base}-{uuid.uuid4().hex[:4].upper()}"
+            hod_teacher = Teacher(user_id=hod_user.id, employee_code=employee_code, designation="HOD")
+            db.add(hod_teacher)
+            await db.flush()
+    else:
+        raise ValidationError("Provide hod_teacher_id or hod_user_id")
+
+    course = (await db.execute(select(Course).where(Course.id == course_id))).scalar_one_or_none()
+    if not course:
+        raise NotFoundError("Course not found")
+    if course.institution_id != institution_id:
+        raise ValidationError("Course does not belong to selected institution")
+
+    branch = (await db.execute(select(Branch).where(Branch.id == branch_id))).scalar_one_or_none()
+    if not branch:
+        raise NotFoundError("Branch not found")
+    if branch.course_id != course.id:
+        raise ValidationError("Branch does not belong to selected course")
+    if hod_user.institution_id != institution_id:
+        raise ValidationError("Selected HOD teacher does not belong to selected institution")
+
+    existing = (
+        await db.execute(
+            select(HODLink).where(
+                HODLink.hod_teacher_id == hod_teacher.id,
+                HODLink.institution_id == institution_id,
+                HODLink.course_id == course.id,
+                HODLink.branch_id == branch.id,
+                HODLink.id != link.id,
+            )
+        )
+    ).scalar_one_or_none()
+    if existing:
+        raise ConflictError("HOD link already exists")
+
+    link.hod_teacher_id = hod_teacher.id
+    link.institution_id = institution_id
+    link.course_id = course.id
+    link.branch_id = branch.id
+    await db.flush()
+    await db.refresh(link)
+    return link
+
+
+async def create_teacher_hod_subject_links(
+    db: AsyncSession, teacher_id, hod_link_id, subject_ids: list
+) -> list[TeacherHODSubjectLink]:
+    teacher = await get_teacher(db, str(teacher_id))
+    teacher_user = (await db.execute(select(User).where(User.id == teacher.user_id))).scalar_one()
+    hod_link = (await db.execute(select(HODLink).where(HODLink.id == hod_link_id))).scalar_one_or_none()
+    if not hod_link:
+        raise NotFoundError("HOD link not found")
+    if teacher_user.institution_id != hod_link.institution_id:
+        raise ValidationError("Teacher does not belong to selected institution")
+
+    created: list[TeacherHODSubjectLink] = []
+    for subject_id in subject_ids:
+        subject = (await db.execute(select(Subject).where(Subject.id == subject_id))).scalar_one_or_none()
+        if not subject:
+            raise NotFoundError("Subject not found")
+        if subject.course_id != hod_link.course_id:
+            raise ValidationError("Subject does not belong to selected course")
+        if subject.branch_id and subject.branch_id != hod_link.branch_id:
+            raise ValidationError("Subject does not belong to selected branch")
+
+        existing = (
+            await db.execute(
+                select(TeacherHODSubjectLink).where(
+                    TeacherHODSubjectLink.teacher_id == teacher.id,
+                    TeacherHODSubjectLink.hod_link_id == hod_link.id,
+                    TeacherHODSubjectLink.subject_id == subject.id,
+                )
+            )
+        ).scalar_one_or_none()
+        if existing:
+            continue
+
+        link = TeacherHODSubjectLink(
+            teacher_id=teacher.id,
+            hod_link_id=hod_link.id,
+            subject_id=subject.id,
+        )
+        db.add(link)
+        created.append(link)
+
+    await db.flush()
+    for item in created:
+        await db.refresh(item)
+    return created
+
+
+async def list_teacher_hod_subject_links(
+    db: AsyncSession,
+    institution_id: str | None = None,
+    course_id: str | None = None,
+    branch_id: str | None = None,
+) -> list[dict]:
+    teacher_user = aliased(User)
+    hod_teacher = aliased(Teacher)
+    hod_user = aliased(User)
+
+    q = (
+        select(
+            TeacherHODSubjectLink.id,
+            TeacherHODSubjectLink.teacher_id,
+            teacher_user.full_name.label("teacher_name"),
+            HODLink.id.label("hod_link_id"),
+            HODLink.hod_teacher_id,
+            hod_user.full_name.label("hod_teacher_name"),
+            HODLink.institution_id,
+            HODLink.course_id,
+            Course.name.label("course_name"),
+            HODLink.branch_id,
+            Branch.name.label("branch_name"),
+            TeacherHODSubjectLink.subject_id,
+            Subject.name.label("subject_name"),
+        )
+        .join(Teacher, Teacher.id == TeacherHODSubjectLink.teacher_id)
+        .join(teacher_user, teacher_user.id == Teacher.user_id)
+        .join(HODLink, HODLink.id == TeacherHODSubjectLink.hod_link_id)
+        .join(hod_teacher, hod_teacher.id == HODLink.hod_teacher_id)
+        .join(hod_user, hod_user.id == hod_teacher.user_id)
+        .join(Course, Course.id == HODLink.course_id)
+        .join(Branch, Branch.id == HODLink.branch_id)
+        .join(Subject, Subject.id == TeacherHODSubjectLink.subject_id)
+    )
+
+    if institution_id:
+        q = q.where(HODLink.institution_id == institution_id)
+    if course_id:
+        q = q.where(HODLink.course_id == course_id)
+    if branch_id:
+        q = q.where(HODLink.branch_id == branch_id)
+
+    rows = (await db.execute(q.order_by(teacher_user.full_name.asc(), Subject.name.asc()))).mappings().all()
+    return [dict(row) for row in rows]
+
+
+async def remove_teacher_hod_subject_link(db: AsyncSession, link_id: str) -> None:
+    link = (
+        await db.execute(select(TeacherHODSubjectLink).where(TeacherHODSubjectLink.id == link_id))
+    ).scalar_one_or_none()
+    if not link:
+        raise NotFoundError("Teacher-HOD subject link not found")
+    await db.delete(link)
+
+
+async def update_teacher_hod_subject_link(
+    db: AsyncSession,
+    link_id: str,
+    teacher_id,
+    hod_link_id,
+    subject_id,
+) -> TeacherHODSubjectLink:
+    link = (
+        await db.execute(select(TeacherHODSubjectLink).where(TeacherHODSubjectLink.id == link_id))
+    ).scalar_one_or_none()
+    if not link:
+        raise NotFoundError("Teacher-HOD subject link not found")
+
+    teacher = await get_teacher(db, str(teacher_id))
+    teacher_user = (await db.execute(select(User).where(User.id == teacher.user_id))).scalar_one()
+    hod_link = (await db.execute(select(HODLink).where(HODLink.id == hod_link_id))).scalar_one_or_none()
+    if not hod_link:
+        raise NotFoundError("HOD link not found")
+    if teacher_user.institution_id != hod_link.institution_id:
+        raise ValidationError("Teacher does not belong to selected institution")
+
+    subject = (await db.execute(select(Subject).where(Subject.id == subject_id))).scalar_one_or_none()
+    if not subject:
+        raise NotFoundError("Subject not found")
+    if subject.course_id != hod_link.course_id:
+        raise ValidationError("Subject does not belong to selected course")
+    if subject.branch_id and subject.branch_id != hod_link.branch_id:
+        raise ValidationError("Subject does not belong to selected branch")
+
+    existing = (
+        await db.execute(
+            select(TeacherHODSubjectLink).where(
+                TeacherHODSubjectLink.teacher_id == teacher.id,
+                TeacherHODSubjectLink.hod_link_id == hod_link.id,
+                TeacherHODSubjectLink.subject_id == subject.id,
+                TeacherHODSubjectLink.id != link.id,
+            )
+        )
+    ).scalar_one_or_none()
+    if existing:
+        raise ConflictError("Teacher-HOD subject link already exists")
+
+    link.teacher_id = teacher.id
+    link.hod_link_id = hod_link.id
+    link.subject_id = subject.id
+    await db.flush()
+    await db.refresh(link)
+    return link
 
 
 async def _user_has_teacher_role(db: AsyncSession, user_id: str) -> bool:

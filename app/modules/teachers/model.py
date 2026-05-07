@@ -35,6 +35,12 @@ class Teacher(UUIDPrimaryKey, TimestampMixin, Base):
     timetable_entries: Mapped[list["TeacherTimetable"]] = relationship(
         back_populates="teacher", cascade="all, delete-orphan"
     )
+    hod_links: Mapped[list["HODLink"]] = relationship(
+        back_populates="hod_teacher", cascade="all, delete-orphan"
+    )
+    teacher_hod_subject_links: Mapped[list["TeacherHODSubjectLink"]] = relationship(
+        back_populates="teacher", cascade="all, delete-orphan"
+    )
 
 
 class TeacherSubject(UUIDPrimaryKey, Base):
@@ -98,4 +104,47 @@ class TeacherTimetable(UUIDPrimaryKey, TimestampMixin, Base):
     teacher: Mapped["Teacher"] = relationship(back_populates="timetable_entries")
     class_: Mapped["Class"] = relationship()
     section: Mapped["Section"] = relationship()
+    subject: Mapped["Subject"] = relationship()
+
+
+class HODLink(UUIDPrimaryKey, TimestampMixin, Base):
+    __tablename__ = "hod_links"
+    __table_args__ = (UniqueConstraint("hod_teacher_id", "institution_id", "course_id", "branch_id"),)
+
+    hod_teacher_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("teachers.id"), nullable=False, index=True
+    )
+    institution_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("institutions.id"), nullable=False, index=True
+    )
+    course_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("courses.id"), nullable=False, index=True
+    )
+    branch_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("branches.id"), nullable=False, index=True
+    )
+
+    hod_teacher: Mapped["Teacher"] = relationship(back_populates="hod_links")
+    course: Mapped["Course"] = relationship()
+    branch: Mapped["Branch"] = relationship()
+
+
+class TeacherHODSubjectLink(UUIDPrimaryKey, TimestampMixin, Base):
+    __tablename__ = "teacher_hod_subject_links"
+    __table_args__ = (
+        UniqueConstraint("teacher_id", "hod_link_id", "subject_id"),
+    )
+
+    teacher_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("teachers.id"), nullable=False, index=True
+    )
+    hod_link_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("hod_links.id"), nullable=False, index=True
+    )
+    subject_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("subjects.id"), nullable=False, index=True
+    )
+
+    teacher: Mapped["Teacher"] = relationship(back_populates="teacher_hod_subject_links")
+    hod_link: Mapped["HODLink"] = relationship()
     subject: Mapped["Subject"] = relationship()
