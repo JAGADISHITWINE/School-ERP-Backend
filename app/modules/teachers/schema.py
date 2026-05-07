@@ -72,6 +72,8 @@ class TeacherTimetableCreate(BaseModel):
     start_time: time
     end_time: time
     room_no: str | None = None
+    version_no: int = 1
+    is_active: bool = True
 
 
 class TeacherTimetableUpdate(BaseModel):
@@ -83,6 +85,8 @@ class TeacherTimetableUpdate(BaseModel):
     start_time: time | None = None
     end_time: time | None = None
     room_no: str | None = None
+    version_no: int | None = None
+    is_active: bool | None = None
 
 
 class TeacherTimetableOut(BaseModel):
@@ -102,6 +106,8 @@ class TeacherTimetableOut(BaseModel):
     start_time: time
     end_time: time
     room_no: str | None = None
+    version_no: int = 1
+    is_active: bool = True
     session_id: uuid.UUID | None = None
     session_status: str | None = None
     session_date: date | None = None

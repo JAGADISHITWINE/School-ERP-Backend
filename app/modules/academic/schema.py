@@ -87,7 +87,10 @@ class BranchOut(BaseModel):
 
 # Subject
 class SubjectCreate(BaseModel):
-    branch_id: uuid.UUID
+    course_id: uuid.UUID
+    class_id: uuid.UUID
+    branch_id: uuid.UUID | None = None
+    semester: int | None = None
     academic_year_id: uuid.UUID | None = None
     name: str
     code: str
@@ -95,6 +98,10 @@ class SubjectCreate(BaseModel):
 
 
 class SubjectUpdate(BaseModel):
+    course_id: uuid.UUID | None = None
+    class_id: uuid.UUID | None = None
+    branch_id: uuid.UUID | None = None
+    semester: int | None = None
     academic_year_id: uuid.UUID | None = None
     name: str | None = None
     code: str | None = None
@@ -104,7 +111,10 @@ class SubjectUpdate(BaseModel):
 
 class SubjectOut(BaseModel):
     id: uuid.UUID
-    branch_id: uuid.UUID
+    course_id: uuid.UUID
+    class_id: uuid.UUID
+    branch_id: uuid.UUID | None
+    semester: int | None
     academic_year_id: uuid.UUID | None
     name: str
     code: str
@@ -117,24 +127,34 @@ class SubjectOut(BaseModel):
 
 # Class
 class ClassCreate(BaseModel):
-    branch_id: uuid.UUID
+    course_id: uuid.UUID
+    branch_id: uuid.UUID | None = None
     academic_year_id: uuid.UUID | None = None
     name: str
-    semester: int
+    year_no: int | None = None
+    semester: int | None = None
+    intake_capacity: int = 60
 
 
 class ClassUpdate(BaseModel):
+    course_id: uuid.UUID | None = None
+    branch_id: uuid.UUID | None = None
     academic_year_id: uuid.UUID | None = None
     name: str | None = None
+    year_no: int | None = None
     semester: int | None = None
+    intake_capacity: int | None = None
 
 
 class ClassOut(BaseModel):
     id: uuid.UUID
-    branch_id: uuid.UUID
+    course_id: uuid.UUID
+    branch_id: uuid.UUID | None
     academic_year_id: uuid.UUID | None
     name: str
-    semester: int
+    year_no: int | None
+    semester: int | None
+    intake_capacity: int
 
     class Config:
         from_attributes = True

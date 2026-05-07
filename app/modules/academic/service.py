@@ -113,7 +113,9 @@ async def create_subject(db, data: SubjectCreate):
     db.add(obj); await db.flush(); await db.refresh(obj)
     return obj
 
-async def list_subjects(db, branch_id, offset, limit):
+async def list_subjects(db, class_id, offset, limit, branch_id=None):
+    if class_id:
+        return await _list(db, Subject, Subject.class_id, class_id, offset, limit)
     return await _list(db, Subject, Subject.branch_id, branch_id, offset, limit)
 
 async def update_subject(db, id_, data: SubjectUpdate):
@@ -132,8 +134,15 @@ async def create_class(db, data: ClassCreate):
     db.add(obj); await db.flush(); await db.refresh(obj)
     return obj
 
-async def list_classes(db, branch_id, offset, limit):
-    return await _list(db, Class, Class.branch_id, branch_id, offset, limit)
+async def list_classes(db, course_id, offset, limit, branch_id=None):
+    q = select(Class)
+    if course_id:
+        q = q.where(Class.course_id == course_id)
+    if branch_id:
+        q = q.where(Class.branch_id == branch_id)
+    total = (await db.execute(select(func.count()).select_from(q.subquery()))).scalar()
+    result = await db.execute(q.offset(offset).limit(limit))
+    return result.scalars().all(), total
 
 async def update_class(db, id_, data: ClassUpdate):
     obj = await _get_or_404(db, Class, id_)

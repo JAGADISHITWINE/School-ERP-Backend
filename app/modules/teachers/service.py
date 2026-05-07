@@ -1,6 +1,8 @@
-from datetime import date
+from datetime import date, time
+from io import BytesIO, StringIO
+import csv
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, literal
+from sqlalchemy import select, func, literal, or_
 from app.modules.teachers.model import Teacher, TeacherSubject, TeacherClass, TeacherTimetable, TimetableDay
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
@@ -113,7 +115,7 @@ async def list_teacher_candidates(db: AsyncSession, institution_id: str):
             .join(Role, Role.id == UserRole.role_id)
             .where(
                 User.institution_id == institution_id,
-                Role.slug == "teacher",
+                _teacher_role_filter(),
                 ~User.id.in_(select(teacher_user_ids.c.user_id)),
             )
             .order_by(User.full_name.asc())
@@ -187,6 +189,8 @@ async def list_teacher_timetable(
             TeacherTimetable.start_time,
             TeacherTimetable.end_time,
             TeacherTimetable.room_no,
+            TeacherTimetable.version_no,
+            TeacherTimetable.is_active,
         )
         .join(Class, Class.id == TeacherTimetable.class_id)
         .join(Section, Section.id == TeacherTimetable.section_id)
@@ -195,6 +199,7 @@ async def list_teacher_timetable(
         .join(AcademicYear, AcademicYear.id == TeacherTimetable.academic_year_id)
         .where(TeacherTimetable.teacher_id == teacher_id)
     )
+    q = q.where(TeacherTimetable.is_active == True)
 
     if session_date:
         q = q.add_columns(
@@ -311,6 +316,8 @@ async def create_timetable_entry(
         start_time=data.start_time,
         end_time=data.end_time,
         room_no=data.room_no,
+        version_no=data.version_no,
+        is_active=data.is_active,
     )
     db.add(entry)
     await db.flush()
@@ -384,6 +391,39 @@ async def delete_timetable_entry(db: AsyncSession, entry_id: str) -> None:
     await db.delete(entry)
 
 
+async def import_timetable_entries(
+    db: AsyncSession,
+    teacher_id: str,
+    filename: str,
+    content: bytes,
+) -> dict:
+    teacher = await get_teacher(db, teacher_id)
+    rows = _read_timetable_rows(filename, content)
+    created = 0
+    skipped = 0
+
+    for row in rows:
+        try:
+            data = TeacherTimetableCreate(
+                class_id=row["class_id"],
+                section_id=row["section_id"],
+                subject_id=row["subject_id"],
+                academic_year_id=row["academic_year_id"],
+                day_of_week=row["day_of_week"],
+                start_time=_parse_time(row["start_time"]),
+                end_time=_parse_time(row["end_time"]),
+                room_no=row.get("room_no") or None,
+                version_no=int(row.get("version_no") or 1),
+                is_active=str(row.get("is_active", "true")).lower() in ("true", "1", "yes"),
+            )
+            await create_timetable_entry(db, str(teacher.id), data)
+            created += 1
+        except Exception:
+            skipped += 1
+
+    return {"created": created, "skipped": skipped, "total": len(rows)}
+
+
 async def remove_class(db: AsyncSession, teacher_id: str, class_id: str) -> None:
     teacher = await get_teacher(db, teacher_id)
     teacher_class = (
@@ -416,7 +456,7 @@ async def _user_has_teacher_role(db: AsyncSession, user_id: str) -> bool:
         await db.execute(
             select(Role.id)
             .join(UserRole, UserRole.role_id == Role.id)
-            .where(UserRole.user_id == user_id, Role.slug == "teacher")
+            .where(UserRole.user_id == user_id, _teacher_role_filter())
             .limit(1)
         )
     ).first()
@@ -428,10 +468,51 @@ async def _get_teacher_role(db: AsyncSession, institution_id: str) -> Role | Non
         await db.execute(
             select(Role).where(
                 Role.institution_id == institution_id,
-                Role.slug == "teacher",
+                _teacher_role_filter(),
             )
         )
     ).scalar_one_or_none()
+
+
+def _teacher_role_filter():
+    return or_(
+        func.lower(Role.slug) == "teacher",
+        func.lower(Role.name) == "teacher",
+        func.lower(Role.name).like("%teacher%"),
+    )
+
+
+def _read_timetable_rows(filename: str, content: bytes) -> list[dict]:
+    lower = filename.lower()
+    if lower.endswith(".csv"):
+        text = content.decode("utf-8-sig")
+        reader = csv.DictReader(StringIO(text))
+        return [dict(r) for r in reader]
+    if lower.endswith(".xlsx"):
+        try:
+            from openpyxl import load_workbook
+        except Exception as exc:
+            raise ValidationError("XLSX support requires openpyxl. Install it in backend environment.") from exc
+        wb = load_workbook(filename=BytesIO(content), data_only=True)
+        ws = wb.active
+        headers = [str(c.value).strip() if c.value is not None else "" for c in ws[1]]
+        items: list[dict] = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            if not any(v is not None and str(v).strip() for v in row):
+                continue
+            items.append({headers[i]: row[i] for i in range(min(len(headers), len(row)))})
+        return items
+    raise ValidationError("Only .csv or .xlsx files are supported")
+
+
+def _parse_time(value) -> time:
+    if isinstance(value, time):
+        return value
+    value = str(value or "").strip()
+    if not value:
+        raise ValidationError("Time value is required")
+    hh, mm = value.split(":")[:2]
+    return time(int(hh), int(mm))
 
 
 async def _get_timetable_entry(db: AsyncSession, entry_id: str) -> TeacherTimetable:
@@ -470,8 +551,14 @@ async def _validate_timetable_refs(
     ).scalar_one_or_none()
     if not subject_obj:
         raise NotFoundError("Subject not found")
-    if subject_obj.branch_id != class_obj.branch_id:
+    if getattr(subject_obj, "class_id", None):
+        if subject_obj.class_id != class_obj.id:
+            raise ValidationError("Subject does not belong to the selected class")
+    elif subject_obj.branch_id and class_obj.branch_id and subject_obj.branch_id != class_obj.branch_id:
         raise ValidationError("Subject does not belong to the class branch")
+    if getattr(subject_obj, "course_id", None) and getattr(class_obj, "course_id", None):
+        if subject_obj.course_id != class_obj.course_id:
+            raise ValidationError("Subject course does not match selected class course")
     if subject_obj.academic_year_id and subject_obj.academic_year_id != academic_year_id:
         raise ValidationError("Subject does not belong to the selected academic year")
     if class_obj.academic_year_id and class_obj.academic_year_id != academic_year_id:
@@ -497,8 +584,8 @@ async def _ensure_timetable_slot_available(
     section_id,
     day_of_week: TimetableDay,
     start_time,
-    exclude_id,
     end_time=None,
+    exclude_id=None,
 ):
     teacher_filters = [
         TeacherTimetable.teacher_id == teacher_id,

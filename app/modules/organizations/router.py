@@ -4,10 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.modules.organizations import service
 from app.modules.organizations.schema import OrgCreate, OrgUpdate, OrgOut, InstitutionCreate, InstitutionUpdate, InstitutionOut
-from app.core.dependencies import require_permission
+from app.core.dependencies import require_permission, CurrentUser
 from app.constants.permissions import ORG_MANAGE, INSTITUTION_MANAGE
 from app.utils.response import ok, paginated
 from app.utils.pagination import PaginationParams
+from sqlalchemy import select
+from app.modules.users.model import User
+from app.modules.institutions.model import Institution
 
 router = APIRouter(tags=["Organizations & Institutions"])
 
@@ -40,6 +43,30 @@ async def create_institution(payload: InstitutionCreate, db: Annotated[AsyncSess
 async def list_institutions(org_id: str, db: Annotated[AsyncSession, Depends(get_db)], pagination: Annotated[PaginationParams, Depends()], search: str | None = Query(default=None)):
     insts, total = await service.list_institutions(db, org_id, pagination.offset, pagination.page_size, search)
     return paginated([InstitutionOut.model_validate(i).model_dump() for i in insts], total, pagination.page, pagination.page_size)
+
+
+@router.get("/institutions/my-scope", response_model=dict)
+async def my_scope_institutions(
+    current_user: CurrentUser,
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    user = (await db.execute(select(User).where(User.id == current_user["id"]))).scalar_one_or_none()
+    if not user:
+        return ok(data=[])
+    current_inst = (
+        await db.execute(select(Institution).where(Institution.id == user.institution_id))
+    ).scalar_one_or_none()
+    if not current_inst:
+        return ok(data=[])
+
+    rows = (
+        await db.execute(
+            select(Institution)
+            .where(Institution.org_id == current_inst.org_id, Institution.is_active == True)
+            .order_by(Institution.name.asc())
+        )
+    ).scalars().all()
+    return ok(data=[InstitutionOut.model_validate(i).model_dump() for i in rows])
 
 
 @router.patch("/institutions/{inst_id}", response_model=dict, dependencies=[Depends(require_permission(INSTITUTION_MANAGE))])

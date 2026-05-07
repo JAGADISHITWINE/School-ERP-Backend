@@ -88,8 +88,13 @@ async def create_subject(payload: SubjectCreate, db: DB):
     return ok(data=SubjectOut.model_validate(obj).model_dump(), message="Subject created")
 
 @router.get("/subjects", response_model=dict, dependencies=[perm(SUBJECT_MANAGE)])
-async def list_subjects(branch_id: str, db: DB, pagination: Pagination):
-    items, total = await service.list_subjects(db, branch_id, pagination.offset, pagination.page_size)
+async def list_subjects(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    pagination: Annotated[PaginationParams, Depends()],
+    class_id: str | None = None,
+    branch_id: str | None = None,
+):
+    items, total = await service.list_subjects(db, class_id, pagination.offset, pagination.page_size, branch_id=branch_id)
     return paginated([SubjectOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
 
 @router.patch("/subjects/{id}", response_model=dict, dependencies=[perm(SUBJECT_MANAGE)])
@@ -106,8 +111,13 @@ async def create_class(payload: ClassCreate, db: DB):
     return ok(data=ClassOut.model_validate(obj).model_dump(), message="Class created")
 
 @router.get("/classes", response_model=dict, dependencies=[perm(CLASS_MANAGE)])
-async def list_classes(branch_id: str, db: DB, pagination: Pagination):
-    items, total = await service.list_classes(db, branch_id, pagination.offset, pagination.page_size)
+async def list_classes(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    pagination: Annotated[PaginationParams, Depends()],
+    course_id: str | None = None,
+    branch_id: str | None = None,
+):
+    items, total = await service.list_classes(db, course_id, pagination.offset, pagination.page_size, branch_id=branch_id)
     return paginated([ClassOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
 
 @router.patch("/classes/{id}", response_model=dict, dependencies=[perm(CLASS_MANAGE)])

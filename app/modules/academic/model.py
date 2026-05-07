@@ -52,12 +52,19 @@ class Branch(UUIDPrimaryKey, TimestampMixin, Base):
 class Subject(UUIDPrimaryKey, TimestampMixin, Base):
     __tablename__ = "subjects"
 
-    branch_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("branches.id"), nullable=False, index=True
+    course_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("courses.id"), nullable=False, index=True
+    )
+    class_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("classes.id"), nullable=False, index=True
+    )
+    branch_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("branches.id"), nullable=True, index=True
     )
     academic_year_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=True, index=True
     )
+    semester: Mapped[int | None] = mapped_column(Integer, nullable=True)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     code: Mapped[str] = mapped_column(String(20), nullable=False)
     credits: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
@@ -69,16 +76,22 @@ class Subject(UUIDPrimaryKey, TimestampMixin, Base):
 class Class(UUIDPrimaryKey, TimestampMixin, Base):
     __tablename__ = "classes"
 
-    branch_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("branches.id"), nullable=False, index=True
+    course_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("courses.id"), nullable=False, index=True
+    )
+    branch_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("branches.id"), nullable=True, index=True
     )
     academic_year_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=True, index=True
     )
     name: Mapped[str] = mapped_column(String(100), nullable=False)  # e.g. "Second Year"
-    semester: Mapped[int] = mapped_column(Integer, nullable=False)
+    year_no: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    semester: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    intake_capacity: Mapped[int] = mapped_column(Integer, default=60, nullable=False)
 
     branch: Mapped["Branch"] = relationship(back_populates="classes")
+    course: Mapped["Course"] = relationship()
     sections: Mapped[list["Section"]] = relationship(back_populates="class_")
 
 

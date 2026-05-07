@@ -9,6 +9,7 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.dialects import postgresql
 
 
 revision: str = "c31b7a9f2d11"
@@ -17,7 +18,7 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
-timetable_day = sa.Enum(
+timetable_day = postgresql.ENUM(
     "MONDAY",
     "TUESDAY",
     "WEDNESDAY",
@@ -26,6 +27,7 @@ timetable_day = sa.Enum(
     "SATURDAY",
     "SUNDAY",
     name="timetableday",
+    create_type=False,
 )
 
 

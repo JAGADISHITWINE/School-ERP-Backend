@@ -1,7 +1,7 @@
 import uuid
 from datetime import date, time
 import enum
-from sqlalchemy import String, ForeignKey, Date, Time, Enum as SAEnum, UniqueConstraint
+from sqlalchemy import String, ForeignKey, Date, Time, Enum as SAEnum, UniqueConstraint, Integer, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from app.db.base import Base, TimestampMixin, UUIDPrimaryKey
@@ -92,6 +92,8 @@ class TeacherTimetable(UUIDPrimaryKey, TimestampMixin, Base):
     start_time: Mapped[time] = mapped_column(Time, nullable=False)
     end_time: Mapped[time] = mapped_column(Time, nullable=False)
     room_no: Mapped[str | None] = mapped_column(String(50))
+    version_no: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
     teacher: Mapped["Teacher"] = relationship(back_populates="timetable_entries")
     class_: Mapped["Class"] = relationship()

@@ -13,7 +13,7 @@ from app.modules.organizations.router import router as org_router
 from app.modules.academic.router import router as academic_router
 from app.modules.students.router import router as students_router
 from app.modules.teachers.router import router as teachers_router
-from app.modules.attendance.router import router as attendance_router
+from app.modules.attendance.router import router as attendance_router, teacher_router
 from app.modules.exams.router import router as exams_router
 from app.modules.fees.router import router as fees_router
 from app.modules.library.router import router as library_router
@@ -83,6 +83,7 @@ app.include_router(academic_router,   prefix=API)
 app.include_router(students_router,   prefix=API)
 app.include_router(teachers_router,   prefix=API)
 app.include_router(attendance_router, prefix=API)
+app.include_router(teacher_router,    prefix=API)
 app.include_router(exams_router,      prefix=API)
 app.include_router(fees_router,       prefix=API)
 app.include_router(library_router,    prefix=API)

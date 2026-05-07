@@ -17,12 +17,13 @@ class AttendanceStatus(str, enum.Enum):
 class SessionStatus(str, enum.Enum):
     OPEN = "open"
     CLOSED = "closed"
+    LOCKED = "locked"
 
 
 class AttendanceSession(UUIDPrimaryKey, TimestampMixin, Base):
     __tablename__ = "attendance_sessions"
     __table_args__ = (
-        UniqueConstraint("section_id", "subject_id", "session_date"),
+        UniqueConstraint("section_id", "subject_id", "session_date", "timetable_id"),
     )
 
     section_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("sections.id"), nullable=False, index=True)
@@ -32,6 +33,8 @@ class AttendanceSession(UUIDPrimaryKey, TimestampMixin, Base):
     academic_year_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("academic_years.id"), nullable=False)
     session_date: Mapped[date] = mapped_column(Date, nullable=False)
     status: Mapped[SessionStatus] = mapped_column(SAEnum(SessionStatus), default=SessionStatus.OPEN, nullable=False)
+    approved_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    approved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     records: Mapped[list["AttendanceRecord"]] = relationship(back_populates="session", cascade="all, delete-orphan")
 
@@ -47,3 +50,12 @@ class AttendanceRecord(UUIDPrimaryKey, Base):
 
     session: Mapped["AttendanceSession"] = relationship(back_populates="records")
     student: Mapped["Student"] = relationship()
+
+
+class AttendanceAuditLog(UUIDPrimaryKey, TimestampMixin, Base):
+    __tablename__ = "attendance_audit_logs"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("attendance_sessions.id"), nullable=False, index=True)
+    action: Mapped[str] = mapped_column(String(50), nullable=False)
+    actor_user_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    meta_json: Mapped[str | None] = mapped_column(String(1000))

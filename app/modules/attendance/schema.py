@@ -25,6 +25,17 @@ class MarkAttendanceRequest(BaseModel):
     records: list[AttendanceEntry]
 
 
+class AttendanceReportItem(BaseModel):
+    student_id: uuid.UUID
+    roll_number: str
+    full_name: str
+    present: int
+    absent: int
+    late: int
+    excused: int
+    percentage: float
+
+
 class SessionOut(BaseModel):
     id: uuid.UUID
     section_id: uuid.UUID
@@ -34,6 +45,7 @@ class SessionOut(BaseModel):
     academic_year_id: uuid.UUID
     session_date: date
     status: SessionStatus
+    approved_by: uuid.UUID | None = None
 
     class Config:
         from_attributes = True

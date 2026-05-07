@@ -1,10 +1,11 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from datetime import date
+from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.db.session import get_db
 from app.modules.teachers import service
-from app.modules.teachers.model import TimetableDay
+from app.modules.teachers.model import TimetableDay, Teacher
 from app.modules.teachers.schema import (
     TeacherCreate,
     TeacherOut,
@@ -18,6 +19,7 @@ from app.modules.teachers.schema import (
 )
 from app.modules.users.model import User
 from app.core.dependencies import CurrentUser, require_permission
+from app.core.exceptions import NotFoundError
 from app.constants.permissions import TEACHER_CREATE, TEACHER_READ, TEACHER_UPDATE
 from app.utils.response import ok, paginated
 from app.utils.pagination import PaginationParams
@@ -137,6 +139,13 @@ async def create_teacher_timetable(teacher_id: str, payload: TeacherTimetableCre
     return ok(data={"id": str(item.id)}, message="Timetable entry created")
 
 
+@router.post("/{teacher_id}/timetable/import", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def import_teacher_timetable(teacher_id: str, db: DB, file: UploadFile = File(...)):
+    content = await file.read()
+    result = await service.import_timetable_entries(db, teacher_id, file.filename or "upload.csv", content)
+    return ok(data=result, message="Timetable import completed")
+
+
 @router.patch("/timetable/{entry_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
 async def update_teacher_timetable(entry_id: str, payload: TeacherTimetableUpdate, db: DB):
     item = await service.update_timetable_entry(db, entry_id, payload)
@@ -147,3 +156,22 @@ async def update_teacher_timetable(entry_id: str, payload: TeacherTimetableUpdat
 async def delete_teacher_timetable(entry_id: str, db: DB):
     await service.delete_timetable_entry(db, entry_id)
     return ok(message="Timetable entry deleted")
+
+
+@router.get("/self/my-timetable", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def my_timetable(current_user: CurrentUser, db: DB):
+    teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
+    if not teacher:
+        raise NotFoundError("Teacher profile not found for current user")
+    items = await service.list_teacher_timetable(db, str(teacher.id))
+    return ok(data=[TeacherTimetableOut(**item).model_dump() for item in items])
+
+
+@router.get("/self/today-classes", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def today_classes(current_user: CurrentUser, db: DB):
+    teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
+    if not teacher:
+        raise NotFoundError("Teacher profile not found for current user")
+    today = date.today()
+    items = await service.list_teacher_timetable(db, str(teacher.id), session_date=today)
+    return ok(data=[TeacherTimetableOut(**item).model_dump() for item in items])
