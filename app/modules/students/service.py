@@ -146,3 +146,13 @@ async def create_academic_record(
     await db.flush()
     await db.refresh(record)
     return record
+
+
+async def list_academic_records(db: AsyncSession, student_id: str):
+    student = await get_student(db, student_id)
+    result = await db.execute(
+        select(StudentAcademicRecord)
+        .where(StudentAcademicRecord.student_id == student.id)
+        .order_by(StudentAcademicRecord.enrolled_at.desc())
+    )
+    return result.scalars().all()

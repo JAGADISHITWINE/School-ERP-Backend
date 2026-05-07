@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.db.session import get_db
 from app.modules.students import service
-from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate, StudentOut, AcademicRecordOut
+from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate, StudentOut, AcademicRecordOut, AcademicRecordListItem
 from app.modules.users.model import User
 from app.modules.students.model import StudentAcademicRecord
 from app.modules.academic.model import Branch, Class, Section, AcademicYear
@@ -139,3 +139,42 @@ async def update_student(student_id: str, payload: StudentUpdate, db: DB):
 async def add_academic_record(student_id: str, payload: AcademicRecordCreate, db: DB):
     record = await service.create_academic_record(db, student_id, payload)
     return ok(data=AcademicRecordOut.model_validate(record).model_dump(), message="Academic record added")
+
+
+@router.get("/{student_id}/academic-records", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
+async def list_student_academic_records(student_id: str, db: DB):
+    records = await service.list_academic_records(db, student_id)
+    out = []
+    for record in records:
+        row = (
+            await db.execute(
+                select(
+                    Branch.name,
+                    Section.name,
+                    Class.id,
+                    Class.name,
+                    AcademicYear.label,
+                )
+                .join(Section, Section.id == record.section_id)
+                .join(Class, Class.id == Section.class_id)
+                .join(Branch, Branch.id == record.branch_id)
+                .join(AcademicYear, AcademicYear.id == record.academic_year_id)
+                .where(StudentAcademicRecord.id == record.id)
+            )
+        ).first()
+        out.append({
+            "id": str(record.id),
+            "student_id": str(record.student_id),
+            "branch_id": str(record.branch_id),
+            "branch_name": row[0] if row else None,
+            "section_id": str(record.section_id),
+            "section_name": row[1] if row else None,
+            "class_id": str(row[2]) if row and row[2] else None,
+            "class_name": row[3] if row else None,
+            "academic_year_id": str(record.academic_year_id),
+            "academic_year_label": row[4] if row else None,
+            "status": record.status,
+            "enrolled_at": record.enrolled_at,
+            "exited_at": record.exited_at,
+        })
+    return ok(data=out)
