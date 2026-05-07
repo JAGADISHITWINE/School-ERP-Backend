@@ -1,4 +1,4 @@
-#!/var/www/html/cms_project/School-ERP-Backend/backend/venv/bin/python3
+#!/var/www/html/cmsclg/School-ERP-Backend/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

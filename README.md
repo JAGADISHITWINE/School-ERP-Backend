@@ -78,8 +78,19 @@ Open → http://localhost:8000/docs
 | POST   | /api/v1/sections                      | Create section                  |
 | POST   | /api/v1/students                      | Create student (+ user account) |
 | POST   | /api/v1/students/{id}/academic-record | Branch change / new year        |
-| POST   | /api/v1/teachers                      | Create teacher                  |
+| GET    | /api/v1/teachers/candidates           | List teacher-role users without teacher profile |
+| POST   | /api/v1/teachers                      | Create teacher or attach profile to existing user |
+| GET    | /api/v1/teachers/{id}                 | Get teacher with linked classes |
+| POST   | /api/v1/teachers/{id}/classes         | Link class to teacher           |
+| DELETE | /api/v1/teachers/{id}/classes/{class_id} | Unlink class from teacher    |
+| GET    | /api/v1/teachers/{id}/timetable       | List teacher timetable          |
+| POST   | /api/v1/teachers/{id}/timetable       | Create timetable slot           |
+| PATCH  | /api/v1/teachers/timetable/{id}       | Update timetable slot           |
+| DELETE | /api/v1/teachers/timetable/{id}       | Delete timetable slot           |
 | POST   | /api/v1/teachers/{id}/subjects        | Assign subject to teacher       |
+| GET    | /api/v1/attendance/my-context         | Teacher timetable-based attendance context |
+| GET    | /api/v1/attendance/teacher-context    | Admin attendance context for a teacher |
+| GET    | /api/v1/attendance/section-students   | Active students for section attendance |
 | POST   | /api/v1/attendance/sessions           | Create attendance session       |
 | POST   | /api/v1/attendance/mark               | Mark attendance                 |
 | PATCH  | /api/v1/attendance/sessions/{id}/close| Close session                   |

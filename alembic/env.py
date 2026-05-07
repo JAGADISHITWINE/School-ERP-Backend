@@ -12,7 +12,7 @@ from app.modules.users.model import User
 from app.modules.roles.model import Role, Permission, UserRole, RolePermission, Menu, RoleMenu
 from app.modules.academic.model import AcademicYear, Course, Branch, Subject, Class, Section
 from app.modules.students.model import Student, StudentAcademicRecord
-from app.modules.teachers.model import Teacher, TeacherSubject
+from app.modules.teachers.model import Teacher, TeacherSubject, TeacherClass, TeacherTimetable
 from app.modules.attendance.model import AttendanceSession, AttendanceRecord
 from app.modules.exams.model import Exam, ExamSubject, Mark
 from app.modules.fees.model import FeeType, FeeStructure, StudentFee, FeePayment
