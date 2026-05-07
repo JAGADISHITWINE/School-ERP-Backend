@@ -53,6 +53,22 @@ class AcademicRecordOut(BaseModel):
         from_attributes = True
 
 
+class AcademicRecordListItem(BaseModel):
+    id: uuid.UUID
+    student_id: uuid.UUID
+    branch_id: uuid.UUID
+    branch_name: str | None = None
+    class_id: uuid.UUID | None = None
+    class_name: str | None = None
+    section_id: uuid.UUID
+    section_name: str | None = None
+    academic_year_id: uuid.UUID
+    academic_year_label: str | None = None
+    status: StudentStatus
+    enrolled_at: datetime
+    exited_at: datetime | None
+
+
 class StudentOut(BaseModel):
     id: uuid.UUID
     user_id: uuid.UUID
