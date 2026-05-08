@@ -15,6 +15,7 @@ from app.modules.teachers.schema import (
     TeacherCandidateOut,
     TeacherTimetableCreate,
     TeacherTimetableUpdate,
+    TeacherTimetableReassignRequest,
     TeacherTimetableOut,
     HODLinkCreate,
     HODLinkUpdate,
@@ -259,6 +260,19 @@ async def import_teacher_timetable(teacher_id: str, db: DB, file: UploadFile = F
 async def update_teacher_timetable(entry_id: str, payload: TeacherTimetableUpdate, db: DB):
     item = await service.update_timetable_entry(db, entry_id, payload)
     return ok(data={"id": str(item.id)}, message="Timetable entry updated")
+
+
+@router.patch("/timetable/{entry_id}/reassign", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def reassign_teacher_timetable(entry_id: str, payload: TeacherTimetableReassignRequest, current_user: CurrentUser, db: DB):
+    item = await service.reassign_timetable_entry(
+        db,
+        entry_id,
+        str(payload.target_teacher_id),
+        current_user["id"],
+        current_user["institution_id"],
+        current_user["is_superuser"],
+    )
+    return ok(data={"id": str(item.id), "teacher_id": str(item.teacher_id)}, message="Class reallocated")
 
 
 @router.delete("/timetable/{entry_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])

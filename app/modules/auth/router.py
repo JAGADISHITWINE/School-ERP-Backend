@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.modules.auth import service
-from app.modules.auth.schema import LoginRequest, TokenResponse, RefreshRequest
+from app.modules.auth.schema import LoginRequest, TokenResponse, RefreshRequest, ForgotPasswordRequest
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
 from app.core.dependencies import CurrentUser
@@ -24,6 +24,23 @@ async def login(payload: LoginRequest, db: Annotated[AsyncSession, Depends(get_d
 async def refresh(payload: RefreshRequest, db: Annotated[AsyncSession, Depends(get_db)]):
     tokens = await service.refresh(db, payload.refresh_token)
     return ok(data=tokens, message="Token refreshed")
+
+
+@router.post("/reset-password", response_model=dict, summary="Reset password")
+async def forgot_password(
+    payload: ForgotPasswordRequest,
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
+    result = await service.forgot_password(
+        db,
+        str(payload.email),
+        payload.password,
+    )
+
+    return ok(
+        data=result,
+        message="Password updated successfully",
+    )
 
 
 @router.get("/me", response_model=dict, summary="Get current user profile")

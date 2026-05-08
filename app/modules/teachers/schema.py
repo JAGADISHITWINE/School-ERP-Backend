@@ -89,6 +89,11 @@ class TeacherTimetableUpdate(BaseModel):
     is_active: bool | None = None
 
 
+class TeacherTimetableReassignRequest(BaseModel):
+    target_teacher_id: uuid.UUID
+    reason: str | None = None
+
+
 class TeacherTimetableOut(BaseModel):
     id: uuid.UUID
     teacher_id: uuid.UUID

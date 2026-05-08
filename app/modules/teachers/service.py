@@ -26,7 +26,7 @@ from app.modules.teachers.schema import (
     TeacherTimetableUpdate,
 )
 from app.core.security import hash_password
-from app.core.exceptions import NotFoundError, ConflictError, ValidationError, BusinessRuleError
+from app.core.exceptions import NotFoundError, ConflictError, ValidationError, BusinessRuleError, ForbiddenError
 
 
 async def create_teacher(
@@ -409,6 +409,70 @@ async def update_timetable_entry(
     for key, value in incoming.items():
         setattr(entry, key, value)
 
+    await db.flush()
+    await db.refresh(entry)
+    return entry
+
+
+async def reassign_timetable_entry(
+    db: AsyncSession,
+    entry_id: str,
+    target_teacher_id: str,
+    actor_user_id: str,
+    actor_institution_id: str,
+    is_superuser: bool = False,
+) -> TeacherTimetable:
+    entry = await _get_timetable_entry(db, entry_id)
+    target_teacher = await get_teacher(db, target_teacher_id)
+
+    row = (
+        await db.execute(
+            select(Course.institution_id, Branch.id.label("branch_id"))
+            .select_from(TeacherTimetable)
+            .join(Class, Class.id == TeacherTimetable.class_id)
+            .join(Branch, Branch.id == Class.branch_id)
+            .join(Course, Course.id == Branch.course_id)
+            .where(TeacherTimetable.id == entry.id)
+        )
+    ).mappings().first()
+    if not row:
+        raise NotFoundError("Timetable entry not found")
+
+    if str(row["institution_id"]) != actor_institution_id:
+        raise ForbiddenError("You cannot reallocate classes outside your institution")
+
+    target_user = (await db.execute(select(User).where(User.id == target_teacher.user_id))).scalar_one()
+    if str(target_user.institution_id) != actor_institution_id:
+        raise ValidationError("Target teacher belongs to another institution")
+
+    if not is_superuser:
+        actor_teacher = (await db.execute(select(Teacher).where(Teacher.user_id == actor_user_id))).scalar_one_or_none()
+        if not actor_teacher:
+            raise ForbiddenError("Only HOD or super admin can reallocate classes")
+        can_manage_branch = (
+            await db.execute(
+                select(HODLink.id).where(
+                    HODLink.hod_teacher_id == actor_teacher.id,
+                    HODLink.institution_id == uuid.UUID(actor_institution_id),
+                    HODLink.branch_id == row["branch_id"],
+                )
+            )
+        ).first()
+        if not can_manage_branch:
+            raise ForbiddenError("Only the mapped HOD can reallocate this class")
+
+    await _ensure_timetable_slot_available(
+        db,
+        target_teacher.id,
+        entry.section_id,
+        entry.day_of_week,
+        entry.start_time,
+        entry.end_time,
+        exclude_id=entry.id,
+    )
+
+    entry.teacher_id = target_teacher.id
+    entry.version_no = (entry.version_no or 1) + 1
     await db.flush()
     await db.refresh(entry)
     return entry

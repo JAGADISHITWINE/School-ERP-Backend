@@ -8,14 +8,18 @@ class UserCreate(BaseModel):
     role_id: uuid.UUID | None = None
     email: EmailStr
     username: str
-    password: str
+    password: str | None = None
     full_name: str
     phone: str | None = None
 
 
 class UserUpdate(BaseModel):
+    institution_id: uuid.UUID
     role_id: uuid.UUID | None = None
-    full_name: str | None = None
+    email: EmailStr
+    username: str
+    password: str | None = None
+    full_name: str
     phone: str | None = None
     is_active: bool | None = None
 

@@ -16,7 +16,11 @@ DB = Annotated[AsyncSession, Depends(get_db)]
 @router.post("", response_model=dict, dependencies=[Depends(require_permission(USER_CREATE))])
 async def create_user(payload: UserCreate, db: DB):
     user = await service.create_user(db, payload)
-    return ok(data=UserOut.model_validate(user).model_dump(), message="User created")
+    data = UserOut.model_validate(user).model_dump()
+    data["credentials_dispatched"] = bool(getattr(user, "credentials_dispatched", False))
+    if not data["credentials_dispatched"]:
+        data["generated_password"] = getattr(user, "generated_password", None)
+    return ok(data=data, message="User created")
 
 
 @router.get("", response_model=dict, dependencies=[Depends(require_permission(USER_READ))])
