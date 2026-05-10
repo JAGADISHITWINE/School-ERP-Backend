@@ -6,7 +6,7 @@ from app.modules.fees import service
 from app.modules.fees.schema import (
     FeeTypeCreate, FeeTypeOut,
     FeeStructureCreate, FeeStructureOut,
-    StudentFeeCreate, StudentFeeOut,
+    StudentFeeCreate, StudentFeeOut, StudentFeeListOut,
     PaymentCreate, PaymentOut,
 )
 from app.core.dependencies import require_permission
@@ -64,7 +64,33 @@ async def create_student_fee(payload: StudentFeeCreate, db: DB):
     return ok(data=StudentFeeOut.model_validate(obj).model_dump(), message="Student fee created")
 
 
-@router.get("/student-fees/{student_id}", response_model=dict)
+@router.get("/student-fees", response_model=dict, dependencies=[Depends(require_permission(FEE_MANAGE))])
+async def list_all_student_fees(
+    db: DB,
+    pagination: Annotated[PaginationParams, Depends()],
+    student_id: str | None = None,
+):
+    rows, total = await service.list_all_student_fees(
+        db, pagination.offset, pagination.page_size, student_id
+    )
+    items = []
+    for student_fee, student_name, roll_number, fee_type_name, course_name, academic_year_label, frequency in rows:
+        data = StudentFeeListOut.model_validate(student_fee).model_dump()
+        data.update(
+            {
+                "student_name": student_name,
+                "roll_number": roll_number,
+                "fee_type_name": fee_type_name,
+                "course_name": course_name,
+                "academic_year_label": academic_year_label,
+                "frequency": frequency,
+            }
+        )
+        items.append(data)
+    return paginated(items, total, pagination.page, pagination.page_size)
+
+
+@router.get("/student-fees/{student_id}", response_model=dict, dependencies=[Depends(require_permission(FEE_MANAGE))])
 async def list_student_fees(student_id: str, db: DB):
     items = await service.list_student_fees(db, student_id)
     return ok(data=[StudentFeeOut.model_validate(i).model_dump() for i in items])
@@ -78,7 +104,7 @@ async def collect_payment(payload: PaymentCreate, db: DB):
     return ok(data=PaymentOut.model_validate(payment).model_dump(), message="Payment recorded")
 
 
-@router.get("/payments/{student_fee_id}", response_model=dict)
+@router.get("/payments/{student_fee_id}", response_model=dict, dependencies=[Depends(require_permission(FEE_COLLECT))])
 async def list_payments(student_fee_id: str, db: DB):
     items = await service.list_payments(db, student_fee_id)
     return ok(data=[PaymentOut.model_validate(i).model_dump() for i in items])

@@ -1,9 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from app.modules.academic.model import AcademicYear, Course
 from app.modules.fees.model import FeeType, FeeStructure, StudentFee, FeePayment, FeeStatus
 from app.modules.fees.schema import (
     FeeTypeCreate, FeeStructureCreate, StudentFeeCreate, PaymentCreate
 )
+from app.modules.students.model import Student
+from app.modules.users.model import User
 from app.core.exceptions import NotFoundError, BusinessRuleError
 
 
@@ -44,6 +47,41 @@ async def list_student_fees(db: AsyncSession, student_id: str):
         select(StudentFee).where(StudentFee.student_id == student_id)
     )
     return result.scalars().all()
+
+
+async def list_all_student_fees(
+    db: AsyncSession,
+    offset: int,
+    limit: int,
+    student_id: str | None = None,
+):
+    q = (
+        select(
+            StudentFee,
+            User.full_name.label("student_name"),
+            Student.roll_number.label("roll_number"),
+            FeeType.name.label("fee_type_name"),
+            Course.name.label("course_name"),
+            AcademicYear.label.label("academic_year_label"),
+            FeeStructure.frequency.label("frequency"),
+        )
+        .join(Student, Student.id == StudentFee.student_id)
+        .join(User, User.id == Student.user_id)
+        .join(FeeStructure, FeeStructure.id == StudentFee.fee_structure_id)
+        .join(FeeType, FeeType.id == FeeStructure.fee_type_id)
+        .join(Course, Course.id == FeeStructure.course_id)
+        .join(AcademicYear, AcademicYear.id == FeeStructure.academic_year_id)
+    )
+    if student_id:
+        q = q.where(StudentFee.student_id == student_id)
+
+    total = (await db.execute(select(func.count()).select_from(q.subquery()))).scalar()
+    result = await db.execute(
+        q.order_by(StudentFee.due_date.asc().nullslast(), StudentFee.created_at.desc())
+        .offset(offset)
+        .limit(limit)
+    )
+    return result.all(), total
 
 
 async def collect_payment(db: AsyncSession, data: PaymentCreate) -> FeePayment:

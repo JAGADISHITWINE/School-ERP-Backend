@@ -26,6 +26,7 @@ class Student(UUIDPrimaryKey, TimestampMixin, Base):
     gender: Mapped[str | None] = mapped_column(String(10))
     guardian_name: Mapped[str | None] = mapped_column(String(200))
     guardian_phone: Mapped[str | None] = mapped_column(String(20))
+    guardian_email: Mapped[str | None] = mapped_column(String(255))
 
     user: Mapped["User"] = relationship()
     academic_records: Mapped[list["StudentAcademicRecord"]] = relationship(
@@ -60,3 +61,19 @@ class StudentAcademicRecord(UUIDPrimaryKey, Base):
     section: Mapped["Section"] = relationship()
     branch: Mapped["Branch"] = relationship()
     academic_year: Mapped["AcademicYear"] = relationship()
+
+
+class StudentDocument(UUIDPrimaryKey, TimestampMixin, Base):
+    __tablename__ = "student_documents"
+
+    student_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("students.id"), nullable=False, index=True
+    )
+    document_type: Mapped[str] = mapped_column(String(80), nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    file_name: Mapped[str | None] = mapped_column(String(255))
+    file_url: Mapped[str | None] = mapped_column(String(500))
+    status: Mapped[str] = mapped_column(String(30), default="pending", nullable=False, index=True)
+    remarks: Mapped[str | None] = mapped_column(String(500))
+
+    student: Mapped["Student"] = relationship()

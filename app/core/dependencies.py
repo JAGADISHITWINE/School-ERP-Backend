@@ -19,8 +19,6 @@ async def get_current_user(
         raise UnauthorizedError("Invalid or expired access token")
 
     user_id = payload.get("sub")
-    institution_id = payload.get("institution_id")
-
     # Lazy import to avoid circular deps
     from app.modules.users.model import User
 
@@ -33,7 +31,7 @@ async def get_current_user(
 
     return {
         "id": str(user.id),
-        "institution_id": institution_id,
+        "institution_id": str(user.institution_id),
         "is_superuser": user.is_superuser,
         "email": user.email,
     }

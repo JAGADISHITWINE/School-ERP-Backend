@@ -14,7 +14,7 @@ from app.modules.roles.schema import (
     PermissionOut,
 )
 from app.core.dependencies import CurrentUser, require_permission
-from app.constants.permissions import ROLE_CREATE, ROLE_UPDATE, PERMISSION_MANAGE
+from app.constants.permissions import ROLE_CREATE, ROLE_READ, ROLE_UPDATE, PERMISSION_MANAGE
 from app.utils.response import ok, paginated
 from app.utils.pagination import PaginationParams
 
@@ -36,7 +36,7 @@ async def create_role(payload: RoleCreate, db: Annotated[AsyncSession, Depends(g
     return ok(data=RoleOut.model_validate(role).model_dump(), message="Role created")
 
 
-@router.get("", response_model=dict)
+@router.get("", response_model=dict, dependencies=[Depends(require_permission(ROLE_READ))])
 async def list_roles(
     current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_
 from app.modules.users.model import User
 from app.core.security import verify_password, create_access_token, create_refresh_token, decode_token, hash_password
-from app.core.exceptions import UnauthorizedError
+from app.core.exceptions import BusinessRuleError, UnauthorizedError
 from app.utils.mailer import send_email
 
 
@@ -76,6 +76,24 @@ async def forgot_password(
     return {
         "updated": True,
     }
+
+
+async def change_password(
+    db: AsyncSession,
+    user_id: str,
+    current_password: str,
+    new_password: str,
+) -> dict:
+    user = (
+        await db.execute(select(User).where(User.id == user_id, User.is_active == True))
+    ).scalar_one_or_none()
+    if not user or not verify_password(current_password, user.password_hash):
+        raise UnauthorizedError("Current password is incorrect")
+    if verify_password(new_password, user.password_hash):
+        raise BusinessRuleError("New password must be different from current password")
+    user.password_hash = hash_password(new_password)
+    await db.flush()
+    return {"updated": True}
 
 
 # def _generate_password(length: int = 10) -> str:

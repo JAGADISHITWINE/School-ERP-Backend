@@ -18,6 +18,7 @@ class StudentCreate(BaseModel):
     gender: str | None = None
     guardian_name: str | None = None
     guardian_phone: str | None = None
+    guardian_email: EmailStr | None = None
     # Initial academic record
     section_id: uuid.UUID
     branch_id: uuid.UUID
@@ -31,6 +32,48 @@ class StudentUpdate(BaseModel):
     gender: str | None = None
     guardian_name: str | None = None
     guardian_phone: str | None = None
+    guardian_email: EmailStr | None = None
+
+
+class StudentStatusUpdate(BaseModel):
+    status: StudentStatus
+
+
+class StudentDocumentCreate(BaseModel):
+    student_id: uuid.UUID
+    document_type: str
+    title: str
+    file_name: str | None = None
+    file_url: str | None = None
+    status: str = "pending"
+    remarks: str | None = None
+
+
+class StudentDocumentUpdate(BaseModel):
+    document_type: str | None = None
+    title: str | None = None
+    file_name: str | None = None
+    file_url: str | None = None
+    status: str | None = None
+    remarks: str | None = None
+
+
+class StudentDocumentOut(BaseModel):
+    id: uuid.UUID
+    student_id: uuid.UUID
+    student_name: str | None = None
+    roll_number: str | None = None
+    document_type: str
+    title: str
+    file_name: str | None
+    file_url: str | None
+    status: str
+    remarks: str | None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
 
 
 class AcademicRecordCreate(BaseModel):
@@ -77,6 +120,7 @@ class StudentOut(BaseModel):
     gender: str | None
     guardian_name: str | None
     guardian_phone: str | None
+    guardian_email: str | None
     full_name: str
     email: str
     role_slug: str | None = None

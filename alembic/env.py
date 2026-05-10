@@ -11,12 +11,14 @@ from app.modules.institutions.model import Institution
 from app.modules.users.model import User
 from app.modules.roles.model import Role, Permission, UserRole, RolePermission, Menu, RoleMenu
 from app.modules.academic.model import AcademicYear, Course, Branch, Subject, Class, Section
-from app.modules.students.model import Student, StudentAcademicRecord
+from app.modules.students.model import Student, StudentAcademicRecord, StudentDocument
 from app.modules.teachers.model import Teacher, TeacherSubject, TeacherClass, TeacherTimetable
 from app.modules.attendance.model import AttendanceSession, AttendanceRecord, AttendanceAuditLog
 from app.modules.exams.model import Exam, ExamSubject, Mark
 from app.modules.fees.model import FeeType, FeeStructure, StudentFee, FeePayment
 from app.modules.library.model import Book, BookIssue
+from app.modules.logs.model import ActivityLog
+from app.modules.notifications.model import NotificationLog
 
 config = context.config
 if config.config_file_name is not None:

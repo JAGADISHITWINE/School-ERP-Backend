@@ -58,3 +58,16 @@ INSTITUTION_MANAGE = "institution_manage"
 # Menus & Permissions
 MENU_MANAGE = "menu_manage"
 PERMISSION_MANAGE = "permission_manage"
+
+# Logs
+ACTIVITY_LOG_READ = "activity_log_read"
+
+# Notifications
+NOTIFICATION_READ = "notification_read"
+NOTIFICATION_MANAGE = "notification_manage"
+
+# Parent Portal
+PARENT_READ = "parent_read"
+
+# Admin Bulk Tools
+ADMIN_BULK_MANAGE = "admin_bulk_manage"

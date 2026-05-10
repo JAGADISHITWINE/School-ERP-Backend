@@ -43,7 +43,7 @@ async def create_session(payload: SessionCreate, current_user: CurrentUser, db: 
         if payload.teacher_id
         else await _resolve_teacher_id(db, current_user["id"])
     )
-    session = await service.create_session(db, teacher_id, payload)
+    session = await service.create_session(db, teacher_id, payload, current_user["id"])
     return ok(data=SessionOut.model_validate(session).model_dump(), message="Session created")
 
 
@@ -57,14 +57,14 @@ async def list_sessions(section_id: str, db: DB, pagination: Annotated[Paginatio
 
 
 @router.post("/mark", response_model=dict, dependencies=[Depends(require_permission(ATTENDANCE_MARK))])
-async def mark_attendance(payload: MarkAttendanceRequest, db: DB):
-    count = await service.mark_attendance(db, payload)
+async def mark_attendance(payload: MarkAttendanceRequest, current_user: CurrentUser, db: DB):
+    count = await service.mark_attendance(db, payload, current_user["id"])
     return ok(data={"records_saved": count}, message="Attendance marked")
 
 
 @router.put("/update", response_model=dict, dependencies=[Depends(require_permission(ATTENDANCE_MARK))])
-async def update_attendance(payload: MarkAttendanceRequest, db: DB):
-    count = await service.mark_attendance(db, payload)
+async def update_attendance(payload: MarkAttendanceRequest, current_user: CurrentUser, db: DB):
+    count = await service.mark_attendance(db, payload, current_user["id"])
     return ok(data={"records_saved": count}, message="Attendance updated")
 
 

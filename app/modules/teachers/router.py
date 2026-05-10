@@ -290,6 +290,49 @@ async def my_timetable(current_user: CurrentUser, db: DB):
     return ok(data=[TeacherTimetableOut(**item).model_dump() for item in items])
 
 
+@router.get("/self/dashboard", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def my_dashboard(current_user: CurrentUser, db: DB):
+    teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
+    if not teacher:
+        raise NotFoundError("Teacher profile not found for current user")
+    user = (await db.execute(select(User).where(User.id == teacher.user_id))).scalar_one()
+    today = date.today()
+    timetable = await service.list_teacher_timetable(db, str(teacher.id))
+    today_items = await service.list_teacher_timetable(db, str(teacher.id), session_date=today)
+    classes = await service.list_teacher_classes(db, str(teacher.id))
+    open_today = [
+        item for item in today_items
+        if str(item.get("session_status") or "").lower() not in ("closed", "locked")
+    ]
+    return ok(
+        data={
+            "teacher": {
+                "id": str(teacher.id),
+                "user_id": str(teacher.user_id),
+                "full_name": user.full_name,
+                "email": user.email,
+                "employee_code": teacher.employee_code,
+                "designation": teacher.designation,
+                "joined_at": teacher.joined_at,
+            },
+            "stats": {
+                "assigned_classes": len(classes),
+                "weekly_slots": len(timetable),
+                "today_classes": len(today_items),
+                "pending_attendance": len(open_today),
+            },
+            "today_classes": [TeacherTimetableOut(**item).model_dump() for item in today_items],
+            "assigned_classes": [TeacherClassOut(**item).model_dump() for item in classes],
+        }
+    )
+
+
+@router.get("/self/hod-analytics", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def my_hod_analytics(current_user: CurrentUser, db: DB, academic_year_id: str | None = None):
+    data = await service.get_hod_branch_analytics(db, current_user["id"], academic_year_id)
+    return ok(data=data)
+
+
 @router.get("/self/today-classes", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
 async def today_classes(current_user: CurrentUser, db: DB):
     teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()

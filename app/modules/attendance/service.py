@@ -7,11 +7,12 @@ from app.modules.teachers.model import Teacher, TeacherSubject, TeacherTimetable
 from app.modules.students.model import Student, StudentAcademicRecord, StudentStatus
 from app.modules.users.model import User
 from app.modules.academic.model import Section, Class, Branch, Subject, AcademicYear
+from app.modules.notifications.service import send_absent_alerts
 from app.core.exceptions import NotFoundError, ConflictError, BusinessRuleError, ValidationError
 
 
 async def create_session(
-    db: AsyncSession, teacher_id: str, data: SessionCreate
+    db: AsyncSession, teacher_id: str, data: SessionCreate, actor_user_id: str | None = None
 ) -> AttendanceSession:
     teacher = await _get_teacher(db, teacher_id)
     section_id, subject_id, academic_year_id, timetable_id = await _resolve_session_scope(
@@ -41,12 +42,12 @@ async def create_session(
     )
     db.add(session)
     await db.flush()
-    db.add(AttendanceAuditLog(session_id=session.id, action="session_created"))
+    db.add(AttendanceAuditLog(session_id=session.id, action="session_created", actor_user_id=actor_user_id))
     await db.refresh(session)
     return session
 
 
-async def mark_attendance(db: AsyncSession, data: MarkAttendanceRequest) -> int:
+async def mark_attendance(db: AsyncSession, data: MarkAttendanceRequest, actor_user_id: str | None = None) -> int:
     session = (
         await db.execute(select(AttendanceSession).where(AttendanceSession.id == data.session_id))
     ).scalar_one_or_none()
@@ -85,7 +86,9 @@ async def mark_attendance(db: AsyncSession, data: MarkAttendanceRequest) -> int:
     ]
     if records:
         await db.execute(insert(AttendanceRecord), records)
-    db.add(AttendanceAuditLog(session_id=session.id, action="attendance_marked"))
+    db.add(AttendanceAuditLog(session_id=session.id, action="attendance_marked", actor_user_id=actor_user_id))
+    absent_student_ids = [entry.student_id for entry in data.records if entry.status == AttendanceStatus.ABSENT]
+    await send_absent_alerts(db, session=session, absent_student_ids=absent_student_ids)
     await db.flush()
     return len(records)
 

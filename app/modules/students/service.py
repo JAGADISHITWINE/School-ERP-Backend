@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from app.modules.students.model import Student, StudentAcademicRecord, StudentStatus
+from app.modules.students.model import Student, StudentAcademicRecord, StudentStatus, StudentDocument
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
-from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate
+from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate, StudentDocumentCreate, StudentDocumentUpdate
 from app.core.security import hash_password
 from app.core.exceptions import NotFoundError, ConflictError, BusinessRuleError
 
@@ -55,6 +55,7 @@ async def create_student(db: AsyncSession, data: StudentCreate) -> Student:
         gender=data.gender,
         guardian_name=data.guardian_name,
         guardian_phone=data.guardian_phone,
+        guardian_email=data.guardian_email,
     )
     db.add(student)
     await db.flush()
@@ -156,3 +157,76 @@ async def list_academic_records(db: AsyncSession, student_id: str):
         .order_by(StudentAcademicRecord.enrolled_at.desc())
     )
     return result.scalars().all()
+
+
+async def update_student_status(db: AsyncSession, student_id: str, status: StudentStatus) -> StudentAcademicRecord:
+    student = await get_student(db, student_id)
+    record = (
+        await db.execute(
+            select(StudentAcademicRecord)
+            .where(
+                StudentAcademicRecord.student_id == student.id,
+                StudentAcademicRecord.exited_at == None,
+            )
+            .order_by(StudentAcademicRecord.enrolled_at.desc())
+        )
+    ).scalar_one_or_none()
+    if not record:
+        raise NotFoundError("Active academic record not found")
+    record.status = status
+    if status in (StudentStatus.TRANSFERRED, StudentStatus.GRADUATED, StudentStatus.DROPPED):
+        record.exited_at = datetime.now(timezone.utc)
+    elif status == StudentStatus.ACTIVE:
+        record.exited_at = None
+    await db.flush()
+    return record
+
+
+async def list_documents(db: AsyncSession, institution_id: str, offset: int, limit: int):
+    q = (
+        select(StudentDocument, User.full_name, Student.roll_number)
+        .join(Student, Student.id == StudentDocument.student_id)
+        .join(User, User.id == Student.user_id)
+        .where(User.institution_id == institution_id)
+        .order_by(StudentDocument.created_at.desc())
+    )
+    total_q = (
+        select(func.count(StudentDocument.id))
+        .join(Student, Student.id == StudentDocument.student_id)
+        .join(User, User.id == Student.user_id)
+        .where(User.institution_id == institution_id)
+    )
+    total = (await db.execute(total_q)).scalar() or 0
+    rows = (await db.execute(q.offset(offset).limit(limit))).all()
+    return rows, total
+
+
+async def create_document(db: AsyncSession, data: StudentDocumentCreate) -> StudentDocument:
+    await get_student(db, str(data.student_id))
+    item = StudentDocument(**data.model_dump())
+    db.add(item)
+    await db.flush()
+    await db.refresh(item)
+    return item
+
+
+async def update_document(db: AsyncSession, document_id: str, data: StudentDocumentUpdate) -> StudentDocument:
+    item = (
+        await db.execute(select(StudentDocument).where(StudentDocument.id == document_id))
+    ).scalar_one_or_none()
+    if not item:
+        raise NotFoundError("Student document not found")
+    for key, value in data.model_dump(exclude_none=True).items():
+        setattr(item, key, value)
+    await db.flush()
+    return item
+
+
+async def delete_document(db: AsyncSession, document_id: str) -> None:
+    item = (
+        await db.execute(select(StudentDocument).where(StudentDocument.id == document_id))
+    ).scalar_one_or_none()
+    if not item:
+        raise NotFoundError("Student document not found")
+    await db.delete(item)
+    await db.flush()

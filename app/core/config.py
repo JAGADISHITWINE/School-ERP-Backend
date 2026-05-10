@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     APP_NAME: str = "School ERP"
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
+    ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
+    RATE_LIMIT_PER_MINUTE: int = 300
+    AUTH_RATE_LIMIT_PER_MINUTE: int = 10
 
     # Database
     DATABASE_URL: str
@@ -27,6 +30,12 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str | None = None
     SMTP_FROM_EMAIL: str | None = None
     SMTP_USE_TLS: bool = True
+
+    # SMS
+    SMS_PROVIDER: str | None = None
+    SMS_ACCOUNT_SID: str | None = None
+    SMS_AUTH_TOKEN: str | None = None
+    SMS_FROM_NUMBER: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=".env",

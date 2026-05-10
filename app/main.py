@@ -1,8 +1,15 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.core.hardening import (
+    InMemoryRateLimitMiddleware,
+    SecurityHeadersMiddleware,
+    allowed_origins,
+    assert_secure_runtime_config,
+)
 
 # ─── Routers ───────────────────────────────────────────────────────────────
 from app.modules.auth.router import router as auth_router
@@ -17,11 +24,17 @@ from app.modules.attendance.router import router as attendance_router, teacher_r
 from app.modules.exams.router import router as exams_router
 from app.modules.fees.router import router as fees_router
 from app.modules.library.router import router as library_router
+from app.modules.logs.router import router as logs_router
+from app.modules.notifications.router import router as notifications_router
+from app.modules.reports.router import router as reports_router
+from app.modules.parents.router import router as parents_router
+from app.modules.admin_bulk.router import router as admin_bulk_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    assert_secure_runtime_config()
     yield
     # Shutdown
 
@@ -49,14 +62,16 @@ Production-grade multi-tenant ERP with:
     """,
     version="1.0.0",
     lifespan=lifespan,
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url="/docs" if settings.DEBUG else None,
+    redoc_url="/redoc" if settings.DEBUG else None,
 )
 
 # ─── CORS ──────────────────────────────────────────────────────────────────
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(InMemoryRateLimitMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Tighten in production
+    allow_origins=allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -66,9 +81,23 @@ app.add_middleware(
 # ─── Global exception handler ──────────────────────────────────────────────
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
+    message = str(exc) if settings.DEBUG else "Internal server error"
     return JSONResponse(
         status_code=500,
-        content={"success": False, "data": None, "message": str(exc)},
+        content={"success": False, "data": None, "message": message},
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={
+            "success": False,
+            "data": None,
+            "message": "Invalid request payload",
+            "errors": exc.errors() if settings.DEBUG else [],
+        },
     )
 
 
@@ -87,6 +116,11 @@ app.include_router(teacher_router,    prefix=API)
 app.include_router(exams_router,      prefix=API)
 app.include_router(fees_router,       prefix=API)
 app.include_router(library_router,    prefix=API)
+app.include_router(logs_router,       prefix=API)
+app.include_router(notifications_router, prefix=API)
+app.include_router(reports_router,    prefix=API)
+app.include_router(parents_router,    prefix=API)
+app.include_router(admin_bulk_router, prefix=API)
 
 
 @app.get("/", tags=["Health"])

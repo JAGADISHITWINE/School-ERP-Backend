@@ -1,0 +1,3 @@
+full_name,email,username,password,phone,roll_number,date_of_birth,gender,guardian_name,guardian_phone,guardian_email,academic_year_label,branch_code,class_name,section_name
+New Student,new.student@student.demo.edu,new.student,Demo@123,9000099999,DEC27CSEA099,2007-05-20,female,Demo Parent,9000099998,demo.parent@parent.demo.edu,2026-27,CSE,CSE Second Year - Semester 3,A
+

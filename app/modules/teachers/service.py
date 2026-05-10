@@ -3,7 +3,7 @@ import uuid
 from io import BytesIO, StringIO
 import csv
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, literal, or_
+from sqlalchemy import select, func, literal, or_, case
 from sqlalchemy.orm import aliased
 from app.modules.teachers.model import (
     Teacher,
@@ -17,7 +17,9 @@ from app.modules.teachers.model import (
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
 from app.modules.academic.model import Class, Branch, Course, AcademicYear, Section, Subject
-from app.modules.attendance.model import AttendanceSession
+from app.modules.attendance.model import AttendanceSession, AttendanceRecord, AttendanceStatus
+from app.modules.exams.model import Mark, ExamSubject, Exam
+from app.modules.students.model import StudentAcademicRecord, StudentStatus
 from app.modules.teachers.schema import (
     TeacherCreate,
     SubjectAssignRequest,
@@ -840,6 +842,192 @@ async def list_teacher_hod_subject_links(
 
     rows = (await db.execute(q.order_by(teacher_user.full_name.asc(), Subject.name.asc()))).mappings().all()
     return [dict(row) for row in rows]
+
+
+async def get_hod_branch_analytics(db: AsyncSession, user_id: str, academic_year_id: str | None = None) -> dict:
+    teacher = (
+        await db.execute(select(Teacher).where(Teacher.user_id == user_id))
+    ).scalar_one_or_none()
+    if not teacher:
+        raise NotFoundError("Teacher profile not found for current user")
+
+    year = None
+    if academic_year_id:
+        year = (
+            await db.execute(select(AcademicYear).where(AcademicYear.id == academic_year_id))
+        ).scalar_one_or_none()
+    if not year:
+        year = (
+            await db.execute(
+                select(AcademicYear)
+                .join(User, User.institution_id == AcademicYear.institution_id)
+                .where(User.id == user_id, AcademicYear.is_current == True)
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+    if not year:
+        year = (
+            await db.execute(select(AcademicYear).order_by(AcademicYear.start_date.desc()).limit(1))
+        ).scalar_one_or_none()
+
+    links = (
+        await db.execute(
+            select(
+                HODLink.id.label("hod_link_id"),
+                HODLink.institution_id,
+                HODLink.course_id,
+                Course.name.label("course_name"),
+                HODLink.branch_id,
+                Branch.name.label("branch_name"),
+            )
+            .join(Course, Course.id == HODLink.course_id)
+            .join(Branch, Branch.id == HODLink.branch_id)
+            .where(HODLink.hod_teacher_id == teacher.id)
+            .order_by(Course.name.asc(), Branch.name.asc())
+        )
+    ).mappings().all()
+
+    items = []
+    today = date.today()
+    for link in links:
+        branch_id = link["branch_id"]
+        year_id = year.id if year else None
+        active_students_q = select(StudentAcademicRecord.student_id).where(
+            StudentAcademicRecord.branch_id == branch_id,
+            StudentAcademicRecord.exited_at == None,
+            StudentAcademicRecord.status == StudentStatus.ACTIVE,
+        )
+        if year_id:
+            active_students_q = active_students_q.where(StudentAcademicRecord.academic_year_id == year_id)
+
+        student_count = (
+            await db.execute(select(func.count()).select_from(active_students_q.subquery()))
+        ).scalar() or 0
+
+        class_count = (
+            await db.execute(select(func.count(func.distinct(Class.id))).where(Class.branch_id == branch_id))
+        ).scalar() or 0
+
+        section_count = (
+            await db.execute(
+                select(func.count(func.distinct(Section.id)))
+                .join(Class, Class.id == Section.class_id)
+                .where(Class.branch_id == branch_id)
+            )
+        ).scalar() or 0
+
+        teachers_count = (
+            await db.execute(
+                select(func.count(func.distinct(TeacherTimetable.teacher_id)))
+                .join(Class, Class.id == TeacherTimetable.class_id)
+                .where(
+                    Class.branch_id == branch_id,
+                    TeacherTimetable.is_active == True,
+                    *(([TeacherTimetable.academic_year_id == year_id] if year_id else [])),
+                )
+            )
+        ).scalar() or 0
+
+        timetable_slots = (
+            await db.execute(
+                select(func.count(TeacherTimetable.id))
+                .join(Class, Class.id == TeacherTimetable.class_id)
+                .where(
+                    Class.branch_id == branch_id,
+                    TeacherTimetable.is_active == True,
+                    *(([TeacherTimetable.academic_year_id == year_id] if year_id else [])),
+                )
+            )
+        ).scalar() or 0
+
+        attendance = (
+            await db.execute(
+                select(
+                    func.count(AttendanceRecord.id).label("total"),
+                    func.sum(case((AttendanceRecord.status.in_([AttendanceStatus.PRESENT, AttendanceStatus.LATE]), 1), else_=0)).label("attended"),
+                    func.sum(case((AttendanceRecord.status == AttendanceStatus.ABSENT, 1), else_=0)).label("absent"),
+                )
+                .join(AttendanceSession, AttendanceSession.id == AttendanceRecord.session_id)
+                .join(Section, Section.id == AttendanceSession.section_id)
+                .join(Class, Class.id == Section.class_id)
+                .where(
+                    Class.branch_id == branch_id,
+                    *(([AttendanceSession.academic_year_id == year_id] if year_id else [])),
+                )
+            )
+        ).first()
+        attendance_total = int(attendance.total or 0) if attendance else 0
+        attended = int(attendance.attended or 0) if attendance else 0
+        absent_total = int(attendance.absent or 0) if attendance else 0
+
+        absent_today = (
+            await db.execute(
+                select(func.count(AttendanceRecord.id))
+                .join(AttendanceSession, AttendanceSession.id == AttendanceRecord.session_id)
+                .join(Section, Section.id == AttendanceSession.section_id)
+                .join(Class, Class.id == Section.class_id)
+                .where(
+                    Class.branch_id == branch_id,
+                    AttendanceSession.session_date == today,
+                    AttendanceRecord.status == AttendanceStatus.ABSENT,
+                    *(([AttendanceSession.academic_year_id == year_id] if year_id else [])),
+                )
+            )
+        ).scalar() or 0
+
+        marks_uploaded = (
+            await db.execute(
+                select(func.count(Mark.id))
+                .join(ExamSubject, ExamSubject.id == Mark.exam_subject_id)
+                .join(Exam, Exam.id == ExamSubject.exam_id)
+                .join(Subject, Subject.id == ExamSubject.subject_id)
+                .where(
+                    Subject.branch_id == branch_id,
+                    *(([Exam.academic_year_id == year_id] if year_id else [])),
+                )
+            )
+        ).scalar() or 0
+
+        items.append(
+            {
+                "hod_link_id": link["hod_link_id"],
+                "institution_id": link["institution_id"],
+                "course_id": link["course_id"],
+                "course_name": link["course_name"],
+                "branch_id": branch_id,
+                "branch_name": link["branch_name"],
+                "student_count": int(student_count),
+                "class_count": int(class_count),
+                "section_count": int(section_count),
+                "teachers_count": int(teachers_count),
+                "timetable_slots": int(timetable_slots),
+                "attendance_percentage": round(attended * 100.0 / attendance_total, 2) if attendance_total else 0.0,
+                "attendance_records": attendance_total,
+                "absent_total": absent_total,
+                "absent_today": int(absent_today),
+                "marks_uploaded": int(marks_uploaded),
+            }
+        )
+
+    totals = {
+        "branches": len(items),
+        "students": sum(row["student_count"] for row in items),
+        "classes": sum(row["class_count"] for row in items),
+        "sections": sum(row["section_count"] for row in items),
+        "teachers": sum(row["teachers_count"] for row in items),
+        "timetable_slots": sum(row["timetable_slots"] for row in items),
+        "absent_today": sum(row["absent_today"] for row in items),
+        "marks_uploaded": sum(row["marks_uploaded"] for row in items),
+    }
+    totals["attendance_percentage"] = (
+        round(sum(row["attendance_percentage"] for row in items) / len(items), 2) if items else 0.0
+    )
+    return {
+        "academic_year_id": str(year.id) if year else None,
+        "academic_year_label": year.label if year else None,
+        "totals": totals,
+        "branches": items,
+    }
 
 
 async def remove_teacher_hod_subject_link(db: AsyncSession, link_id: str) -> None:

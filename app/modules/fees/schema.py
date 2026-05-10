@@ -60,6 +60,15 @@ class StudentFeeOut(BaseModel):
         from_attributes = True
 
 
+class StudentFeeListOut(StudentFeeOut):
+    student_name: str | None = None
+    roll_number: str | None = None
+    fee_type_name: str | None = None
+    course_name: str | None = None
+    academic_year_label: str | None = None
+    frequency: str | None = None
+
+
 class PaymentCreate(BaseModel):
     student_fee_id: uuid.UUID
     amount: float

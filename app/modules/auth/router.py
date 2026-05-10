@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.modules.auth import service
-from app.modules.auth.schema import LoginRequest, TokenResponse, RefreshRequest, ForgotPasswordRequest
+from app.modules.auth.schema import ChangePasswordRequest, LoginRequest, TokenResponse, RefreshRequest, ForgotPasswordRequest
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
 from app.core.dependencies import CurrentUser
@@ -29,18 +29,28 @@ async def refresh(payload: RefreshRequest, db: Annotated[AsyncSession, Depends(g
 @router.post("/reset-password", response_model=dict, summary="Reset password")
 async def forgot_password(
     payload: ForgotPasswordRequest,
+    current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
-    result = await service.forgot_password(
-        db,
-        str(payload.email),
-        payload.password,
-    )
+    if str(payload.email).lower() != str(current_user["email"]).lower() and not current_user["is_superuser"]:
+        from app.core.exceptions import ForbiddenError
+        raise ForbiddenError("Cannot reset another user's password")
+    result = await service.forgot_password(db, str(payload.email), payload.password)
 
     return ok(
         data=result,
         message="Password updated successfully",
     )
+
+
+@router.post("/change-password", response_model=dict, summary="Change current user's password")
+async def change_password(
+    payload: ChangePasswordRequest,
+    current_user: CurrentUser,
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    result = await service.change_password(db, current_user["id"], payload.current_password, payload.new_password)
+    return ok(data=result, message="Password updated successfully")
 
 
 @router.get("/me", response_model=dict, summary="Get current user profile")

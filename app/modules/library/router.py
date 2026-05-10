@@ -22,7 +22,7 @@ async def create_book(payload: BookCreate, db: DB):
     return ok(data=BookOut.model_validate(book).model_dump(), message="Book added")
 
 
-@router.get("/books", response_model=dict)
+@router.get("/books", response_model=dict, dependencies=[Depends(require_permission(LIBRARY_MANAGE))])
 async def list_books(
     institution_id: str, db: DB,
     pagination: Annotated[PaginationParams, Depends()],
@@ -55,7 +55,7 @@ async def return_book(payload: ReturnBookRequest, db: DB):
     )
 
 
-@router.get("/issues", response_model=dict)
+@router.get("/issues", response_model=dict, dependencies=[Depends(require_permission(LIBRARY_ISSUE))])
 async def list_issues(
     db: DB,
     pagination: Annotated[PaginationParams, Depends()],

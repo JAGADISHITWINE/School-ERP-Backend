@@ -4,7 +4,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.db.session import get_db
 from app.modules.students import service
-from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate, StudentOut, AcademicRecordOut, AcademicRecordListItem
+from app.modules.students.schema import (
+    StudentCreate,
+    StudentUpdate,
+    StudentStatusUpdate,
+    StudentDocumentCreate,
+    StudentDocumentUpdate,
+    StudentDocumentOut,
+    AcademicRecordCreate,
+    StudentOut,
+    AcademicRecordOut,
+    AcademicRecordListItem,
+)
 from app.modules.users.model import User
 from app.modules.students.model import StudentAcademicRecord
 from app.modules.academic.model import Branch, Class, Section, AcademicYear
@@ -96,6 +107,7 @@ async def list_students(current_user: CurrentUser, db: DB, pagination: Paginatio
             "gender": s.gender,
             "guardian_name": s.guardian_name,
             "guardian_phone": s.guardian_phone,
+            "guardian_email": s.guardian_email,
             "full_name": user.full_name,
             "email": user.email,
             "role_slug": role_slug,
@@ -104,6 +116,38 @@ async def list_students(current_user: CurrentUser, db: DB, pagination: Paginatio
         }
         out.append(d)
     return paginated(out, total, pagination.page, pagination.page_size)
+
+
+@router.get("/documents/list", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
+async def list_student_documents(current_user: CurrentUser, db: DB, pagination: Pagination):
+    rows, total = await service.list_documents(
+        db, current_user["institution_id"], pagination.offset, pagination.page_size
+    )
+    out = []
+    for document, student_name, roll_number in rows:
+        data = StudentDocumentOut.model_validate(document).model_dump()
+        data["student_name"] = student_name
+        data["roll_number"] = roll_number
+        out.append(data)
+    return paginated(out, total, pagination.page, pagination.page_size)
+
+
+@router.post("/documents", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
+async def create_student_document(payload: StudentDocumentCreate, db: DB):
+    document = await service.create_document(db, payload)
+    return ok(data={"id": str(document.id)}, message="Student document added")
+
+
+@router.patch("/documents/{document_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
+async def update_student_document(document_id: str, payload: StudentDocumentUpdate, db: DB):
+    document = await service.update_document(db, document_id, payload)
+    return ok(data={"id": str(document.id)}, message="Student document updated")
+
+
+@router.delete("/documents/{document_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
+async def delete_student_document(document_id: str, db: DB):
+    await service.delete_document(db, document_id)
+    return ok(message="Student document deleted")
 
 
 @router.get("/{student_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
@@ -120,6 +164,7 @@ async def get_student(student_id: str, db: DB):
         "gender": student.gender,
         "guardian_name": student.guardian_name,
         "guardian_phone": student.guardian_phone,
+        "guardian_email": student.guardian_email,
         "full_name": user.full_name,
         "email": user.email,
         "role_slug": role_slug,
@@ -133,6 +178,20 @@ async def get_student(student_id: str, db: DB):
 async def update_student(student_id: str, payload: StudentUpdate, db: DB):
     student = await service.update_student(db, student_id, payload)
     return ok(data={"id": str(student.id)}, message="Student updated")
+
+
+@router.patch("/{student_id}/status", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
+async def update_student_status(student_id: str, payload: StudentStatusUpdate, db: DB):
+    record = await service.update_student_status(db, student_id, payload.status)
+    return ok(
+        data={
+            "student_id": str(record.student_id),
+            "academic_record_id": str(record.id),
+            "status": record.status,
+            "exited_at": record.exited_at,
+        },
+        message="Student status updated",
+    )
 
 
 @router.post("/{student_id}/academic-record", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
@@ -155,10 +214,11 @@ async def list_student_academic_records(student_id: str, db: DB):
                     Class.name,
                     AcademicYear.label,
                 )
-                .join(Section, Section.id == record.section_id)
+                .select_from(StudentAcademicRecord)
+                .join(Section, Section.id == StudentAcademicRecord.section_id)
                 .join(Class, Class.id == Section.class_id)
-                .join(Branch, Branch.id == record.branch_id)
-                .join(AcademicYear, AcademicYear.id == record.academic_year_id)
+                .join(Branch, Branch.id == StudentAcademicRecord.branch_id)
+                .join(AcademicYear, AcademicYear.id == StudentAcademicRecord.academic_year_id)
                 .where(StudentAcademicRecord.id == record.id)
             )
         ).first()

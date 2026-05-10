@@ -25,6 +25,11 @@ class ForgotPasswordRequest(BaseModel):
     )
 
 
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str = Field(min_length=8, max_length=100)
+
+
 class MeResponse(BaseModel):
     id: str
     email: str

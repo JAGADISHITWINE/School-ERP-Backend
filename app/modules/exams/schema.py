@@ -23,6 +23,18 @@ class ExamSubjectCreate(BaseModel):
     exam_date: date | None = None
 
 
+class ExamSubjectOut(BaseModel):
+    id: uuid.UUID
+    exam_id: uuid.UUID
+    subject_id: uuid.UUID
+    max_marks: int
+    pass_marks: int
+    exam_date: date | None
+
+    class Config:
+        from_attributes = True
+
+
 class ExamOut(BaseModel):
     id: uuid.UUID
     institution_id: uuid.UUID
