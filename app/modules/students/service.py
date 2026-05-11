@@ -1,12 +1,16 @@
 from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, desc, or_, case
 from app.modules.students.model import Student, StudentAcademicRecord, StudentStatus, StudentDocument
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
 from app.modules.students.schema import StudentCreate, StudentUpdate, AcademicRecordCreate, StudentDocumentCreate, StudentDocumentUpdate
 from app.core.security import hash_password
 from app.core.exceptions import NotFoundError, ConflictError, BusinessRuleError
+from app.modules.parents import service as parent_portal_service
+from app.modules.academic.model import AcademicYear, Branch, Class, Section
+from app.modules.library.model import Book, BookIssue, IssueStatus
+from app.modules.teachers.model import Teacher, TeacherClass, TeacherSubject, TeacherTimetable
 
 
 async def _get_student_role(db: AsyncSession, institution_id) -> Role | None:
@@ -74,13 +78,111 @@ async def create_student(db: AsyncSession, data: StudentCreate) -> Student:
     return student
 
 
-async def list_students(db: AsyncSession, institution_id: str, offset: int, limit: int):
+async def list_students(db: AsyncSession, institution_id: str, offset: int, limit: int, search: str | None = None):
     """List students belonging to an institution (via user FK)."""
     q = (
         select(Student)
         .join(User, Student.user_id == User.id)
-        .where(User.institution_id == institution_id)
+        .where(User.institution_id == institution_id, User.is_active == True)
     )
+    term = (search or "").strip().lower()
+    if term:
+        like = f"%{term}%"
+        starts = f"{term}%"
+        q = q.where(
+            or_(
+                func.lower(User.full_name).like(like),
+                func.lower(User.email).like(like),
+                func.lower(Student.roll_number).like(like),
+                func.lower(Student.guardian_name).like(like),
+                func.lower(Student.guardian_email).like(like),
+            )
+        ).order_by(
+            case(
+                (func.lower(Student.roll_number) == term, 0),
+                (func.lower(User.full_name) == term, 1),
+                (func.lower(Student.roll_number).like(starts), 2),
+                (func.lower(User.full_name).like(starts), 3),
+                else_=4,
+            ),
+            desc(Student.updated_at),
+            desc(Student.created_at),
+        )
+    else:
+        q = q.order_by(desc(Student.updated_at), desc(Student.created_at))
+    total = (await db.execute(select(func.count()).select_from(q.subquery()))).scalar()
+    result = await db.execute(q.offset(offset).limit(limit))
+    return result.scalars().all(), total
+
+
+async def list_students_for_teacher(
+    db: AsyncSession,
+    institution_id: str,
+    teacher_user_id: str,
+    offset: int,
+    limit: int,
+    search: str | None = None,
+):
+    teacher = (
+        await db.execute(select(Teacher).where(Teacher.user_id == teacher_user_id))
+    ).scalar_one_or_none()
+    if not teacher:
+        return [], 0
+
+    assigned_class_ids = select(TeacherClass.class_id).where(TeacherClass.teacher_id == teacher.id)
+    assigned_section_ids = (
+        select(TeacherSubject.section_id)
+        .where(TeacherSubject.teacher_id == teacher.id)
+        .union(
+            select(TeacherTimetable.section_id).where(
+                TeacherTimetable.teacher_id == teacher.id,
+                TeacherTimetable.is_active == True,
+            )
+        )
+    )
+
+    q = (
+        select(Student)
+        .join(User, Student.user_id == User.id)
+        .join(StudentAcademicRecord, StudentAcademicRecord.student_id == Student.id)
+        .join(Section, Section.id == StudentAcademicRecord.section_id)
+        .where(
+            User.institution_id == institution_id,
+            User.is_active == True,
+            StudentAcademicRecord.exited_at == None,
+            StudentAcademicRecord.status == StudentStatus.ACTIVE,
+            or_(
+                StudentAcademicRecord.section_id.in_(assigned_section_ids),
+                Section.class_id.in_(assigned_class_ids),
+            ),
+        )
+        .distinct()
+    )
+    term = (search or "").strip().lower()
+    if term:
+        like = f"%{term}%"
+        starts = f"{term}%"
+        q = q.where(
+            or_(
+                func.lower(User.full_name).like(like),
+                func.lower(User.email).like(like),
+                func.lower(Student.roll_number).like(like),
+                func.lower(Student.guardian_name).like(like),
+                func.lower(Student.guardian_email).like(like),
+            )
+        ).order_by(
+            case(
+                (func.lower(Student.roll_number) == term, 0),
+                (func.lower(User.full_name) == term, 1),
+                (func.lower(Student.roll_number).like(starts), 2),
+                (func.lower(User.full_name).like(starts), 3),
+                else_=4,
+            ),
+            desc(Student.updated_at),
+            desc(Student.created_at),
+        )
+    else:
+        q = q.order_by(desc(Student.updated_at), desc(Student.created_at))
     total = (await db.execute(select(func.count()).select_from(q.subquery()))).scalar()
     result = await db.execute(q.offset(offset).limit(limit))
     return result.scalars().all(), total
@@ -96,24 +198,324 @@ async def get_student(db: AsyncSession, student_id: str) -> Student:
     return student
 
 
+async def get_student_by_user_id(db: AsyncSession, user_id: str) -> Student:
+    student = (
+        await db.execute(select(Student).where(Student.user_id == user_id))
+    ).scalar_one_or_none()
+    if not student:
+        raise NotFoundError("Student profile not found for current user")
+    return student
+
+
+async def get_student_portal(db: AsyncSession, current_user: dict) -> dict:
+    student = await get_student_by_user_id(db, current_user["id"])
+    user = (
+        await db.execute(select(User).where(User.id == student.user_id))
+    ).scalar_one()
+    student_id = str(student.id)
+
+    attendance = await parent_portal_service.get_attendance_data(db, student_id)
+    performance = await parent_portal_service.get_performance_data(db, student_id)
+    fees = await parent_portal_service.get_fees_data(db, student_id)
+    exams = await parent_portal_service.get_exams_data(db, student_id)
+    timetable = await parent_portal_service.get_timetable_data(db, student_id)
+    notifications = await parent_portal_service.get_notifications(db, [student_id])
+    messages = await parent_portal_service.get_messages(db, [student_id])
+    library = await get_student_library_data(db, student_id, user.institution_id)
+    current = await _student_academic_snapshot(db, student_id)
+
+    profile = {
+        "id": student_id,
+        "rollNo": student.roll_number,
+        "name": user.full_name,
+        "email": user.email,
+        "phone": user.phone,
+        "avatar": _initials(user.full_name),
+        "guardianName": student.guardian_name,
+        "guardianPhone": student.guardian_phone,
+        "guardianEmail": student.guardian_email,
+        "dept": current.get("branch") or "Unassigned",
+        "year": current.get("className") or current.get("academicYear") or "",
+        "section": current.get("section") or "",
+        "semester": current.get("semester") or 0,
+        "cgpa": performance["cgpa"],
+        "attendance": attendance["overall"],
+        "pendingFees": fees["totalDue"],
+    }
+
+    return {
+        "student": profile,
+        "attendance": attendance,
+        "performance": performance,
+        "fees": fees,
+        "exams": exams,
+        "timetable": timetable,
+        "notifications": notifications,
+        "messages": messages,
+        "assignments": [],
+        "studyMaterials": [],
+        "library": library,
+    }
+
+
+async def get_student_library_data(db: AsyncSession, student_id: str, institution_id: str) -> dict:
+    books = (
+        await db.execute(
+            select(Book)
+            .where(Book.institution_id == institution_id)
+            .order_by(desc(Book.updated_at), desc(Book.created_at), Book.title.asc())
+            .limit(100)
+        )
+    ).scalars().all()
+
+    issues = (
+        await db.execute(
+            select(BookIssue, Book)
+            .join(Book, Book.id == BookIssue.book_id)
+            .where(
+                BookIssue.student_id == student_id,
+                BookIssue.status.in_([IssueStatus.ISSUED, IssueStatus.OVERDUE]),
+            )
+            .order_by(BookIssue.due_date.asc(), BookIssue.issued_on.desc())
+        )
+    ).all()
+
+    return {
+        "books": [
+            {
+                "id": str(book.id),
+                "title": book.title,
+                "author": book.author,
+                "publisher": book.publisher,
+                "isbn": book.isbn,
+                "copies": book.available_copies,
+                "available": book.available_copies > 0,
+                "updated_at": book.updated_at,
+            }
+            for book in books
+        ],
+        "issued": [
+            {
+                "id": str(issue.id),
+                "bookId": str(book.id),
+                "title": book.title,
+                "author": book.author,
+                "issued": issue.issued_on.isoformat() if issue.issued_on else "",
+                "due": issue.due_date.isoformat() if issue.due_date else "",
+                "fine": _money(issue.fine_amount),
+                "status": issue.status.value if hasattr(issue.status, "value") else issue.status,
+            }
+            for issue, book in issues
+        ],
+    }
+
+
+async def get_student_full_profile(db: AsyncSession, student_id: str) -> dict:
+    student = await get_student(db, student_id)
+    user = (
+        await db.execute(select(User).where(User.id == student.user_id))
+    ).scalar_one()
+
+    current = await _student_academic_snapshot(db, student_id)
+    attendance = await parent_portal_service.get_attendance_data(db, student_id)
+    performance = await parent_portal_service.get_performance_data(db, student_id)
+    fees = await parent_portal_service.get_fees_data(db, student_id)
+    exams = await parent_portal_service.get_exams_data(db, student_id)
+    timetable = await parent_portal_service.get_timetable_data(db, student_id)
+    behavior = await parent_portal_service.get_behavior_data(db, student_id)
+    notifications = await parent_portal_service.get_notifications(db, [student_id])
+
+    academic_records = []
+    for record in await list_academic_records(db, student_id):
+        row = (
+            await db.execute(
+                select(
+                    Branch.name,
+                    Section.name,
+                    Class.id,
+                    Class.name,
+                    AcademicYear.label,
+                )
+                .select_from(StudentAcademicRecord)
+                .join(Section, Section.id == StudentAcademicRecord.section_id)
+                .join(Class, Class.id == Section.class_id)
+                .join(Branch, Branch.id == StudentAcademicRecord.branch_id)
+                .join(AcademicYear, AcademicYear.id == StudentAcademicRecord.academic_year_id)
+                .where(StudentAcademicRecord.id == record.id)
+            )
+        ).first()
+        academic_records.append({
+            "id": str(record.id),
+            "student_id": str(record.student_id),
+            "branch_id": str(record.branch_id),
+            "branch_name": row[0] if row else None,
+            "section_id": str(record.section_id),
+            "section_name": row[1] if row else None,
+            "class_id": str(row[2]) if row and row[2] else None,
+            "class_name": row[3] if row else None,
+            "academic_year_id": str(record.academic_year_id),
+            "academic_year_label": row[4] if row else None,
+            "status": str(record.status.value if hasattr(record.status, "value") else record.status),
+            "enrolled_at": record.enrolled_at,
+            "exited_at": record.exited_at,
+        })
+
+    documents = (
+        await db.execute(
+            select(StudentDocument)
+            .where(StudentDocument.student_id == student_id)
+            .order_by(desc(StudentDocument.updated_at), desc(StudentDocument.created_at))
+        )
+    ).scalars().all()
+
+    return {
+        "profile": {
+            "id": str(student.id),
+            "user_id": str(student.user_id),
+            "roll_number": student.roll_number,
+            "full_name": user.full_name,
+            "email": user.email,
+            "phone": user.phone,
+            "date_of_birth": student.date_of_birth,
+            "gender": student.gender,
+            "guardian_name": student.guardian_name,
+            "guardian_phone": student.guardian_phone,
+            "guardian_email": student.guardian_email,
+            "created_at": student.created_at,
+            "updated_at": student.updated_at,
+            **current,
+        },
+        "academic_records": academic_records,
+        "attendance": attendance,
+        "performance": performance,
+        "fees": fees,
+        "exams": exams,
+        "timetable": timetable,
+        "behavior": behavior,
+        "notifications": notifications,
+        "documents": [
+            {
+                "id": str(item.id),
+                "document_type": item.document_type,
+                "title": item.title,
+                "file_name": item.file_name,
+                "file_url": item.file_url,
+                "status": item.status,
+                "remarks": item.remarks,
+                "created_at": item.created_at,
+                "updated_at": item.updated_at,
+            }
+            for item in documents
+        ],
+    }
+
+
+def _initials(name: str) -> str:
+    parts = [part for part in name.split() if part]
+    return "".join(part[0] for part in parts[:2]).upper() or "ST"
+
+
+async def _student_academic_snapshot(db: AsyncSession, student_id: str) -> dict:
+    from app.modules.academic.model import AcademicYear, Branch, Class, Section
+
+    row = (
+        await db.execute(
+            select(Branch.name, Section.name, Class.name, Class.semester, AcademicYear.label)
+            .select_from(StudentAcademicRecord)
+            .join(Branch, Branch.id == StudentAcademicRecord.branch_id)
+            .join(Section, Section.id == StudentAcademicRecord.section_id)
+            .join(Class, Class.id == Section.class_id)
+            .join(AcademicYear, AcademicYear.id == StudentAcademicRecord.academic_year_id)
+            .where(
+                StudentAcademicRecord.student_id == student_id,
+                StudentAcademicRecord.exited_at == None,
+            )
+            .limit(1)
+        )
+    ).first()
+    if not row:
+        return {}
+    return {
+        "branch": row[0],
+        "section": row[1],
+        "className": row[2],
+        "semester": row[3],
+        "academicYear": row[4],
+    }
+
+
 async def update_student(db: AsyncSession, student_id: str, data: StudentUpdate) -> Student:
     student = await get_student(db, student_id)
+    incoming = data.model_dump(exclude_none=True)
+
+    academic_year_id = incoming.pop("academic_year_id", None)
+    branch_id = incoming.pop("branch_id", None)
+    section_id = incoming.pop("section_id", None)
+
     # Update student profile fields
-    for k, v in data.model_dump(exclude_none=True).items():
+    for k, v in incoming.items():
         if hasattr(student, k):
             setattr(student, k, v)
     # Also update the user's full_name/phone if passed
     user_data = {}
-    if data.full_name:
-        user_data["full_name"] = data.full_name
-    if data.phone:
-        user_data["phone"] = data.phone
+    if "full_name" in incoming:
+        user_data["full_name"] = incoming["full_name"]
+    if "phone" in incoming:
+        user_data["phone"] = incoming["phone"]
     if user_data:
         user = (await db.execute(select(User).where(User.id == student.user_id))).scalar_one()
         for k, v in user_data.items():
             setattr(user, k, v)
+
+    if academic_year_id and branch_id and section_id:
+        active = (
+            await db.execute(
+                select(StudentAcademicRecord).where(
+                    StudentAcademicRecord.student_id == student_id,
+                    StudentAcademicRecord.exited_at == None,
+                )
+            )
+        ).scalar_one_or_none()
+        changed = (
+            not active
+            or active.academic_year_id != academic_year_id
+            or active.branch_id != branch_id
+            or active.section_id != section_id
+        )
+        if changed:
+            if active:
+                active.exited_at = datetime.now(timezone.utc)
+                active.status = StudentStatus.TRANSFERRED
+            db.add(
+                StudentAcademicRecord(
+                    student_id=student.id,
+                    section_id=section_id,
+                    branch_id=branch_id,
+                    academic_year_id=academic_year_id,
+                    status=StudentStatus.ACTIVE,
+                )
+            )
     await db.flush()
     return student
+
+
+async def delete_student(db: AsyncSession, student_id: str) -> None:
+    student = await get_student(db, student_id)
+    user = (await db.execute(select(User).where(User.id == student.user_id))).scalar_one()
+    user.is_active = False
+    active_records = (
+        await db.execute(
+            select(StudentAcademicRecord).where(
+                StudentAcademicRecord.student_id == student.id,
+                StudentAcademicRecord.exited_at == None,
+            )
+        )
+    ).scalars().all()
+    now = datetime.now(timezone.utc)
+    for record in active_records:
+        record.exited_at = now
+        record.status = StudentStatus.DROPPED
+    await db.flush()
 
 
 async def create_academic_record(
@@ -188,7 +590,7 @@ async def list_documents(db: AsyncSession, institution_id: str, offset: int, lim
         .join(Student, Student.id == StudentDocument.student_id)
         .join(User, User.id == Student.user_id)
         .where(User.institution_id == institution_id)
-        .order_by(StudentDocument.created_at.desc())
+        .order_by(StudentDocument.updated_at.desc(), StudentDocument.created_at.desc())
     )
     total_q = (
         select(func.count(StudentDocument.id))

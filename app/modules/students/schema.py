@@ -1,7 +1,32 @@
 import uuid
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date, datetime
 from app.modules.students.model import StudentStatus
+
+
+def clean_words(value: str | None) -> str | None:
+    if value is None:
+        return value
+    cleaned = " ".join(value.strip().split())
+    if not cleaned:
+        return cleaned
+    return cleaned[0].upper() + cleaned[1:]
+
+
+def clean_token(value: str | None) -> str | None:
+    if value is None:
+        return value
+    return " ".join(value.strip().split())
+
+
+def validate_phone(value: str | None) -> str | None:
+    value = clean_token(value)
+    if not value:
+        return value
+    digits = "".join(ch for ch in value if ch.isdigit())
+    if len(digits) < 10 or len(digits) > 15:
+        raise ValueError("Phone number must contain 10 to 15 digits")
+    return value
 
 
 class StudentCreate(BaseModel):
@@ -24,8 +49,26 @@ class StudentCreate(BaseModel):
     branch_id: uuid.UUID
     academic_year_id: uuid.UUID
 
+    @field_validator("full_name", "guardian_name", "gender", mode="before")
+    @classmethod
+    def normalize_words(cls, value):
+        return clean_words(value)
+
+    @field_validator("username", "roll_number", mode="before")
+    @classmethod
+    def normalize_tokens(cls, value):
+        return clean_token(value)
+
+    @field_validator("phone", "guardian_phone", mode="before")
+    @classmethod
+    def normalize_phone(cls, value):
+        return validate_phone(value)
+
 
 class StudentUpdate(BaseModel):
+    academic_year_id: uuid.UUID | None = None
+    branch_id: uuid.UUID | None = None
+    section_id: uuid.UUID | None = None
     full_name: str | None = None
     phone: str | None = None
     date_of_birth: date | None = None
@@ -33,6 +76,16 @@ class StudentUpdate(BaseModel):
     guardian_name: str | None = None
     guardian_phone: str | None = None
     guardian_email: EmailStr | None = None
+
+    @field_validator("full_name", "guardian_name", "gender", mode="before")
+    @classmethod
+    def normalize_words(cls, value):
+        return clean_words(value)
+
+    @field_validator("phone", "guardian_phone", mode="before")
+    @classmethod
+    def normalize_phone(cls, value):
+        return validate_phone(value)
 
 
 class StudentStatusUpdate(BaseModel):
@@ -134,6 +187,7 @@ class StudentOut(BaseModel):
     current_academic_year_label: str | None = None
     current_status: StudentStatus | None = None
     created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True

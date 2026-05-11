@@ -152,34 +152,57 @@ async def _course(db: AsyncSession, institution_id: str, code: str) -> Course:
     return item
 
 
-async def _branch(db: AsyncSession, institution_id: str, code: str) -> Branch:
-    item = (
+async def _branch(db: AsyncSession, institution_id: str, code: str, course_code: str = "") -> Branch:
+    query = (
+        select(Branch)
+        .join(Course, Course.id == Branch.course_id)
+        .where(Course.institution_id == institution_id, Branch.code == code)
+    )
+    if course_code:
+        query = query.where(Course.code == course_code)
+    rows = (
         await db.execute(
-            select(Branch)
-            .join(Course, Course.id == Branch.course_id)
-            .where(Course.institution_id == institution_id, Branch.code == code)
+            query
         )
-    ).scalar_one_or_none()
-    if not item:
+    ).scalars().all()
+    if not rows:
         raise NotFoundError(f"Branch not found: {code}")
-    return item
+    if len(rows) > 1:
+        raise ValidationError(f"Branch code is ambiguous: {code}. Provide course_code.")
+    return rows[0]
 
 
-async def _class(db: AsyncSession, institution_id: str, name: str) -> Class:
-    item = (
+async def _class(db: AsyncSession, institution_id: str, name: str, course_code: str = "", branch_code: str = "") -> Class:
+    query = (
+        select(Class)
+        .join(Course, Course.id == Class.course_id)
+        .where(Course.institution_id == institution_id, Class.name == name)
+    )
+    if course_code:
+        query = query.where(Course.code == course_code)
+    if branch_code:
+        query = query.outerjoin(Branch, Branch.id == Class.branch_id).where(Branch.code == branch_code)
+    rows = (
         await db.execute(
-            select(Class)
-            .join(Course, Course.id == Class.course_id)
-            .where(Course.institution_id == institution_id, Class.name == name)
+            query
         )
-    ).scalar_one_or_none()
-    if not item:
+    ).scalars().all()
+    if not rows:
         raise NotFoundError(f"Class not found: {name}")
-    return item
+    if len(rows) > 1:
+        raise ValidationError(f"Class name is ambiguous: {name}. Provide course_code and branch_code.")
+    return rows[0]
 
 
-async def _section(db: AsyncSession, institution_id: str, class_name: str, section_name: str) -> Section:
-    class_ = await _class(db, institution_id, class_name)
+async def _section(
+    db: AsyncSession,
+    institution_id: str,
+    class_name: str,
+    section_name: str,
+    course_code: str = "",
+    branch_code: str = "",
+) -> Section:
+    class_ = await _class(db, institution_id, class_name, course_code, branch_code)
     item = await _one(db, Section, Section.class_id == class_.id, Section.name == section_name)
     if not item:
         raise NotFoundError(f"Section not found: {class_name} / {section_name}")
@@ -274,7 +297,7 @@ async def _import_branch(db, institution_id, row):
 
 async def _import_class(db, institution_id, row):
     course = await _course(db, institution_id, _s(row, "course_code"))
-    branch = await _branch(db, institution_id, _s(row, "branch_code")) if _s(row, "branch_code") else None
+    branch = await _branch(db, institution_id, _s(row, "branch_code"), _s(row, "course_code")) if _s(row, "branch_code") else None
     year = await _year(db, institution_id, _s(row, "academic_year_label")) if _s(row, "academic_year_label") else None
     name = _s(row, "name")
     item = await _one(db, Class, Class.course_id == course.id, Class.name == name)
@@ -291,7 +314,7 @@ async def _import_class(db, institution_id, row):
 
 
 async def _import_section(db, institution_id, row):
-    class_ = await _class(db, institution_id, _s(row, "class_name"))
+    class_ = await _class(db, institution_id, _s(row, "class_name"), _s(row, "course_code"), _s(row, "branch_code"))
     name = _s(row, "name")
     item = await _one(db, Section, Section.class_id == class_.id, Section.name == name)
     action = "updated" if item else "created"
@@ -304,8 +327,8 @@ async def _import_section(db, institution_id, row):
 
 async def _import_subject(db, institution_id, row):
     course = await _course(db, institution_id, _s(row, "course_code"))
-    class_ = await _class(db, institution_id, _s(row, "class_name"))
-    branch = await _branch(db, institution_id, _s(row, "branch_code")) if _s(row, "branch_code") else None
+    class_ = await _class(db, institution_id, _s(row, "class_name"), _s(row, "course_code"), _s(row, "branch_code"))
+    branch = await _branch(db, institution_id, _s(row, "branch_code"), _s(row, "course_code")) if _s(row, "branch_code") else None
     year = await _year(db, institution_id, _s(row, "academic_year_label")) if _s(row, "academic_year_label") else None
     code = _s(row, "code")
     item = await _one(db, Subject, Subject.course_id == course.id, Subject.code == code)
@@ -360,8 +383,8 @@ async def _import_student(db, institution_id, row):
         )
 
     year = await _year(db, institution_id, _s(row, "academic_year_label"))
-    branch = await _branch(db, institution_id, _s(row, "branch_code"))
-    section = await _section(db, institution_id, _s(row, "class_name"), _s(row, "section_name"))
+    branch = await _branch(db, institution_id, _s(row, "branch_code"), _s(row, "course_code"))
+    section = await _section(db, institution_id, _s(row, "class_name"), _s(row, "section_name"), _s(row, "course_code"), _s(row, "branch_code"))
     active = await _one(db, StudentAcademicRecord, StudentAcademicRecord.student_id == item.id, StudentAcademicRecord.exited_at == None)
     if not active:
         db.add(StudentAcademicRecord(student_id=item.id, section_id=section.id, branch_id=branch.id, academic_year_id=year.id, status=StudentStatus.ACTIVE))
@@ -577,11 +600,12 @@ async def _export_library_books(db, institution_id):
 async def _export_students(db, institution_id):
     rows = (
         await db.execute(
-            select(Student, User, StudentAcademicRecord, Section, Class, Branch, AcademicYear)
+            select(Student, User, StudentAcademicRecord, Section, Class, Course, Branch, AcademicYear)
             .join(User, User.id == Student.user_id)
             .outerjoin(StudentAcademicRecord, (StudentAcademicRecord.student_id == Student.id) & (StudentAcademicRecord.exited_at == None))
             .outerjoin(Section, Section.id == StudentAcademicRecord.section_id)
             .outerjoin(Class, Class.id == Section.class_id)
+            .outerjoin(Course, Course.id == Class.course_id)
             .outerjoin(Branch, Branch.id == StudentAcademicRecord.branch_id)
             .outerjoin(AcademicYear, AcademicYear.id == StudentAcademicRecord.academic_year_id)
             .where(User.institution_id == institution_id)
@@ -601,11 +625,12 @@ async def _export_students(db, institution_id):
             "guardian_phone": student.guardian_phone or "",
             "guardian_email": student.guardian_email or "",
             "academic_year_label": year.label if year else "",
+            "course_code": course.code if course else "",
             "branch_code": branch.code if branch else "",
             "class_name": class_.name if class_ else "",
             "section_name": section.name if section else "",
         }
-        for student, user, _, section, class_, branch, year in rows
+        for student, user, _, section, class_, course, branch, year in rows
     ]
 
 
@@ -619,9 +644,9 @@ SPECS = {
     "courses": {"headers": ["code", "name", "level", "duration_years", "is_active"], "examples": [{"code": "BCA", "name": "Bachelor of Computer Applications", "level": "UG", "duration_years": "3", "is_active": "true"}]},
     "branches": {"headers": ["course_code", "code", "name", "is_active"], "examples": [{"course_code": "BTECH", "code": "AIML", "name": "Artificial Intelligence and Machine Learning", "is_active": "true"}]},
     "classes": {"headers": ["course_code", "branch_code", "academic_year_label", "name", "year_no", "semester", "intake_capacity"], "examples": [{"course_code": "BTECH", "branch_code": "CSE", "academic_year_label": "2026-27", "name": "CSE Fourth Year - Semester 7", "year_no": "4", "semester": "7", "intake_capacity": "60"}]},
-    "sections": {"headers": ["class_name", "name", "max_strength"], "examples": [{"class_name": "CSE Second Year - Semester 3", "name": "C", "max_strength": "60"}]},
+    "sections": {"headers": ["course_code", "branch_code", "class_name", "name", "max_strength"], "examples": [{"course_code": "BTECH", "branch_code": "CSE", "class_name": "CSE Second Year - Semester 3", "name": "C", "max_strength": "60"}]},
     "subjects": {"headers": ["course_code", "class_name", "branch_code", "academic_year_label", "semester", "code", "name", "credits", "is_active"], "examples": [{"course_code": "BTECH", "class_name": "CSE Second Year - Semester 3", "branch_code": "CSE", "academic_year_label": "2026-27", "semester": "3", "code": "CS2309", "name": "Design and Analysis of Algorithms", "credits": "4", "is_active": "true"}]},
-    "students": {"headers": ["full_name", "email", "username", "password", "phone", "roll_number", "date_of_birth", "gender", "guardian_name", "guardian_phone", "guardian_email", "academic_year_label", "branch_code", "class_name", "section_name"], "examples": [{"full_name": "New Student", "email": "new.student@student.demo.edu", "username": "new.student", "password": "Demo@123", "phone": "9000099999", "roll_number": "DEC27CSEA099", "date_of_birth": "2007-05-20", "gender": "female", "guardian_name": "Demo Parent", "guardian_phone": "9000099998", "guardian_email": "demo.parent@parent.demo.edu", "academic_year_label": "2026-27", "branch_code": "CSE", "class_name": "CSE Second Year - Semester 3", "section_name": "A"}]},
+    "students": {"headers": ["full_name", "email", "username", "password", "phone", "roll_number", "date_of_birth", "gender", "guardian_name", "guardian_phone", "guardian_email", "academic_year_label", "course_code", "branch_code", "class_name", "section_name"], "examples": [{"full_name": "New Student", "email": "new.student@student.demo.edu", "username": "new.student", "password": "Demo@123", "phone": "9000099999", "roll_number": "DEC27CSEA099", "date_of_birth": "2007-05-20", "gender": "female", "guardian_name": "Demo Parent", "guardian_phone": "9000099998", "guardian_email": "demo.parent@parent.demo.edu", "academic_year_label": "2026-27", "course_code": "BTECH", "branch_code": "CSE", "class_name": "CSE Second Year - Semester 3", "section_name": "A"}]},
     "teachers": {"headers": ["full_name", "email", "username", "password", "phone", "employee_code", "designation", "joined_at"], "examples": [{"full_name": "Demo Faculty", "email": "demo.faculty@demo.edu", "username": "demo.faculty", "password": "Demo@123", "phone": "9000088888", "employee_code": "FAC-DEMO-01", "designation": "Assistant Professor", "joined_at": "2026-06-01"}]},
     "fee-types": {"headers": ["name", "description"], "examples": [{"name": "Development Fee", "description": "Annual development fee"}]},
     "fee-structures": {"headers": ["fee_type_name", "course_code", "academic_year_label", "amount", "frequency"], "examples": [{"fee_type_name": "Development Fee", "course_code": "BTECH", "academic_year_label": "2026-27", "amount": "12000", "frequency": "annual"}]},

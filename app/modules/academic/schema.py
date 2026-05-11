@@ -1,6 +1,21 @@
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import date, datetime
+
+
+def clean_words(value: str | None) -> str | None:
+    if value is None:
+        return value
+    cleaned = " ".join(value.strip().split())
+    if not cleaned:
+        return cleaned
+    return cleaned[0].upper() + cleaned[1:]
+
+
+def clean_code(value: str | None) -> str | None:
+    if value is None:
+        return value
+    return " ".join(value.strip().split()).upper()
 
 
 # Academic Year
@@ -11,6 +26,11 @@ class AcademicYearCreate(BaseModel):
     end_date: date
     is_current: bool = False
 
+    @field_validator("label", mode="before")
+    @classmethod
+    def normalize_label(cls, value):
+        return clean_words(value)
+
 
 class AcademicYearUpdate(BaseModel):
     label: str | None = None
@@ -18,6 +38,11 @@ class AcademicYearUpdate(BaseModel):
     end_date: date | None = None
     is_current: bool | None = None
     is_active: bool | None = None
+
+    @field_validator("label", mode="before")
+    @classmethod
+    def normalize_label(cls, value):
+        return clean_words(value)
 
 
 class AcademicYearOut(BaseModel):
@@ -41,12 +66,34 @@ class CourseCreate(BaseModel):
     level: str
     duration_years: int
 
+    @field_validator("name", "level", mode="before")
+    @classmethod
+    def normalize_words(cls, value):
+        return clean_words(value)
+
+    @field_validator("code", mode="before")
+    @classmethod
+    def normalize_code(cls, value):
+        return clean_code(value)
+
 
 class CourseUpdate(BaseModel):
+    institution_id: uuid.UUID
     name: str | None = None
+    code: str | None = None
     level: str | None = None
     duration_years: int | None = None
     is_active: bool | None = None
+
+    @field_validator("name", "level", mode="before")
+    @classmethod
+    def normalize_words(cls, value):
+        return clean_words(value)
+
+    @field_validator("code", mode="before")
+    @classmethod
+    def normalize_code(cls, value):
+        return clean_code(value)
 
 
 class CourseOut(BaseModel):
@@ -68,10 +115,32 @@ class BranchCreate(BaseModel):
     name: str
     code: str
 
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
+
+    @field_validator("code", mode="before")
+    @classmethod
+    def normalize_code(cls, value):
+        return clean_code(value)
+
 
 class BranchUpdate(BaseModel):
+    course_id: uuid.UUID | None = None
     name: str | None = None
+    code: str | None = None
     is_active: bool | None = None
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
+
+    @field_validator("code", mode="before")
+    @classmethod
+    def normalize_code(cls, value):
+        return clean_code(value)
 
 
 class BranchOut(BaseModel):
@@ -96,6 +165,16 @@ class SubjectCreate(BaseModel):
     code: str
     credits: int = 0
 
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
+
+    @field_validator("code", mode="before")
+    @classmethod
+    def normalize_code(cls, value):
+        return clean_code(value)
+
 
 class SubjectUpdate(BaseModel):
     course_id: uuid.UUID | None = None
@@ -107,6 +186,16 @@ class SubjectUpdate(BaseModel):
     code: str | None = None
     credits: int | None = None
     is_active: bool | None = None
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
+
+    @field_validator("code", mode="before")
+    @classmethod
+    def normalize_code(cls, value):
+        return clean_code(value)
 
 
 class SubjectOut(BaseModel):
@@ -135,6 +224,11 @@ class ClassCreate(BaseModel):
     semester: int | None = None
     intake_capacity: int = 60
 
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
+
 
 class ClassUpdate(BaseModel):
     course_id: uuid.UUID | None = None
@@ -144,6 +238,11 @@ class ClassUpdate(BaseModel):
     year_no: int | None = None
     semester: int | None = None
     intake_capacity: int | None = None
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
 
 
 class ClassOut(BaseModel):
@@ -166,10 +265,20 @@ class SectionCreate(BaseModel):
     name: str
     max_strength: int = 60
 
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
+
 
 class SectionUpdate(BaseModel):
     name: str | None = None
     max_strength: int | None = None
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return clean_words(value)
 
 
 class SectionOut(BaseModel):

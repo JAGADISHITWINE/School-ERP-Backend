@@ -205,6 +205,147 @@ async def list_teacher_classes(db: AsyncSession, teacher_id: str) -> list[dict]:
     return [dict(row) for row in rows]
 
 
+async def list_teacher_teaching_scope(
+    db: AsyncSession,
+    teacher_id: str,
+    branch_id: str | None = None,
+    class_id: str | None = None,
+    section_id: str | None = None,
+) -> dict:
+    await get_teacher(db, teacher_id)
+
+    teacher_class_ids = select(TeacherClass.class_id).where(TeacherClass.teacher_id == teacher_id)
+    teacher_class_branch_ids = (
+        select(Class.branch_id)
+        .join(TeacherClass, TeacherClass.class_id == Class.id)
+        .where(TeacherClass.teacher_id == teacher_id)
+    )
+    linked_branch_ids = (
+        select(HODLink.branch_id)
+        .join(TeacherHODSubjectLink, TeacherHODSubjectLink.hod_link_id == HODLink.id)
+        .where(TeacherHODSubjectLink.teacher_id == teacher_id)
+    )
+
+    branch_q = (
+        select(Branch.id, Branch.name)
+        .join(Course, Course.id == Branch.course_id)
+        .add_columns(Course.id.label("course_id"), Course.name.label("course_name"))
+        .where(
+            or_(
+                Branch.id.in_(teacher_class_branch_ids),
+                Branch.id.in_(linked_branch_ids),
+            )
+        )
+        .distinct()
+        .order_by(Branch.name.asc())
+    )
+    branches = (await db.execute(branch_q)).mappings().all()
+
+    class_q = (
+        select(
+            Class.id,
+            Class.name,
+            Class.semester,
+            Class.year_no,
+            Class.branch_id,
+            Branch.name.label("branch_name"),
+            Class.course_id,
+            Course.name.label("course_name"),
+        )
+        .outerjoin(Branch, Branch.id == Class.branch_id)
+        .outerjoin(Course, Course.id == Class.course_id)
+        .where(
+            or_(
+                Class.id.in_(teacher_class_ids),
+                Class.branch_id.in_(linked_branch_ids),
+            )
+        )
+    )
+    if branch_id:
+        class_q = class_q.where(Class.branch_id == branch_id)
+    classes = (
+        await db.execute(class_q.order_by(Branch.name.asc(), Class.semester.asc(), Class.name.asc()))
+    ).mappings().all()
+
+    section_q = (
+        select(
+            Section.id,
+            Section.name,
+            Section.class_id,
+            Class.name.label("class_name"),
+        )
+        .join(Class, Class.id == Section.class_id)
+        .outerjoin(TeacherSubject, TeacherSubject.section_id == Section.id)
+        .where(
+            or_(
+                TeacherSubject.teacher_id == teacher_id,
+                Class.id.in_(teacher_class_ids),
+                Class.branch_id.in_(linked_branch_ids),
+            )
+        )
+        .distinct()
+    )
+    if branch_id:
+        section_q = section_q.where(Class.branch_id == branch_id)
+    if class_id:
+        section_q = section_q.where(Section.class_id == class_id)
+    sections = (
+        await db.execute(section_q.order_by(Class.name.asc(), Section.name.asc()))
+    ).mappings().all()
+
+    subject_q = (
+        select(
+            Subject.id,
+            Subject.name,
+            Subject.code,
+            Subject.class_id,
+            func.coalesce(Subject.branch_id, Class.branch_id).label("branch_id"),
+            TeacherSubject.section_id,
+        )
+        .outerjoin(TeacherSubject, TeacherSubject.subject_id == Subject.id)
+        .outerjoin(TeacherHODSubjectLink, TeacherHODSubjectLink.subject_id == Subject.id)
+        .outerjoin(HODLink, HODLink.id == TeacherHODSubjectLink.hod_link_id)
+        .join(Class, Class.id == Subject.class_id)
+        .where(
+            or_(
+                TeacherSubject.teacher_id == teacher_id,
+                TeacherHODSubjectLink.teacher_id == teacher_id,
+            )
+        )
+        .distinct()
+    )
+    if branch_id:
+        subject_q = subject_q.where(
+            or_(
+                Class.branch_id == branch_id,
+                Subject.branch_id == branch_id,
+                HODLink.branch_id == branch_id,
+            )
+        )
+    if class_id:
+        subject_q = subject_q.where(Subject.class_id == class_id)
+    if section_id:
+        section_class_id = (
+            await db.execute(select(Section.class_id).where(Section.id == section_id))
+        ).scalar_one_or_none()
+        subject_q = subject_q.where(
+            or_(
+                TeacherSubject.section_id == section_id,
+                Subject.class_id == section_class_id,
+            )
+        )
+    subjects = (
+        await db.execute(subject_q.order_by(Subject.name.asc(), Subject.code.asc()))
+    ).mappings().all()
+
+    return {
+        "branches": [dict(row) for row in branches],
+        "classes": [dict(row) for row in classes],
+        "sections": [dict(row) for row in sections],
+        "subjects": [dict(row) for row in subjects],
+    }
+
+
 async def list_teacher_timetable(
     db: AsyncSession,
     teacher_id: str,
@@ -844,6 +985,66 @@ async def list_teacher_hod_subject_links(
     return [dict(row) for row in rows]
 
 
+async def list_institution_timetable(
+    db: AsyncSession,
+    institution_id: str,
+    day_of_week: TimetableDay | None = None,
+) -> list[dict]:
+    q = (
+        select(
+            TeacherTimetable.id,
+            TeacherTimetable.teacher_id,
+            User.full_name.label("teacher_name"),
+            Teacher.designation.label("teacher_designation"),
+            TeacherTimetable.class_id,
+            Class.name.label("class_name"),
+            TeacherTimetable.section_id,
+            Section.name.label("section_name"),
+            TeacherTimetable.subject_id,
+            Subject.name.label("subject_name"),
+            Branch.id.label("branch_id"),
+            Branch.name.label("branch_name"),
+            TeacherTimetable.academic_year_id,
+            AcademicYear.label.label("academic_year_label"),
+            TeacherTimetable.day_of_week,
+            TeacherTimetable.start_time,
+            TeacherTimetable.end_time,
+            TeacherTimetable.room_no,
+            TeacherTimetable.version_no,
+            TeacherTimetable.is_active,
+            literal(None).label("session_id"),
+            literal(None).label("session_status"),
+            literal(None).label("session_date"),
+        )
+        .join(Teacher, Teacher.id == TeacherTimetable.teacher_id)
+        .join(User, User.id == Teacher.user_id)
+        .join(Class, Class.id == TeacherTimetable.class_id)
+        .join(Section, Section.id == TeacherTimetable.section_id)
+        .join(Subject, Subject.id == TeacherTimetable.subject_id)
+        .join(Branch, Branch.id == Class.branch_id)
+        .join(AcademicYear, AcademicYear.id == TeacherTimetable.academic_year_id)
+        .where(
+            User.institution_id == institution_id,
+            TeacherTimetable.is_active == True,
+        )
+    )
+    if day_of_week:
+        q = q.where(TeacherTimetable.day_of_week == day_of_week)
+
+    rows = (
+        await db.execute(
+            q.order_by(
+                TeacherTimetable.day_of_week.asc(),
+                TeacherTimetable.start_time.asc(),
+                User.full_name.asc(),
+                Class.name.asc(),
+                Section.name.asc(),
+            )
+        )
+    ).mappings().all()
+    return [dict(row) for row in rows]
+
+
 async def get_hod_branch_analytics(db: AsyncSession, user_id: str, academic_year_id: str | None = None) -> dict:
     teacher = (
         await db.execute(select(Teacher).where(Teacher.user_id == user_id))
@@ -1210,8 +1411,20 @@ async def _validate_timetable_refs(
             )
         )
     ).first()
-    if not class_link:
-        raise ValidationError("Teacher is not linked to the selected class")
+    branch_subject_link = (
+        await db.execute(
+            select(TeacherHODSubjectLink.id)
+            .join(HODLink, HODLink.id == TeacherHODSubjectLink.hod_link_id)
+            .where(
+                TeacherHODSubjectLink.teacher_id == teacher.id,
+                TeacherHODSubjectLink.subject_id == subject_obj.id,
+                HODLink.branch_id == class_obj.branch_id,
+            )
+            .limit(1)
+        )
+    ).first()
+    if not class_link and not branch_subject_link:
+        raise ValidationError("Teacher is not linked to the selected class or branch subject")
 
     return class_obj, section_obj, subject_obj
 

@@ -1,11 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, update
+from sqlalchemy import select, func, update, or_
 from app.modules.exams.model import Exam, ExamSubject, Mark, ExamWorkflow
 from app.modules.exams.schema import ExamCreate, ExamUpdate, ExamSubjectCreate, MarksUploadRequest
 from app.core.exceptions import NotFoundError, BusinessRuleError
 from app.modules.logs.service import log_activity
-from app.modules.students.model import Student
+from app.modules.students.model import Student, StudentAcademicRecord, StudentStatus
 from app.modules.users.model import User
+from app.modules.roles.model import Role, UserRole
+from app.modules.academic.model import Section, Subject
+from app.modules.teachers.model import Teacher, TeacherClass, TeacherSubject, TeacherTimetable
 
 
 async def create_exam(db: AsyncSession, data: ExamCreate) -> Exam:
@@ -108,6 +111,11 @@ async def upload_marks(
         raise BusinessRuleError("Exam does not belong to your institution")
     if exam.workflow_status != ExamWorkflow.DRAFT:
         raise BusinessRuleError("Marks can be uploaded only while exam is in draft status")
+    teacher = await _teacher_for_user(db, actor_user_id)
+    if teacher:
+        allowed = await _teacher_can_upload_exam_subject(db, str(teacher.id), es)
+        if not allowed:
+            raise BusinessRuleError("Teacher is not assigned to this exam subject")
 
     # Upsert marks per student
     for entry in data.entries:
@@ -130,6 +138,10 @@ async def upload_marks(
         ).scalar_one_or_none()
         if not student:
             raise BusinessRuleError("Student does not belong to this institution")
+        if teacher:
+            allowed_student = await _teacher_can_mark_student(db, str(teacher.id), es, str(entry.student_id))
+            if not allowed_student:
+                raise BusinessRuleError("One or more students are outside this teacher assignment")
         if not entry.is_absent:
             if entry.marks_obtained is None:
                 raise BusinessRuleError("Marks are required when student is not absent")
@@ -168,3 +180,93 @@ async def get_marks(db: AsyncSession, exam_subject_id: str) -> list[Mark]:
         select(Mark).where(Mark.exam_subject_id == exam_subject_id)
     )
     return result.scalars().all()
+
+
+async def _teacher_for_user(db: AsyncSession, user_id: str | None) -> Teacher | None:
+    if not user_id:
+        return None
+    role_slug = (
+        await db.execute(
+            select(Role.slug)
+            .join(UserRole, UserRole.role_id == Role.id)
+            .where(UserRole.user_id == user_id)
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    if role_slug != "teacher":
+        return None
+    return (
+        await db.execute(select(Teacher).where(Teacher.user_id == user_id))
+    ).scalar_one_or_none()
+
+
+async def _teacher_can_upload_exam_subject(db: AsyncSession, teacher_id: str, exam_subject: ExamSubject) -> bool:
+    subject = (
+        await db.execute(select(Subject).where(Subject.id == exam_subject.subject_id))
+    ).scalar_one_or_none()
+    if not subject:
+        return False
+    row = (
+        await db.execute(
+            select(TeacherSubject.id)
+            .where(
+                TeacherSubject.teacher_id == teacher_id,
+                TeacherSubject.subject_id == exam_subject.subject_id,
+            )
+            .union(
+                select(TeacherTimetable.id).where(
+                    TeacherTimetable.teacher_id == teacher_id,
+                    TeacherTimetable.subject_id == exam_subject.subject_id,
+                    TeacherTimetable.is_active == True,
+                )
+            )
+            .union(
+                select(TeacherClass.id).where(
+                    TeacherClass.teacher_id == teacher_id,
+                    TeacherClass.class_id == subject.class_id,
+                )
+            )
+            .limit(1)
+        )
+    ).first()
+    return bool(row)
+
+
+async def _teacher_can_mark_student(db: AsyncSession, teacher_id: str, exam_subject: ExamSubject, student_id: str) -> bool:
+    subject = (
+        await db.execute(select(Subject).where(Subject.id == exam_subject.subject_id))
+    ).scalar_one_or_none()
+    if not subject:
+        return False
+    row = (
+        await db.execute(
+            select(StudentAcademicRecord.id)
+            .join(Section, Section.id == StudentAcademicRecord.section_id)
+            .where(
+                StudentAcademicRecord.student_id == student_id,
+                StudentAcademicRecord.exited_at == None,
+                StudentAcademicRecord.status == StudentStatus.ACTIVE,
+                Section.class_id == subject.class_id,
+                or_(
+                    StudentAcademicRecord.section_id.in_(
+                        select(TeacherSubject.section_id).where(
+                            TeacherSubject.teacher_id == teacher_id,
+                            TeacherSubject.subject_id == exam_subject.subject_id,
+                        )
+                    ),
+                    StudentAcademicRecord.section_id.in_(
+                        select(TeacherTimetable.section_id).where(
+                            TeacherTimetable.teacher_id == teacher_id,
+                            TeacherTimetable.subject_id == exam_subject.subject_id,
+                            TeacherTimetable.is_active == True,
+                        )
+                    ),
+                    Section.class_id.in_(
+                        select(TeacherClass.class_id).where(TeacherClass.teacher_id == teacher_id)
+                    ),
+                ),
+            )
+            .limit(1)
+        )
+    ).first()
+    return bool(row)

@@ -94,6 +94,45 @@ async def list_teachers(current_user: CurrentUser, db: DB, pagination: Annotated
     return paginated(out, total, pagination.page, pagination.page_size)
 
 
+@router.get("/self/teaching-scope", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def my_teaching_scope(
+    current_user: CurrentUser,
+    db: DB,
+    branch_id: str | None = None,
+    class_id: str | None = None,
+    section_id: str | None = None,
+):
+    teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
+    if not teacher:
+        raise NotFoundError("Teacher profile not found for current user")
+    data = await service.list_teacher_teaching_scope(
+        db,
+        str(teacher.id),
+        branch_id=branch_id,
+        class_id=class_id,
+        section_id=section_id,
+    )
+    return ok(data=data)
+
+
+@router.get("/{teacher_id}/teaching-scope", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def list_teacher_teaching_scope(
+    teacher_id: str,
+    db: DB,
+    branch_id: str | None = None,
+    class_id: str | None = None,
+    section_id: str | None = None,
+):
+    data = await service.list_teacher_teaching_scope(
+        db,
+        teacher_id,
+        branch_id=branch_id,
+        class_id=class_id,
+        section_id=section_id,
+    )
+    return ok(data=data)
+
+
 @router.get("/{teacher_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
 async def get_teacher(teacher_id: str, db: DB):
     teacher = await service.get_teacher(db, teacher_id)
@@ -235,6 +274,16 @@ async def update_teacher_hod_subject_link(link_id: str, payload: TeacherHODSubje
         payload.subject_id,
     )
     return ok(data={"id": str(link.id)}, message="Teacher-HOD subject link updated")
+
+
+@router.get("/timetable/all", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def list_all_teacher_timetables(current_user: CurrentUser, db: DB, day_of_week: TimetableDay | None = None):
+    items = await service.list_institution_timetable(
+        db,
+        current_user["institution_id"],
+        day_of_week=day_of_week,
+    )
+    return ok(data=items)
 
 
 @router.get("/{teacher_id}/timetable", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])

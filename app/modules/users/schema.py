@@ -14,12 +14,12 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    institution_id: uuid.UUID
+    institution_id: uuid.UUID | None = None
     role_id: uuid.UUID | None = None
-    email: EmailStr
-    username: str
+    email: EmailStr | None = None
+    username: str | None = None
     password: str | None = None
-    full_name: str
+    full_name: str | None = None
     phone: str | None = None
     is_active: bool | None = None
 

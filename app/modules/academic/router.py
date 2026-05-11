@@ -43,6 +43,11 @@ async def update_academic_year(id: str, payload: AcademicYearUpdate, db: DB):
     obj = await service.update_academic_year(db, id, payload)
     return ok(data=AcademicYearOut.model_validate(obj).model_dump())
 
+@router.delete("/academic-years/{id}", response_model=dict, dependencies=[perm(ACADEMIC_YEAR_MANAGE)])
+async def delete_academic_year(id: str, db: DB):
+    await service.delete_academic_year(db, id)
+    return ok(message="Academic year deleted")
+
 
 # ─── Courses ───────────────────────────────────────────────────────────────
 
@@ -61,6 +66,11 @@ async def update_course(id: str, payload: CourseUpdate, db: DB):
     obj = await service.update_course(db, id, payload)
     return ok(data=CourseOut.model_validate(obj).model_dump())
 
+@router.delete("/courses/{id}", response_model=dict, dependencies=[perm(COURSE_MANAGE)])
+async def delete_course(id: str, db: DB):
+    await service.delete_course(db, id)
+    return ok(message="Course deleted")
+
 
 # ─── Branches ──────────────────────────────────────────────────────────────
 
@@ -70,7 +80,7 @@ async def create_branch(payload: BranchCreate, db: DB):
     return ok(data=BranchOut.model_validate(obj).model_dump(), message="Branch created")
 
 @router.get("/branches", response_model=dict, dependencies=[perm(BRANCH_MANAGE)])
-async def list_branches(course_id: str, db: DB, pagination: Pagination):
+async def list_branches(db: DB, pagination: Pagination, course_id: str | None = None):
     items, total = await service.list_branches(db, course_id, pagination.offset, pagination.page_size)
     return paginated([BranchOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
 
@@ -78,6 +88,11 @@ async def list_branches(course_id: str, db: DB, pagination: Pagination):
 async def update_branch(id: str, payload: BranchUpdate, db: DB):
     obj = await service.update_branch(db, id, payload)
     return ok(data=BranchOut.model_validate(obj).model_dump())
+
+@router.delete("/branches/{id}", response_model=dict, dependencies=[perm(BRANCH_MANAGE)])
+async def delete_branch(id: str, db: DB):
+    await service.delete_branch(db, id)
+    return ok(message="Branch deleted")
 
 
 # ─── Subjects ──────────────────────────────────────────────────────────────
@@ -93,14 +108,29 @@ async def list_subjects(
     pagination: Annotated[PaginationParams, Depends()],
     class_id: str | None = None,
     branch_id: str | None = None,
+    course_id: str | None = None,
+    academic_year_id: str | None = None,
 ):
-    items, total = await service.list_subjects(db, class_id, pagination.offset, pagination.page_size, branch_id=branch_id)
+    items, total = await service.list_subjects(
+        db,
+        class_id,
+        pagination.offset,
+        pagination.page_size,
+        branch_id=branch_id,
+        course_id=course_id,
+        academic_year_id=academic_year_id,
+    )
     return paginated([SubjectOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
 
 @router.patch("/subjects/{id}", response_model=dict, dependencies=[perm(SUBJECT_MANAGE)])
 async def update_subject(id: str, payload: SubjectUpdate, db: DB):
     obj = await service.update_subject(db, id, payload)
     return ok(data=SubjectOut.model_validate(obj).model_dump())
+
+@router.delete("/subjects/{id}", response_model=dict, dependencies=[perm(SUBJECT_MANAGE)])
+async def delete_subject(id: str, db: DB):
+    await service.delete_subject(db, id)
+    return ok(message="Subject deleted")
 
 
 # ─── Classes ───────────────────────────────────────────────────────────────
@@ -116,14 +146,27 @@ async def list_classes(
     pagination: Annotated[PaginationParams, Depends()],
     course_id: str | None = None,
     branch_id: str | None = None,
+    academic_year_id: str | None = None,
 ):
-    items, total = await service.list_classes(db, course_id, pagination.offset, pagination.page_size, branch_id=branch_id)
+    items, total = await service.list_classes(
+        db,
+        course_id,
+        pagination.offset,
+        pagination.page_size,
+        branch_id=branch_id,
+        academic_year_id=academic_year_id,
+    )
     return paginated([ClassOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
 
 @router.patch("/classes/{id}", response_model=dict, dependencies=[perm(CLASS_MANAGE)])
 async def update_class(id: str, payload: ClassUpdate, db: DB):
     obj = await service.update_class(db, id, payload)
     return ok(data=ClassOut.model_validate(obj).model_dump())
+
+@router.delete("/classes/{id}", response_model=dict, dependencies=[perm(CLASS_MANAGE)])
+async def delete_class(id: str, db: DB):
+    await service.delete_class(db, id)
+    return ok(message="Class deleted")
 
 
 # ─── Sections ──────────────────────────────────────────────────────────────
@@ -134,7 +177,7 @@ async def create_section(payload: SectionCreate, db: DB):
     return ok(data=SectionOut.model_validate(obj).model_dump(), message="Section created")
 
 @router.get("/sections", response_model=dict, dependencies=[perm(SECTION_MANAGE)])
-async def list_sections(class_id: str, db: DB, pagination: Pagination):
+async def list_sections(db: DB, pagination: Pagination, class_id: str | None = None):
     items, total = await service.list_sections(db, class_id, pagination.offset, pagination.page_size)
     return paginated([SectionOut.model_validate(i).model_dump() for i in items], total, pagination.page, pagination.page_size)
 
@@ -142,3 +185,8 @@ async def list_sections(class_id: str, db: DB, pagination: Pagination):
 async def update_section(id: str, payload: SectionUpdate, db: DB):
     obj = await service.update_section(db, id, payload)
     return ok(data=SectionOut.model_validate(obj).model_dump())
+
+@router.delete("/sections/{id}", response_model=dict, dependencies=[perm(SECTION_MANAGE)])
+async def delete_section(id: str, db: DB):
+    await service.delete_section(db, id)
+    return ok(message="Section deleted")

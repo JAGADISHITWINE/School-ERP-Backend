@@ -5,7 +5,7 @@ from app.db.session import get_db
 from app.modules.auth import service
 from app.modules.auth.schema import ChangePasswordRequest, LoginRequest, TokenResponse, RefreshRequest, ForgotPasswordRequest
 from app.modules.users.model import User
-from app.modules.roles.model import Role, UserRole
+from app.modules.roles.model import Menu, Permission, Role, RoleMenu, RolePermission, UserRole
 from app.core.dependencies import CurrentUser
 from app.utils.response import ok
 from sqlalchemy import select
@@ -29,12 +29,11 @@ async def refresh(payload: RefreshRequest, db: Annotated[AsyncSession, Depends(g
 @router.post("/reset-password", response_model=dict, summary="Reset password")
 async def forgot_password(
     payload: ForgotPasswordRequest,
-    current_user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
-    if str(payload.email).lower() != str(current_user["email"]).lower() and not current_user["is_superuser"]:
-        from app.core.exceptions import ForbiddenError
-        raise ForbiddenError("Cannot reset another user's password")
+    if payload.password != payload.confirm_password:
+        from app.core.exceptions import BusinessRuleError
+        raise BusinessRuleError("Passwords do not match")
     result = await service.forgot_password(db, str(payload.email), payload.password)
 
     return ok(
@@ -70,13 +69,52 @@ async def me(
 
     role_row = (
         await db.execute(
-            select(Role.slug, Role.name)
+            select(Role.id, Role.slug, Role.name)
             .join(UserRole, UserRole.role_id == Role.id)
             .where(UserRole.user_id == user.id)
             .limit(1)
         )
     ).first()
-    role_slug, role_name = role_row if role_row else (None, None)
+    role_id, role_slug, role_name = role_row if role_row else (None, None, None)
+
+    permissions = []
+    menus = []
+    if role_id:
+        permission_rows = (
+            await db.execute(
+                select(Permission.code, Permission.module, Permission.action)
+                .join(RolePermission, RolePermission.permission_id == Permission.id)
+                .where(RolePermission.role_id == role_id)
+                .order_by(Permission.module.asc(), Permission.action.asc())
+            )
+        ).all()
+        permissions = sorted(
+            {
+                item
+                for code, module, action in permission_rows
+                for item in (code, f"{module}.{action}")
+            }
+        )
+
+        menu_rows = (
+            await db.execute(
+                select(Menu)
+                .join(RoleMenu, RoleMenu.menu_id == Menu.id)
+                .where(RoleMenu.role_id == role_id, Menu.is_active == True)
+                .order_by(Menu.order_no.asc(), Menu.label.asc())
+            )
+        ).scalars().all()
+        menus = [
+            {
+                "id": str(menu.id),
+                "label": menu.label,
+                "path": menu.route or "",
+                "icon": menu.icon or "",
+                "order": menu.order_no,
+                "roles": [role_slug] if role_slug else [],
+            }
+            for menu in menu_rows
+        ]
 
     return ok(
         data={
@@ -90,5 +128,7 @@ async def me(
             "is_superuser": user.is_superuser,
             "role": role_slug,
             "role_name": role_name,
+            "permissions": permissions,
+            "menus": menus,
         }
     )

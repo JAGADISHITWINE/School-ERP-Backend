@@ -418,8 +418,10 @@ async def get_notifications(db: AsyncSession, student_ids: list[str]) -> list[di
         {
             "id": str(row.id),
             "title": row.subject or (row.body or "Notification")[:80],
+            "body": row.body or row.subject or "Notification",
             "type": "danger" if row.channel.value == "sms" and row.status.value == "failed" else "info",
             "time": row.created_at.strftime("%d %b %Y") if row.created_at else "",
+            "read": False,
         }
         for row in rows
     ]
@@ -435,16 +437,16 @@ async def get_messages(db: AsyncSession, student_ids: list[str]) -> list[dict]:
                 "from": "College Office",
                 "role": "ERP Notification",
                 "subject": item["title"],
-                "preview": item["title"],
-                "body": item["title"],
+                "preview": item.get("body") or item["title"],
+                "body": item.get("body") or item["title"],
                 "time": item["time"],
-                "unread": False,
+                "unread": not item.get("read", False),
                 "thread": [
                     {
                         "id": f"{item['id']}-1",
                         "author": "teacher",
                         "name": "College Office",
-                        "body": item["title"],
+                        "body": item.get("body") or item["title"],
                         "time": item["time"],
                     }
                 ],

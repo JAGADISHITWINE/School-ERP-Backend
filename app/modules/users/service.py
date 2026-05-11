@@ -104,7 +104,7 @@ async def create_user(db: AsyncSession, data: UserCreate) -> User:
     else:
         _set_user_role_attrs(user)
     setattr(user, "generated_password", generated_password)
-    setattr(user, "credentials_dispatched", _send_credentials_email(user.email, user.username, generated_password))
+    setattr(user, "credentials_dispatched", _send_credentials_email(user.email, generated_password))
     return user
 
 
@@ -127,13 +127,16 @@ async def update_user(db: AsyncSession, user_id: str, data: UserUpdate) -> User:
     user = await get_user(db, user_id)
     incoming = data.model_dump(exclude_none=True)
     role_id = incoming.pop("role_id", None)
+    password = incoming.pop("password", None)
 
     for k, v in incoming.items():
         setattr(user, k, v)
+    if password:
+        user.password_hash = hash_password(password)
 
     role = None
     if role_id:
-        role = await _ensure_role_belongs_to_institution(db, role_id, user.institution_id)
+        role = await _ensure_role_belongs_to_institution(db, role_id, str(user.institution_id))
         await db.execute(delete(UserRole).where(UserRole.user_id == user.id))
         db.add(UserRole(user_id=user.id, role_id=role_id))
 

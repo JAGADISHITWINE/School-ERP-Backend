@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.db.session import get_db
@@ -41,6 +41,7 @@ async def _current_academic_snapshot(db: AsyncSession, student_id):
                 Section.name,
                 Class.id,
                 Class.name,
+                Class.course_id,
                 StudentAcademicRecord.academic_year_id,
                 AcademicYear.label,
                 StudentAcademicRecord.status,
@@ -65,9 +66,10 @@ async def _current_academic_snapshot(db: AsyncSession, student_id):
         "current_section_name": row[3],
         "current_class_id": str(row[4]) if row[4] else None,
         "current_class_name": row[5],
-        "current_academic_year_id": str(row[6]) if row[6] else None,
-        "current_academic_year_label": row[7],
-        "current_status": row[8],
+        "current_course_id": str(row[6]) if row[6] else None,
+        "current_academic_year_id": str(row[7]) if row[7] else None,
+        "current_academic_year_label": row[8],
+        "current_status": row[9],
     }
 
 
@@ -90,10 +92,21 @@ async def create_student(payload: StudentCreate, db: DB):
 
 
 @router.get("", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
-async def list_students(current_user: CurrentUser, db: DB, pagination: Pagination):
-    students, total = await service.list_students(
-        db, current_user["institution_id"], pagination.offset, pagination.page_size
-    )
+async def list_students(
+    current_user: CurrentUser,
+    db: DB,
+    pagination: Pagination,
+    search: str | None = Query(default=None),
+):
+    role_slug = await _user_role_slug(db, current_user["id"])
+    if role_slug == "teacher" and not current_user["is_superuser"]:
+        students, total = await service.list_students_for_teacher(
+            db, current_user["institution_id"], current_user["id"], pagination.offset, pagination.page_size, search
+        )
+    else:
+        students, total = await service.list_students(
+            db, current_user["institution_id"], pagination.offset, pagination.page_size, search
+        )
     out = []
     for s in students:
         user = (await db.execute(select(User).where(User.id == s.user_id))).scalar_one()
@@ -102,6 +115,7 @@ async def list_students(current_user: CurrentUser, db: DB, pagination: Paginatio
         d = {
             "id": str(s.id),
             "user_id": str(s.user_id),
+            "institution_id": str(user.institution_id),
             "roll_number": s.roll_number,
             "date_of_birth": s.date_of_birth,
             "gender": s.gender,
@@ -110,8 +124,10 @@ async def list_students(current_user: CurrentUser, db: DB, pagination: Paginatio
             "guardian_email": s.guardian_email,
             "full_name": user.full_name,
             "email": user.email,
+            "phone": user.phone,
             "role_slug": role_slug,
             "created_at": s.created_at,
+            "updated_at": s.updated_at,
             **current,
         }
         out.append(d)
@@ -130,6 +146,18 @@ async def list_student_documents(current_user: CurrentUser, db: DB, pagination: 
         data["roll_number"] = roll_number
         out.append(data)
     return paginated(out, total, pagination.page, pagination.page_size)
+
+
+@router.get("/self/portal", response_model=dict)
+async def get_my_student_portal(current_user: CurrentUser, db: DB):
+    data = await service.get_student_portal(db, current_user)
+    return ok(data=data)
+
+
+@router.get("/{student_id}/full-profile", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
+async def get_student_full_profile(student_id: str, db: DB):
+    data = await service.get_student_full_profile(db, student_id)
+    return ok(data=data)
 
 
 @router.post("/documents", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
@@ -159,6 +187,7 @@ async def get_student(student_id: str, db: DB):
     d = {
         "id": str(student.id),
         "user_id": str(student.user_id),
+        "institution_id": str(user.institution_id),
         "roll_number": student.roll_number,
         "date_of_birth": student.date_of_birth,
         "gender": student.gender,
@@ -167,8 +196,10 @@ async def get_student(student_id: str, db: DB):
         "guardian_email": student.guardian_email,
         "full_name": user.full_name,
         "email": user.email,
+        "phone": user.phone,
         "role_slug": role_slug,
         "created_at": student.created_at,
+        "updated_at": student.updated_at,
         **current,
     }
     return ok(data=d)
@@ -178,6 +209,12 @@ async def get_student(student_id: str, db: DB):
 async def update_student(student_id: str, payload: StudentUpdate, db: DB):
     student = await service.update_student(db, student_id, payload)
     return ok(data={"id": str(student.id)}, message="Student updated")
+
+
+@router.delete("/{student_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
+async def delete_student(student_id: str, db: DB):
+    await service.delete_student(db, student_id)
+    return ok(message="Student deactivated")
 
 
 @router.patch("/{student_id}/status", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
