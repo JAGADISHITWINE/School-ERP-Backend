@@ -9,6 +9,7 @@ from app.modules.teachers.model import (
     Teacher,
     TeacherSubject,
     TeacherClass,
+    ClassMentor,
     TeacherTimetable,
     TimetableDay,
     HODLink,
@@ -24,11 +25,14 @@ from app.modules.teachers.schema import (
     TeacherCreate,
     SubjectAssignRequest,
     TeacherClassAssignRequest,
+    ClassMentorCreate,
+    ClassMentorUpdate,
     TeacherTimetableCreate,
     TeacherTimetableUpdate,
 )
 from app.core.security import hash_password
 from app.core.exceptions import NotFoundError, ConflictError, ValidationError, BusinessRuleError, ForbiddenError
+from app.core.role_context import has_any_role
 
 
 async def create_teacher(
@@ -97,14 +101,96 @@ async def create_teacher(
     return teacher
 
 
-async def list_teachers(db: AsyncSession, institution_id: str, offset: int, limit: int):
+def _has_admin_teacher_scope(current_user: dict | None) -> bool:
+    return bool(
+        current_user
+        and (
+            current_user.get("is_superuser")
+            or has_any_role(current_user, {"superadmin", "admin", "principal"})
+        )
+    )
+
+
+async def _current_teacher_profile(db: AsyncSession, current_user: dict | None) -> Teacher:
+    if not current_user:
+        raise ForbiddenError("Teacher profile is required")
+    teacher = (
+        await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))
+    ).scalar_one_or_none()
+    if not teacher:
+        raise ForbiddenError("Teacher profile not found for current user")
+    return teacher
+
+
+def _managed_branch_ids_for_hod(teacher_id):
+    return select(HODLink.branch_id).where(HODLink.hod_teacher_id == teacher_id)
+
+
+def _teacher_ids_for_hod_scope(hod_teacher_id):
+    managed_branch_ids = _managed_branch_ids_for_hod(hod_teacher_id)
+    linked_teacher_ids = (
+        select(TeacherHODSubjectLink.teacher_id)
+        .join(HODLink, HODLink.id == TeacherHODSubjectLink.hod_link_id)
+        .where(HODLink.hod_teacher_id == hod_teacher_id)
+    )
+    class_teacher_ids = (
+        select(TeacherClass.teacher_id)
+        .join(Class, Class.id == TeacherClass.class_id)
+        .where(Class.branch_id.in_(managed_branch_ids))
+    )
+    timetable_teacher_ids = (
+        select(TeacherTimetable.teacher_id)
+        .join(Class, Class.id == TeacherTimetable.class_id)
+        .where(Class.branch_id.in_(managed_branch_ids))
+    )
+    return linked_teacher_ids.union(class_teacher_ids, timetable_teacher_ids)
+
+
+async def assert_can_view_teacher(db: AsyncSession, current_user: dict | None, teacher_id: str) -> None:
+    if _has_admin_teacher_scope(current_user):
+        return
+    actor_teacher = await _current_teacher_profile(db, current_user)
+    if str(actor_teacher.id) == str(teacher_id):
+        return
+    if has_any_role(current_user or {}, {"hod"}):
+        allowed_ids = _teacher_ids_for_hod_scope(actor_teacher.id)
+        row = (
+            await db.execute(
+                select(Teacher.id)
+                .where(Teacher.id == teacher_id, Teacher.id.in_(allowed_ids))
+                .limit(1)
+            )
+        ).first()
+        if row:
+            return
+    raise ForbiddenError("You can view only linked teacher data")
+
+
+async def list_teachers(
+    db: AsyncSession,
+    institution_id: str,
+    offset: int,
+    limit: int,
+    current_user: dict | None = None,
+):
     q = (
         select(Teacher)
         .join(User, Teacher.user_id == User.id)
         .where(User.institution_id == institution_id)
     )
+    if current_user and not _has_admin_teacher_scope(current_user):
+        actor_teacher = await _current_teacher_profile(db, current_user)
+        if has_any_role(current_user, {"hod"}):
+            q = q.where(
+                or_(
+                    Teacher.id == actor_teacher.id,
+                    Teacher.id.in_(_teacher_ids_for_hod_scope(actor_teacher.id)),
+                )
+            )
+        else:
+            q = q.where(Teacher.id == actor_teacher.id)
     total = (await db.execute(select(func.count()).select_from(q.subquery()))).scalar()
-    result = await db.execute(q.offset(offset).limit(limit))
+    result = await db.execute(q.order_by(Teacher.employee_code.asc()).offset(offset).limit(limit))
     return result.scalars().all(), total
 
 
@@ -202,6 +288,187 @@ async def list_teacher_classes(db: AsyncSession, teacher_id: str) -> list[dict]:
             .order_by(Branch.name.asc(), Class.semester.asc(), Class.name.asc())
         )
     ).mappings().all()
+    return [dict(row) for row in rows]
+
+
+async def _class_section_context(db: AsyncSession, class_id: str, section_id: str, academic_year_id: str):
+    class_row = (
+        await db.execute(
+            select(Class, Section, Branch, Course)
+            .join(Section, Section.class_id == Class.id)
+            .outerjoin(Branch, Branch.id == Class.branch_id)
+            .join(Course, Course.id == Class.course_id)
+            .where(
+                Class.id == class_id,
+                Section.id == section_id,
+                Section.class_id == Class.id,
+            )
+        )
+    ).first()
+    year = (
+        await db.execute(select(AcademicYear).where(AcademicYear.id == academic_year_id))
+    ).scalar_one_or_none()
+    if not class_row or not year:
+        raise ValidationError("Selected academic year/class/section is invalid")
+    class_, section, branch, course = class_row
+    return class_, section, branch, course, year
+
+
+async def _assert_hod_can_manage_class(
+    db: AsyncSession,
+    current_user: dict,
+    class_id: str,
+    section_id: str,
+    academic_year_id: str,
+):
+    class_, section, branch, course, year = await _class_section_context(db, class_id, section_id, academic_year_id)
+    if current_user.get("is_superuser") or has_any_role(current_user, {"admin", "superadmin", "principal"}):
+        return class_, section, branch, course, year
+
+    actor_teacher = (
+        await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))
+    ).scalar_one_or_none()
+    if not actor_teacher:
+        raise ForbiddenError("Only Admin/HOD can manage class mentors")
+
+    hod_link = (
+        await db.execute(
+            select(HODLink.id).where(
+                HODLink.hod_teacher_id == actor_teacher.id,
+                HODLink.institution_id == current_user["institution_id"],
+                HODLink.course_id == class_.course_id,
+                HODLink.branch_id == class_.branch_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if not hod_link:
+        raise ForbiddenError("Only the mapped HOD can manage mentors for this class/section")
+    return class_, section, branch, course, year
+
+
+async def create_class_mentor(db: AsyncSession, payload: ClassMentorCreate, current_user: dict) -> ClassMentor:
+    await get_teacher(db, str(payload.teacher_id))
+    await _assert_hod_can_manage_class(db, current_user, str(payload.class_id), str(payload.section_id), str(payload.academic_year_id))
+    existing = (
+        await db.execute(
+            select(ClassMentor).where(
+                ClassMentor.academic_year_id == payload.academic_year_id,
+                ClassMentor.class_id == payload.class_id,
+                ClassMentor.section_id == payload.section_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if existing:
+        raise ConflictError("Mentor already assigned for selected academic year/class/section")
+    mentor = ClassMentor(
+        teacher_id=payload.teacher_id,
+        academic_year_id=payload.academic_year_id,
+        class_id=payload.class_id,
+        section_id=payload.section_id,
+        assigned_by_user_id=current_user["id"],
+        is_active=True,
+    )
+    db.add(mentor)
+    await db.flush()
+    await db.refresh(mentor)
+    return mentor
+
+
+async def update_class_mentor(db: AsyncSession, mentor_id: str, payload: ClassMentorUpdate, current_user: dict) -> ClassMentor:
+    mentor = (await db.execute(select(ClassMentor).where(ClassMentor.id == mentor_id))).scalar_one_or_none()
+    if not mentor:
+        raise NotFoundError("Class mentor assignment not found")
+    teacher_id = payload.teacher_id or mentor.teacher_id
+    academic_year_id = payload.academic_year_id or mentor.academic_year_id
+    class_id = payload.class_id or mentor.class_id
+    section_id = payload.section_id or mentor.section_id
+    await get_teacher(db, str(teacher_id))
+    await _assert_hod_can_manage_class(db, current_user, str(class_id), str(section_id), str(academic_year_id))
+    duplicate = (
+        await db.execute(
+            select(ClassMentor.id).where(
+                ClassMentor.id != mentor.id,
+                ClassMentor.academic_year_id == academic_year_id,
+                ClassMentor.class_id == class_id,
+                ClassMentor.section_id == section_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if duplicate:
+        raise ConflictError("Mentor already assigned for selected academic year/class/section")
+    mentor.teacher_id = teacher_id
+    mentor.academic_year_id = academic_year_id
+    mentor.class_id = class_id
+    mentor.section_id = section_id
+    if payload.is_active is not None:
+        mentor.is_active = payload.is_active
+    await db.flush()
+    await db.refresh(mentor)
+    return mentor
+
+
+async def delete_class_mentor(db: AsyncSession, mentor_id: str, current_user: dict) -> None:
+    mentor = (await db.execute(select(ClassMentor).where(ClassMentor.id == mentor_id))).scalar_one_or_none()
+    if not mentor:
+        raise NotFoundError("Class mentor assignment not found")
+    await _assert_hod_can_manage_class(db, current_user, str(mentor.class_id), str(mentor.section_id), str(mentor.academic_year_id))
+    await db.delete(mentor)
+    await db.flush()
+
+
+async def list_class_mentors(
+    db: AsyncSession,
+    current_user: dict,
+    academic_year_id: str | None = None,
+    branch_id: str | None = None,
+    class_id: str | None = None,
+    section_id: str | None = None,
+) -> list[dict]:
+    q = (
+        select(
+            ClassMentor.id,
+            ClassMentor.teacher_id,
+            User.full_name.label("teacher_name"),
+            Teacher.employee_code,
+            ClassMentor.academic_year_id,
+            AcademicYear.label.label("academic_year_label"),
+            Course.id.label("course_id"),
+            Course.name.label("course_name"),
+            Branch.id.label("branch_id"),
+            Branch.name.label("branch_name"),
+            ClassMentor.class_id,
+            Class.name.label("class_name"),
+            ClassMentor.section_id,
+            Section.name.label("section_name"),
+            ClassMentor.assigned_by_user_id,
+            ClassMentor.is_active,
+            ClassMentor.created_at,
+        )
+        .select_from(ClassMentor)
+        .join(Teacher, Teacher.id == ClassMentor.teacher_id)
+        .join(User, User.id == Teacher.user_id)
+        .join(AcademicYear, AcademicYear.id == ClassMentor.academic_year_id)
+        .join(Class, Class.id == ClassMentor.class_id)
+        .join(Section, Section.id == ClassMentor.section_id)
+        .outerjoin(Branch, Branch.id == Class.branch_id)
+        .join(Course, Course.id == Class.course_id)
+        .where(User.institution_id == current_user["institution_id"])
+    )
+    if academic_year_id:
+        q = q.where(ClassMentor.academic_year_id == academic_year_id)
+    if branch_id:
+        q = q.where(Class.branch_id == branch_id)
+    if class_id:
+        q = q.where(ClassMentor.class_id == class_id)
+    if section_id:
+        q = q.where(ClassMentor.section_id == section_id)
+    if not (current_user.get("is_superuser") or has_any_role(current_user, {"admin", "superadmin", "principal"})):
+        actor_teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
+        if not actor_teacher:
+            raise ForbiddenError("Only Admin/HOD can view class mentors")
+        hod_branches = select(HODLink.branch_id).where(HODLink.hod_teacher_id == actor_teacher.id)
+        q = q.where(Class.branch_id.in_(hod_branches))
+    rows = (await db.execute(q.order_by(AcademicYear.label.desc(), Branch.name.asc(), Class.name.asc(), Section.name.asc()))).mappings().all()
     return [dict(row) for row in rows]
 
 
@@ -780,6 +1047,7 @@ async def list_hod_links(
     institution_id: str | None = None,
     course_id: str | None = None,
     branch_id: str | None = None,
+    current_user: dict | None = None,
 ) -> list[dict]:
     q = (
         select(
@@ -803,6 +1071,15 @@ async def list_hod_links(
         q = q.where(HODLink.course_id == course_id)
     if branch_id:
         q = q.where(HODLink.branch_id == branch_id)
+    if current_user and not _has_admin_teacher_scope(current_user):
+        actor_teacher = await _current_teacher_profile(db, current_user)
+        if has_any_role(current_user, {"hod"}):
+            q = q.where(HODLink.hod_teacher_id == actor_teacher.id)
+        else:
+            visible_hod_link_ids = select(TeacherHODSubjectLink.hod_link_id).where(
+                TeacherHODSubjectLink.teacher_id == actor_teacher.id
+            )
+            q = q.where(HODLink.id.in_(visible_hod_link_ids))
 
     rows = (await db.execute(q.order_by(User.full_name.asc()))).mappings().all()
     return [dict(row) for row in rows]
@@ -892,8 +1169,8 @@ async def update_hod_link(
 
 
 async def create_teacher_hod_subject_links(
-    db: AsyncSession, teacher_id, hod_link_id, subject_ids: list
-) -> list[TeacherHODSubjectLink]:
+    db: AsyncSession, teacher_id, hod_link_id, section_id, subject_ids: list
+) -> dict:
     teacher = await get_teacher(db, str(teacher_id))
     teacher_user = (await db.execute(select(User).where(User.id == teacher.user_id))).scalar_one()
     hod_link = (await db.execute(select(HODLink).where(HODLink.id == hod_link_id))).scalar_one_or_none()
@@ -901,8 +1178,22 @@ async def create_teacher_hod_subject_links(
         raise NotFoundError("HOD link not found")
     if teacher_user.institution_id != hod_link.institution_id:
         raise ValidationError("Teacher does not belong to selected institution")
+    section = (
+        await db.execute(
+            select(Section)
+            .join(Class, Class.id == Section.class_id)
+            .where(
+                Section.id == section_id,
+                Class.course_id == hod_link.course_id,
+                Class.branch_id == hod_link.branch_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if not section:
+        raise ValidationError("Section is required and must belong to selected branch/class")
 
     created: list[TeacherHODSubjectLink] = []
+    skipped: list[str] = []
     for subject_id in subject_ids:
         subject = (await db.execute(select(Subject).where(Subject.id == subject_id))).scalar_one_or_none()
         if not subject:
@@ -911,22 +1202,27 @@ async def create_teacher_hod_subject_links(
             raise ValidationError("Subject does not belong to selected course")
         if subject.branch_id and subject.branch_id != hod_link.branch_id:
             raise ValidationError("Subject does not belong to selected branch")
+        if subject.class_id and subject.class_id != section.class_id:
+            raise ValidationError("Subject does not belong to selected class")
 
         existing = (
             await db.execute(
                 select(TeacherHODSubjectLink).where(
                     TeacherHODSubjectLink.teacher_id == teacher.id,
                     TeacherHODSubjectLink.hod_link_id == hod_link.id,
+                    TeacherHODSubjectLink.section_id == section.id,
                     TeacherHODSubjectLink.subject_id == subject.id,
                 )
             )
         ).scalar_one_or_none()
         if existing:
+            skipped.append(str(subject.id))
             continue
 
         link = TeacherHODSubjectLink(
             teacher_id=teacher.id,
             hod_link_id=hod_link.id,
+            section_id=section.id,
             subject_id=subject.id,
         )
         db.add(link)
@@ -935,7 +1231,7 @@ async def create_teacher_hod_subject_links(
     await db.flush()
     for item in created:
         await db.refresh(item)
-    return created
+    return {"created": created, "skipped_subject_ids": skipped}
 
 
 async def list_teacher_hod_subject_links(
@@ -943,6 +1239,7 @@ async def list_teacher_hod_subject_links(
     institution_id: str | None = None,
     course_id: str | None = None,
     branch_id: str | None = None,
+    current_user: dict | None = None,
 ) -> list[dict]:
     teacher_user = aliased(User)
     hod_teacher = aliased(Teacher)
@@ -961,6 +1258,10 @@ async def list_teacher_hod_subject_links(
             Course.name.label("course_name"),
             HODLink.branch_id,
             Branch.name.label("branch_name"),
+            Class.id.label("class_id"),
+            Class.name.label("class_name"),
+            TeacherHODSubjectLink.section_id,
+            Section.name.label("section_name"),
             TeacherHODSubjectLink.subject_id,
             Subject.name.label("subject_name"),
         )
@@ -972,6 +1273,8 @@ async def list_teacher_hod_subject_links(
         .join(Course, Course.id == HODLink.course_id)
         .join(Branch, Branch.id == HODLink.branch_id)
         .join(Subject, Subject.id == TeacherHODSubjectLink.subject_id)
+        .outerjoin(Section, Section.id == TeacherHODSubjectLink.section_id)
+        .outerjoin(Class, Class.id == Section.class_id)
     )
 
     if institution_id:
@@ -980,6 +1283,12 @@ async def list_teacher_hod_subject_links(
         q = q.where(HODLink.course_id == course_id)
     if branch_id:
         q = q.where(HODLink.branch_id == branch_id)
+    if current_user and not _has_admin_teacher_scope(current_user):
+        actor_teacher = await _current_teacher_profile(db, current_user)
+        if has_any_role(current_user, {"hod"}):
+            q = q.where(HODLink.hod_teacher_id == actor_teacher.id)
+        else:
+            q = q.where(TeacherHODSubjectLink.teacher_id == actor_teacher.id)
 
     rows = (await db.execute(q.order_by(teacher_user.full_name.asc(), Subject.name.asc()))).mappings().all()
     return [dict(row) for row in rows]
@@ -1245,6 +1554,7 @@ async def update_teacher_hod_subject_link(
     link_id: str,
     teacher_id,
     hod_link_id,
+    section_id,
     subject_id,
 ) -> TeacherHODSubjectLink:
     link = (
@@ -1268,22 +1578,37 @@ async def update_teacher_hod_subject_link(
         raise ValidationError("Subject does not belong to selected course")
     if subject.branch_id and subject.branch_id != hod_link.branch_id:
         raise ValidationError("Subject does not belong to selected branch")
+    section = (
+        await db.execute(
+            select(Section)
+            .join(Class, Class.id == Section.class_id)
+            .where(
+                Section.id == section_id,
+                Class.course_id == hod_link.course_id,
+                Class.branch_id == hod_link.branch_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if not section:
+        raise ValidationError("Section is required and must belong to selected branch/class")
 
     existing = (
         await db.execute(
             select(TeacherHODSubjectLink).where(
                 TeacherHODSubjectLink.teacher_id == teacher.id,
                 TeacherHODSubjectLink.hod_link_id == hod_link.id,
+                TeacherHODSubjectLink.section_id == section.id,
                 TeacherHODSubjectLink.subject_id == subject.id,
                 TeacherHODSubjectLink.id != link.id,
             )
         )
     ).scalar_one_or_none()
     if existing:
-        raise ConflictError("Teacher-HOD subject link already exists")
+        raise ConflictError("Teacher is already linked to this class, section, and subject.")
 
     link.teacher_id = teacher.id
     link.hod_link_id = hod_link.id
+    link.section_id = section.id
     link.subject_id = subject.id
     await db.flush()
     await db.refresh(link)
@@ -1316,8 +1641,20 @@ async def _get_teacher_role(db: AsyncSession, institution_id: str) -> Role | Non
 def _teacher_role_filter():
     return or_(
         func.lower(Role.slug) == "teacher",
+        func.lower(Role.slug) == "hod",
+        func.lower(Role.slug) == "principal",
+        func.lower(Role.slug) == "principle",
+        func.lower(Role.slug) == "faculty",
+        func.lower(Role.slug) == "lecturer",
         func.lower(Role.name) == "teacher",
+        func.lower(Role.name) == "hod",
+        func.lower(Role.name) == "principal",
+        func.lower(Role.name) == "principle",
+        func.lower(Role.name) == "faculty",
+        func.lower(Role.name) == "lecturer",
         func.lower(Role.name).like("%teacher%"),
+        func.lower(Role.name).like("%faculty%"),
+        func.lower(Role.name).like("%lecturer%"),
     )
 
 

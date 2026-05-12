@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000"
     RATE_LIMIT_PER_MINUTE: int = 300
     AUTH_RATE_LIMIT_PER_MINUTE: int = 10
+    DOCUMENT_STORAGE_DIR: str = "storage/student-documents"
+    DOCUMENT_MAX_UPLOAD_MB: int = 10
 
     # Database
     DATABASE_URL: str

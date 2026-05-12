@@ -1,0 +1,6 @@
+code,name,level,duration_years,is_active
+BTECH,Bachelor of Technology,UG,4,true
+BCA,Bachelor of Computer Applications,UG,3,true
+BBA,Bachelor of Business Administration,UG,3,true
+BCOM,Bachelor of Commerce,UG,3,true
+MCA,Master of Computer Applications,PG,2,true

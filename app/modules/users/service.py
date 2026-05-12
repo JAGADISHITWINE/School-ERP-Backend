@@ -1,12 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import delete, select, func
+from sqlalchemy import delete, select, func, or_
 import secrets
 import string
 from app.modules.users.model import User
 from app.modules.roles.model import Role, UserRole
 from app.modules.users.schema import UserCreate, UserUpdate
 from app.core.security import hash_password
-from app.core.exceptions import NotFoundError, ConflictError, ValidationError
+from app.core.exceptions import NotFoundError, ConflictError, ValidationError, ForbiddenError
 from app.utils.mailer import send_email
 
 
@@ -47,6 +47,35 @@ async def _attach_primary_role(db: AsyncSession, user: User) -> User:
     return _set_user_role_attrs(user, role_id, role_name)
 
 
+SUPERADMIN_SLUGS = {"superadmin", "super_admin"}
+
+
+async def _user_has_superadmin_role(db: AsyncSession, user_id: str) -> bool:
+    row = (
+        await db.execute(
+            select(Role.id)
+            .join(UserRole, UserRole.role_id == Role.id)
+            .where(
+                UserRole.user_id == user_id,
+                func.lower(Role.slug).in_(SUPERADMIN_SLUGS),
+            )
+            .limit(1)
+        )
+    ).first()
+    return row is not None
+
+
+async def _actor_can_manage_superadmin(db: AsyncSession, actor: dict) -> bool:
+    if actor.get("is_superuser"):
+        return True
+    return await _user_has_superadmin_role(db, actor["id"])
+
+
+async def _assert_can_manage_user(db: AsyncSession, actor: dict, target: User) -> None:
+    if await _user_has_superadmin_role(db, str(target.id)) and not await _actor_can_manage_superadmin(db, actor):
+        raise ForbiddenError("Admin cannot manage Superadmin users")
+
+
 async def _attach_primary_roles(db: AsyncSession, users: list[User]) -> list[User]:
     if not users:
         return users
@@ -71,7 +100,7 @@ async def _attach_primary_roles(db: AsyncSession, users: list[User]) -> list[Use
     return users
 
 
-async def create_user(db: AsyncSession, data: UserCreate) -> User:
+async def create_user(db: AsyncSession, data: UserCreate, actor: dict | None = None) -> User:
     ex = (await db.execute(select(User).where(User.email == data.email))).scalar_one_or_none()
     if ex:
         raise ConflictError("Email already registered")
@@ -81,6 +110,8 @@ async def create_user(db: AsyncSession, data: UserCreate) -> User:
     role = None
     if data.role_id:
         role = await _ensure_role_belongs_to_institution(db, data.role_id, data.institution_id)
+        if actor and role.slug.lower() in SUPERADMIN_SLUGS and not await _actor_can_manage_superadmin(db, actor):
+            raise ForbiddenError("Admin cannot assign Superadmin role")
 
     generated_password = data.password or _generate_password()
     user = User(
@@ -103,28 +134,66 @@ async def create_user(db: AsyncSession, data: UserCreate) -> User:
         _set_user_role_attrs(user, role.id, role.name)
     else:
         _set_user_role_attrs(user)
-    setattr(user, "generated_password", generated_password)
-    setattr(user, "credentials_dispatched", _send_credentials_email(user.email, generated_password))
+    # setattr(user, "generated_password", generated_password)
+    # setattr(user, "credentials_dispatched", _send_credentials_email(user.email, generated_password))
     return user
 
 
-async def list_users(db: AsyncSession, institution_id: str, offset: int, limit: int):
+async def list_users(
+    db: AsyncSession,
+    institution_id: str,
+    offset: int,
+    limit: int,
+    actor: dict | None = None,
+    search: str | None = None,
+):
     q = select(User).where(User.institution_id == institution_id)
+    if actor and not await _actor_can_manage_superadmin(db, actor):
+        superadmin_user_ids = (
+            select(UserRole.user_id)
+            .join(Role, Role.id == UserRole.role_id)
+            .where(func.lower(Role.slug).in_(SUPERADMIN_SLUGS))
+        )
+        q = q.where(User.id.not_in(superadmin_user_ids), User.is_superuser == False)
+    term = (search or "").strip().lower()
+    if term:
+        like = f"%{term}%"
+        role_user_ids = (
+            select(UserRole.user_id)
+            .join(Role, Role.id == UserRole.role_id)
+            .where(
+                or_(
+                    func.lower(Role.name).like(like),
+                    func.lower(Role.slug).like(like),
+                )
+            )
+        )
+        q = q.where(
+            or_(
+                func.lower(User.full_name).like(like),
+                func.lower(User.email).like(like),
+                func.lower(User.username).like(like),
+                func.lower(func.coalesce(User.phone, "")).like(like),
+                User.id.in_(role_user_ids),
+            )
+        )
     total = (await db.execute(select(func.count()).select_from(q.subquery()))).scalar()
     result = await db.execute(q.offset(offset).limit(limit))
     users = result.scalars().all()
     return await _attach_primary_roles(db, users), total
 
 
-async def get_user(db: AsyncSession, user_id: str) -> User:
+async def get_user(db: AsyncSession, user_id: str, actor: dict | None = None) -> User:
     user = (await db.execute(select(User).where(User.id == user_id))).scalar_one_or_none()
     if not user:
         raise NotFoundError("User not found")
+    if actor:
+        await _assert_can_manage_user(db, actor, user)
     return await _attach_primary_role(db, user)
 
 
-async def update_user(db: AsyncSession, user_id: str, data: UserUpdate) -> User:
-    user = await get_user(db, user_id)
+async def update_user(db: AsyncSession, user_id: str, data: UserUpdate, actor: dict | None = None) -> User:
+    user = await get_user(db, user_id, actor)
     incoming = data.model_dump(exclude_none=True)
     role_id = incoming.pop("role_id", None)
     password = incoming.pop("password", None)
@@ -137,6 +206,8 @@ async def update_user(db: AsyncSession, user_id: str, data: UserUpdate) -> User:
     role = None
     if role_id:
         role = await _ensure_role_belongs_to_institution(db, role_id, str(user.institution_id))
+        if actor and role.slug.lower() in SUPERADMIN_SLUGS and not await _actor_can_manage_superadmin(db, actor):
+            raise ForbiddenError("Admin cannot assign Superadmin role")
         await db.execute(delete(UserRole).where(UserRole.user_id == user.id))
         db.add(UserRole(user_id=user.id, role_id=role_id))
 
@@ -146,6 +217,12 @@ async def update_user(db: AsyncSession, user_id: str, data: UserUpdate) -> User:
     else:
         await _attach_primary_role(db, user)
     return user
+
+
+async def delete_user(db: AsyncSession, user_id: str, actor: dict | None = None) -> None:
+    user = await get_user(db, user_id, actor)
+    await db.delete(user)
+    await db.flush()
 
 
 def _generate_password(length: int = 10) -> str:

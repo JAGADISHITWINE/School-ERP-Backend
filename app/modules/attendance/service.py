@@ -14,6 +14,9 @@ from app.core.exceptions import NotFoundError, ConflictError, BusinessRuleError,
 async def create_session(
     db: AsyncSession, teacher_id: str, data: SessionCreate, actor_user_id: str | None = None
 ) -> AttendanceSession:
+    if data.session_date > date.today():
+        raise ValidationError("Future-date attendance is not allowed")
+
     teacher = await _get_teacher(db, teacher_id)
     section_id, subject_id, academic_year_id, timetable_id = await _resolve_session_scope(
         db, teacher.id, data
@@ -28,7 +31,7 @@ async def create_session(
         )
     ).scalar_one_or_none()
     if ex:
-        raise ConflictError("Attendance session already exists for this period and date")
+        raise ConflictError("Attendance already marked for this session.")
 
     await _validate_timing_window(db, timetable_id, data.session_date)
 
@@ -53,6 +56,8 @@ async def mark_attendance(db: AsyncSession, data: MarkAttendanceRequest, actor_u
     ).scalar_one_or_none()
     if not session:
         raise NotFoundError("Attendance session not found")
+    if session.session_date > date.today():
+        raise ValidationError("Future-date attendance is not allowed")
     if session.status in (SessionStatus.CLOSED, SessionStatus.LOCKED):
         raise BusinessRuleError("Cannot modify a closed/locked attendance session")
 
@@ -359,11 +364,304 @@ async def list_section_students(
                 "student_id": student_id,
                 "roll_number": roll_number,
                 "full_name": full_name,
+                "photo_url": None,
                 "status": saved.get("status"),
                 "remarks": saved.get("remarks"),
             }
         )
     return items
+
+
+async def attendance_session_summary(
+    db: AsyncSession,
+    section_id: str,
+    academic_year_id: str,
+    session_id: str | None = None,
+    target_date: date | None = None,
+    subject_id: str | None = None,
+) -> dict:
+    total_students = (
+        await db.execute(
+            select(func.count(StudentAcademicRecord.student_id)).where(
+                StudentAcademicRecord.section_id == section_id,
+                StudentAcademicRecord.academic_year_id == academic_year_id,
+                StudentAcademicRecord.exited_at == None,
+                StudentAcademicRecord.status == StudentStatus.ACTIVE,
+            )
+        )
+    ).scalar() or 0
+
+    q = (
+        select(
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.PRESENT, 1), else_=0)).label("present"),
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.ABSENT, 1), else_=0)).label("absent"),
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.LATE, 1), else_=0)).label("late"),
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.EXCUSED, 1), else_=0)).label("excused"),
+            func.count(AttendanceRecord.id).label("marked"),
+        )
+        .select_from(AttendanceSession)
+        .outerjoin(AttendanceRecord, AttendanceRecord.session_id == AttendanceSession.id)
+        .where(
+            AttendanceSession.section_id == section_id,
+            AttendanceSession.academic_year_id == academic_year_id,
+        )
+    )
+    if session_id:
+        q = q.where(AttendanceSession.id == session_id)
+    if target_date:
+        q = q.where(AttendanceSession.session_date == target_date)
+    if subject_id:
+        q = q.where(AttendanceSession.subject_id == subject_id)
+
+    row = (await db.execute(q)).first()
+    present = int(row.present or 0) if row else 0
+    absent = int(row.absent or 0) if row else 0
+    late = int(row.late or 0) if row else 0
+    excused = int(row.excused or 0) if row else 0
+    marked = int(row.marked or 0) if row else 0
+    attended = present + late
+    denominator = marked if marked else total_students
+    percentage = round(attended * 100.0 / denominator, 2) if denominator else 0.0
+    return {
+        "total_students": int(total_students),
+        "present": present,
+        "absent": absent,
+        "late": late,
+        "leave": excused,
+        "marked": marked,
+        "unmarked": max(int(total_students) - marked, 0),
+        "percentage": percentage,
+    }
+
+
+async def class_attendance_report(db: AsyncSession, section_id: str, academic_year_id: str):
+    return await attendance_report(db, section_id, academic_year_id)
+
+
+async def subject_attendance_report(db: AsyncSession, section_id: str, academic_year_id: str, subject_id: str):
+    rows = (
+        await db.execute(
+            select(
+                Student.id,
+                Student.roll_number,
+                User.full_name,
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.PRESENT, 1), else_=0)).label("present"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.ABSENT, 1), else_=0)).label("absent"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.LATE, 1), else_=0)).label("late"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.EXCUSED, 1), else_=0)).label("excused"),
+                func.count(AttendanceRecord.id).label("total"),
+            )
+            .join(AttendanceRecord, AttendanceRecord.student_id == Student.id)
+            .join(AttendanceSession, AttendanceSession.id == AttendanceRecord.session_id)
+            .join(User, User.id == Student.user_id)
+            .where(
+                AttendanceSession.section_id == section_id,
+                AttendanceSession.academic_year_id == academic_year_id,
+                AttendanceSession.subject_id == subject_id,
+            )
+            .group_by(Student.id, Student.roll_number, User.full_name)
+            .order_by(Student.roll_number.asc())
+        )
+    ).all()
+    return [_report_row(row) for row in rows]
+
+
+async def student_attendance_detail(db: AsyncSession, student_id: str, academic_year_id: str | None = None) -> dict:
+    student_row = (
+        await db.execute(
+            select(Student, User.full_name, User.email)
+            .join(User, User.id == Student.user_id)
+            .where(Student.id == student_id)
+        )
+    ).first()
+    if not student_row:
+        raise NotFoundError("Student not found")
+    student, full_name, email = student_row
+
+    filters = [AttendanceRecord.student_id == student_id]
+    if academic_year_id:
+        filters.append(AttendanceSession.academic_year_id == academic_year_id)
+
+    history_rows = (
+        await db.execute(
+            select(
+                AttendanceSession.session_date,
+                AttendanceRecord.status,
+                AttendanceRecord.remarks,
+                Subject.name.label("subject_name"),
+                Class.name.label("class_name"),
+                Section.name.label("section_name"),
+                AttendanceSession.id.label("session_id"),
+            )
+            .select_from(AttendanceRecord)
+            .join(AttendanceSession, AttendanceSession.id == AttendanceRecord.session_id)
+            .join(Subject, Subject.id == AttendanceSession.subject_id)
+            .join(Section, Section.id == AttendanceSession.section_id)
+            .join(Class, Class.id == Section.class_id)
+            .where(*filters)
+            .order_by(AttendanceSession.session_date.desc())
+        )
+    ).mappings().all()
+
+    subject_rows = (
+        await db.execute(
+            select(
+                Subject.id,
+                Subject.name,
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.PRESENT, 1), else_=0)).label("present"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.ABSENT, 1), else_=0)).label("absent"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.LATE, 1), else_=0)).label("late"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.EXCUSED, 1), else_=0)).label("excused"),
+                func.count(AttendanceRecord.id).label("total"),
+            )
+            .select_from(AttendanceRecord)
+            .join(AttendanceSession, AttendanceSession.id == AttendanceRecord.session_id)
+            .join(Subject, Subject.id == AttendanceSession.subject_id)
+            .where(*filters)
+            .group_by(Subject.id, Subject.name)
+            .order_by(Subject.name.asc())
+        )
+    ).all()
+
+    monthly_rows = (
+        await db.execute(
+            select(
+                func.extract("year", AttendanceSession.session_date).label("year"),
+                func.extract("month", AttendanceSession.session_date).label("month"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.PRESENT, 1), else_=0)).label("present"),
+                func.sum(case((AttendanceRecord.status == AttendanceStatus.LATE, 1), else_=0)).label("late"),
+                func.count(AttendanceRecord.id).label("total"),
+            )
+            .select_from(AttendanceRecord)
+            .join(AttendanceSession, AttendanceSession.id == AttendanceRecord.session_id)
+            .where(*filters)
+            .group_by("year", "month")
+            .order_by("year", "month")
+        )
+    ).all()
+
+    total = len(history_rows)
+    attended = sum(1 for row in history_rows if row["status"] in (AttendanceStatus.PRESENT, AttendanceStatus.LATE))
+    percentage = round(attended * 100.0 / total, 2) if total else 0.0
+
+    return {
+        "student": {
+            "id": str(student.id),
+            "roll_number": student.roll_number,
+            "full_name": full_name,
+            "email": email,
+            "photo_url": None,
+        },
+        "summary": {
+            "total": total,
+            "present": sum(1 for row in history_rows if row["status"] == AttendanceStatus.PRESENT),
+            "absent": sum(1 for row in history_rows if row["status"] == AttendanceStatus.ABSENT),
+            "late": sum(1 for row in history_rows if row["status"] == AttendanceStatus.LATE),
+            "leave": sum(1 for row in history_rows if row["status"] == AttendanceStatus.EXCUSED),
+            "percentage": percentage,
+            "low_attendance": percentage < 75 if total else False,
+        },
+        "subjects": [_report_row(row, id_index=True) for row in subject_rows],
+        "monthly": [
+            {
+                "year": int(row.year),
+                "month": int(row.month),
+                "percentage": round(((row.present or 0) + (row.late or 0)) * 100.0 / (row.total or 1), 2),
+                "total": int(row.total or 0),
+            }
+            for row in monthly_rows
+        ],
+        "history": [dict(row) for row in history_rows],
+    }
+
+
+async def monthly_attendance_analytics(
+    db: AsyncSession,
+    section_id: str,
+    academic_year_id: str,
+    month: int,
+    year: int,
+    subject_id: str | None = None,
+) -> dict:
+    q = (
+        select(
+            AttendanceSession.session_date,
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.PRESENT, 1), else_=0)).label("present"),
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.ABSENT, 1), else_=0)).label("absent"),
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.LATE, 1), else_=0)).label("late"),
+            func.sum(case((AttendanceRecord.status == AttendanceStatus.EXCUSED, 1), else_=0)).label("leave"),
+            func.count(AttendanceRecord.id).label("total"),
+        )
+        .select_from(AttendanceSession)
+        .outerjoin(AttendanceRecord, AttendanceRecord.session_id == AttendanceSession.id)
+        .where(
+            AttendanceSession.section_id == section_id,
+            AttendanceSession.academic_year_id == academic_year_id,
+            func.extract("month", AttendanceSession.session_date) == month,
+            func.extract("year", AttendanceSession.session_date) == year,
+        )
+        .group_by(AttendanceSession.session_date)
+        .order_by(AttendanceSession.session_date.asc())
+    )
+    if subject_id:
+        q = q.where(AttendanceSession.subject_id == subject_id)
+    rows = (await db.execute(q)).all()
+    days = []
+    totals = {"present": 0, "absent": 0, "late": 0, "leave": 0, "total": 0}
+    for row in rows:
+        present = int(row.present or 0)
+        late = int(row.late or 0)
+        total = int(row.total or 0)
+        pct = round((present + late) * 100.0 / total, 2) if total else 0.0
+        status = "holiday" if total == 0 else "present" if pct >= 75 else "leave" if pct >= 50 else "absent"
+        days.append(
+            {
+                "date": row.session_date,
+                "present": present,
+                "absent": int(row.absent or 0),
+                "late": late,
+                "leave": int(row.leave or 0),
+                "total": total,
+                "percentage": pct,
+                "status": status,
+            }
+        )
+        totals["present"] += present
+        totals["absent"] += int(row.absent or 0)
+        totals["late"] += late
+        totals["leave"] += int(row.leave or 0)
+        totals["total"] += total
+    totals["percentage"] = round((totals["present"] + totals["late"]) * 100.0 / totals["total"], 2) if totals["total"] else 0.0
+    return {"month": month, "year": year, "summary": totals, "days": days}
+
+
+def _report_row(row, id_index: bool = False) -> dict:
+    if id_index:
+        total = row.total or 0
+        pct = round(((row.present or 0) + (row.late or 0)) * 100.0 / total, 2) if total else 0.0
+        return {
+            "subject_id": row.id,
+            "subject_name": row.name,
+            "present": row.present or 0,
+            "absent": row.absent or 0,
+            "late": row.late or 0,
+            "leave": row.excused or 0,
+            "percentage": pct,
+            "total": total,
+        }
+    total = row.total or 0
+    pct = round(((row.present or 0) + (row.late or 0)) * 100.0 / total, 2) if total else 0.0
+    return {
+        "student_id": row.id,
+        "roll_number": row.roll_number,
+        "full_name": row.full_name,
+        "present": row.present or 0,
+        "absent": row.absent or 0,
+        "late": row.late or 0,
+        "leave": row.excused or 0,
+        "percentage": pct,
+        "total": total,
+    }
 
 
 async def _get_teacher(db: AsyncSession, teacher_id: str) -> Teacher:

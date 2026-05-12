@@ -1,0 +1,31 @@
+fee_type_name,course_code,academic_year_label,amount,frequency
+Tuition Fee,BTECH,2026-27,85000,semester
+Library Fee,BTECH,2026-27,3000,annual
+Laboratory Fee,BTECH,2026-27,8000,semester
+Examination Fee,BTECH,2026-27,2500,semester
+Development Fee,BTECH,2026-27,10000,annual
+Placement Training Fee,BTECH,2026-27,6000,annual
+Tuition Fee,BCA,2026-27,45000,semester
+Library Fee,BCA,2026-27,3000,annual
+Laboratory Fee,BCA,2026-27,8000,semester
+Examination Fee,BCA,2026-27,2500,semester
+Development Fee,BCA,2026-27,10000,annual
+Placement Training Fee,BCA,2026-27,6000,annual
+Tuition Fee,BBA,2026-27,42000,semester
+Library Fee,BBA,2026-27,3000,annual
+Laboratory Fee,BBA,2026-27,2500,semester
+Examination Fee,BBA,2026-27,2500,semester
+Development Fee,BBA,2026-27,10000,annual
+Placement Training Fee,BBA,2026-27,6000,annual
+Tuition Fee,BCOM,2026-27,38000,semester
+Library Fee,BCOM,2026-27,3000,annual
+Laboratory Fee,BCOM,2026-27,2500,semester
+Examination Fee,BCOM,2026-27,2500,semester
+Development Fee,BCOM,2026-27,10000,annual
+Placement Training Fee,BCOM,2026-27,6000,annual
+Tuition Fee,MCA,2026-27,65000,semester
+Library Fee,MCA,2026-27,3000,annual
+Laboratory Fee,MCA,2026-27,8000,semester
+Examination Fee,MCA,2026-27,2500,semester
+Development Fee,MCA,2026-27,10000,annual
+Placement Training Fee,MCA,2026-27,6000,annual

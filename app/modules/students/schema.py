@@ -1,6 +1,7 @@
 import uuid
 from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date, datetime
+from typing import Literal
 from app.modules.students.model import StudentStatus
 
 
@@ -163,6 +164,27 @@ class AcademicRecordListItem(BaseModel):
     status: StudentStatus
     enrolled_at: datetime
     exited_at: datetime | None
+
+
+PromotionAction = Literal["promote", "detain", "drop", "transfer", "graduate"]
+
+
+class PromotionPreviewRequest(BaseModel):
+    from_academic_year_id: uuid.UUID
+    from_section_id: uuid.UUID
+    to_academic_year_id: uuid.UUID
+    to_section_id: uuid.UUID
+    student_ids: list[uuid.UUID] | None = None
+
+
+class PromotionStudentDecision(BaseModel):
+    student_id: uuid.UUID
+    action: PromotionAction = "promote"
+    to_section_id: uuid.UUID | None = None
+
+
+class PromotionExecuteRequest(PromotionPreviewRequest):
+    decisions: list[PromotionStudentDecision] | None = None
 
 
 class StudentOut(BaseModel):

@@ -1,0 +1,81 @@
+course_code,class_name,branch_code,academic_year_label,semester,code,name,credits,is_active
+BTECH,CSE Semester 1,CSE,2026-27,1,CSE101,Engineering Mathematics I,4,true
+BTECH,CSE Semester 1,CSE,2026-27,1,CSE102,Python Programming,4,true
+BTECH,CSE Semester 1,CSE,2026-27,1,CSE103,Digital Logic Design,4,true
+BTECH,CSE Semester 1,CSE,2026-27,1,CSE104,Computer Organization,3,true
+BTECH,CSE Semester 1,CSE,2026-27,1,CSE105,Professional Communication,3,true
+BTECH,CSE Semester 2,CSE,2026-27,2,CSE201,Engineering Mathematics I II,4,true
+BTECH,CSE Semester 2,CSE,2026-27,2,CSE202,Python Programming II,4,true
+BTECH,CSE Semester 2,CSE,2026-27,2,CSE203,Digital Logic Design II,4,true
+BTECH,CSE Semester 2,CSE,2026-27,2,CSE204,Computer Organization II,3,true
+BTECH,CSE Semester 2,CSE,2026-27,2,CSE205,Professional Communication II,3,true
+BTECH,AIML Semester 1,AIML,2026-27,1,AIML101,Linear Algebra for AI,4,true
+BTECH,AIML Semester 1,AIML,2026-27,1,AIML102,Python for AI,4,true
+BTECH,AIML Semester 1,AIML,2026-27,1,AIML103,Data Visualization,4,true
+BTECH,AIML Semester 1,AIML,2026-27,1,AIML104,Statistics for Data Science,3,true
+BTECH,AIML Semester 1,AIML,2026-27,1,AIML105,AI Workshop,3,true
+BTECH,AIML Semester 2,AIML,2026-27,2,AIML201,Linear Algebra for AI II,4,true
+BTECH,AIML Semester 2,AIML,2026-27,2,AIML202,Python for AI II,4,true
+BTECH,AIML Semester 2,AIML,2026-27,2,AIML203,Data Visualization II,4,true
+BTECH,AIML Semester 2,AIML,2026-27,2,AIML204,Statistics for Data Science II,3,true
+BTECH,AIML Semester 2,AIML,2026-27,2,AIML205,AI Workshop II,3,true
+BTECH,ECE Semester 1,ECE,2026-27,1,ECE101,Engineering Mathematics I,4,true
+BTECH,ECE Semester 1,ECE,2026-27,1,ECE102,Basic Electronics,4,true
+BTECH,ECE Semester 1,ECE,2026-27,1,ECE103,Network Analysis,4,true
+BTECH,ECE Semester 1,ECE,2026-27,1,ECE104,Signals and Systems,3,true
+BTECH,ECE Semester 1,ECE,2026-27,1,ECE105,Electronic Workshop,3,true
+BTECH,ECE Semester 2,ECE,2026-27,2,ECE201,Engineering Mathematics I II,4,true
+BTECH,ECE Semester 2,ECE,2026-27,2,ECE202,Basic Electronics II,4,true
+BTECH,ECE Semester 2,ECE,2026-27,2,ECE203,Network Analysis II,4,true
+BTECH,ECE Semester 2,ECE,2026-27,2,ECE204,Signals and Systems II,3,true
+BTECH,ECE Semester 2,ECE,2026-27,2,ECE205,Electronic Workshop II,3,true
+BTECH,MECH Semester 1,MECH,2026-27,1,MECH101,Engineering Mechanics,4,true
+BTECH,MECH Semester 1,MECH,2026-27,1,MECH102,Engineering Graphics,4,true
+BTECH,MECH Semester 1,MECH,2026-27,1,MECH103,Manufacturing Process,4,true
+BTECH,MECH Semester 1,MECH,2026-27,1,MECH104,Material Science,3,true
+BTECH,MECH Semester 1,MECH,2026-27,1,MECH105,Workshop Practice,3,true
+BTECH,MECH Semester 2,MECH,2026-27,2,MECH201,Engineering Mechanics II,4,true
+BTECH,MECH Semester 2,MECH,2026-27,2,MECH202,Engineering Graphics II,4,true
+BTECH,MECH Semester 2,MECH,2026-27,2,MECH203,Manufacturing Process II,4,true
+BTECH,MECH Semester 2,MECH,2026-27,2,MECH204,Material Science II,3,true
+BTECH,MECH Semester 2,MECH,2026-27,2,MECH205,Workshop Practice II,3,true
+BCA,CA Semester 1,CA,2026-27,1,CA101,Programming in C,4,true
+BCA,CA Semester 1,CA,2026-27,1,CA102,Digital Computer Fundamentals,4,true
+BCA,CA Semester 1,CA,2026-27,1,CA103,Mathematics for Computing,4,true
+BCA,CA Semester 1,CA,2026-27,1,CA104,Office Automation,3,true
+BCA,CA Semester 1,CA,2026-27,1,CA105,Web Fundamentals,3,true
+BCA,CA Semester 2,CA,2026-27,2,CA201,Programming in C II,4,true
+BCA,CA Semester 2,CA,2026-27,2,CA202,Digital Computer Fundamentals II,4,true
+BCA,CA Semester 2,CA,2026-27,2,CA203,Mathematics for Computing II,4,true
+BCA,CA Semester 2,CA,2026-27,2,CA204,Office Automation II,3,true
+BCA,CA Semester 2,CA,2026-27,2,CA205,Web Fundamentals II,3,true
+BBA,BA Semester 1,BA,2026-27,1,BA101,Principles of Management,4,true
+BBA,BA Semester 1,BA,2026-27,1,BA102,Business Economics,4,true
+BBA,BA Semester 1,BA,2026-27,1,BA103,Business Mathematics,4,true
+BBA,BA Semester 1,BA,2026-27,1,BA104,Organizational Behaviour,3,true
+BBA,BA Semester 1,BA,2026-27,1,BA105,Business Communication,3,true
+BBA,BA Semester 2,BA,2026-27,2,BA201,Principles of Management II,4,true
+BBA,BA Semester 2,BA,2026-27,2,BA202,Business Economics II,4,true
+BBA,BA Semester 2,BA,2026-27,2,BA203,Business Mathematics II,4,true
+BBA,BA Semester 2,BA,2026-27,2,BA204,Organizational Behaviour II,3,true
+BBA,BA Semester 2,BA,2026-27,2,BA205,Business Communication II,3,true
+BCOM,AT Semester 1,AT,2026-27,1,AT101,Financial Accounting,4,true
+BCOM,AT Semester 1,AT,2026-27,1,AT102,Business Law,4,true
+BCOM,AT Semester 1,AT,2026-27,1,AT103,Corporate Accounting,4,true
+BCOM,AT Semester 1,AT,2026-27,1,AT104,Taxation Basics,3,true
+BCOM,AT Semester 1,AT,2026-27,1,AT105,Cost Accounting,3,true
+BCOM,AT Semester 2,AT,2026-27,2,AT201,Financial Accounting II,4,true
+BCOM,AT Semester 2,AT,2026-27,2,AT202,Business Law II,4,true
+BCOM,AT Semester 2,AT,2026-27,2,AT203,Corporate Accounting II,4,true
+BCOM,AT Semester 2,AT,2026-27,2,AT204,Taxation Basics II,3,true
+BCOM,AT Semester 2,AT,2026-27,2,AT205,Cost Accounting II,3,true
+MCA,SE Semester 1,SE,2026-27,1,SE101,Advanced Database Systems,4,true
+MCA,SE Semester 1,SE,2026-27,1,SE102,Software Engineering,4,true
+MCA,SE Semester 1,SE,2026-27,1,SE103,Cloud Computing,4,true
+MCA,SE Semester 1,SE,2026-27,1,SE104,Machine Learning,3,true
+MCA,SE Semester 1,SE,2026-27,1,SE105,Research Methodology,3,true
+MCA,SE Semester 2,SE,2026-27,2,SE201,Advanced Database Systems II,4,true
+MCA,SE Semester 2,SE,2026-27,2,SE202,Software Engineering II,4,true
+MCA,SE Semester 2,SE,2026-27,2,SE203,Cloud Computing II,4,true
+MCA,SE Semester 2,SE,2026-27,2,SE204,Machine Learning II,3,true
+MCA,SE Semester 2,SE,2026-27,2,SE205,Research Methodology II,3,true

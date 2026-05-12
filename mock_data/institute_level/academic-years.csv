@@ -1,0 +1,4 @@
+label,start_date,end_date,is_current,is_active
+2025-26,2025-06-01,2026-05-31,false,true
+2026-27,2026-06-01,2027-05-31,true,true
+2027-28,2027-06-01,2028-05-31,false,true

@@ -1,5 +1,5 @@
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import date, datetime
 from app.modules.fees.model import FeeStatus
 
@@ -27,6 +27,22 @@ class FeeStructureCreate(BaseModel):
     amount: float
     frequency: str
 
+    @field_validator("amount")
+    @classmethod
+    def positive_amount(cls, value):
+        if value <= 0:
+            raise ValueError("Amount must be greater than zero")
+        return value
+
+    @field_validator("frequency")
+    @classmethod
+    def valid_frequency(cls, value):
+        allowed = {"annual", "semester", "monthly", "one_time"}
+        normalized = value.strip().lower()
+        if normalized not in allowed:
+            raise ValueError("Frequency must be annual, semester, monthly, or one_time")
+        return normalized
+
 
 class FeeStructureOut(BaseModel):
     id: uuid.UUID
@@ -45,6 +61,13 @@ class StudentFeeCreate(BaseModel):
     fee_structure_id: uuid.UUID
     amount_due: float
     due_date: date | None = None
+
+    @field_validator("amount_due")
+    @classmethod
+    def positive_due(cls, value):
+        if value <= 0:
+            raise ValueError("Amount due must be greater than zero")
+        return value
 
 
 class StudentFeeOut(BaseModel):
@@ -74,6 +97,22 @@ class PaymentCreate(BaseModel):
     amount: float
     payment_mode: str
     transaction_ref: str | None = None
+
+    @field_validator("amount")
+    @classmethod
+    def positive_payment(cls, value):
+        if value <= 0:
+            raise ValueError("Payment amount must be greater than zero")
+        return value
+
+    @field_validator("payment_mode")
+    @classmethod
+    def valid_payment_mode(cls, value):
+        allowed = {"cash", "upi", "card", "neft", "rtgs", "cheque", "online"}
+        normalized = value.strip().lower()
+        if normalized not in allowed:
+            raise ValueError("Unsupported payment mode")
+        return normalized
 
 
 class PaymentOut(BaseModel):

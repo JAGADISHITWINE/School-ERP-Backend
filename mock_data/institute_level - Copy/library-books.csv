@@ -1,0 +1,121 @@
+isbn,barcode,title,author,publisher,total_copies,available_copies
+9789350000001,LIB00001,Programming: Concepts and Applications Vol 1,Rohan Kumar,McGraw Hill,4,3
+9789350000002,LIB00002,Data Structures: Concepts and Applications Vol 1,Meera Nair,Oxford University Press,5,4
+9789350000003,LIB00003,Database Systems: Concepts and Applications Vol 1,Karthik Rao,S Chand,6,5
+9789350000004,LIB00004,Operating Systems: Concepts and Applications Vol 1,Diya Patel,Wiley,7,6
+9789350000005,LIB00005,Computer Networks: Concepts and Applications Vol 1,Arjun Reddy,O'Reilly,8,2
+9789350000006,LIB00006,Artificial Intelligence: Concepts and Applications Vol 1,Nisha Jain,BPB Publications,3,3
+9789350000007,LIB00007,Machine Learning: Concepts and Applications Vol 1,Dev Malhotra,Pearson,4,4
+9789350000008,LIB00008,Cloud Computing: Concepts and Applications Vol 1,Sara Thomas,McGraw Hill,5,5
+9789350000009,LIB00009,Digital Electronics: Concepts and Applications Vol 1,Ishan Verma,Oxford University Press,6,6
+9789350000010,LIB00010,Engineering Mathematics: Concepts and Applications Vol 1,Aarav Iyer,S Chand,7,2
+9789350000011,LIB00011,Business Management: Concepts and Applications Vol 1,Kiara Menon,Wiley,8,3
+9789350000012,LIB00012,Financial Accounting: Concepts and Applications Vol 1,Vivaan Bhat,O'Reilly,3,4
+9789350000013,LIB00013,Marketing Management: Concepts and Applications Vol 1,Saanvi Kulkarni,BPB Publications,4,5
+9789350000014,LIB00014,Business Law: Concepts and Applications Vol 1,Aditya Shetty,Pearson,5,6
+9789350000015,LIB00015,Research Methodology: Concepts and Applications Vol 1,Ira Gupta,McGraw Hill,6,2
+9789350000016,LIB00016,Programming: Concepts and Applications Vol 2,Kabir Joshi,Oxford University Press,7,3
+9789350000017,LIB00017,Data Structures: Concepts and Applications Vol 2,Tara Khan,S Chand,8,4
+9789350000018,LIB00018,Database Systems: Concepts and Applications Vol 2,Reyansh Das,Wiley,3,5
+9789350000019,LIB00019,Operating Systems: Concepts and Applications Vol 2,Myra Ali,O'Reilly,4,6
+9789350000020,LIB00020,Computer Networks: Concepts and Applications Vol 2,Aisha Sharma,BPB Publications,5,2
+9789350000021,LIB00021,Artificial Intelligence: Concepts and Applications Vol 2,Nikhil Kumar,Pearson,6,3
+9789350000022,LIB00022,Machine Learning: Concepts and Applications Vol 2,Pranav Nair,McGraw Hill,7,4
+9789350000023,LIB00023,Cloud Computing: Concepts and Applications Vol 2,Ritika Rao,Oxford University Press,8,5
+9789350000024,LIB00024,Digital Electronics: Concepts and Applications Vol 2,Varun Patel,S Chand,3,6
+9789350000025,LIB00025,Engineering Mathematics: Concepts and Applications Vol 2,Sneha Reddy,Wiley,4,2
+9789350000026,LIB00026,Business Management: Concepts and Applications Vol 2,Yash Jain,O'Reilly,5,3
+9789350000027,LIB00027,Financial Accounting: Concepts and Applications Vol 2,Pooja Malhotra,BPB Publications,6,4
+9789350000028,LIB00028,Marketing Management: Concepts and Applications Vol 2,Harsh Thomas,Pearson,7,5
+9789350000029,LIB00029,Business Law: Concepts and Applications Vol 2,Neha Verma,McGraw Hill,8,6
+9789350000030,LIB00030,Research Methodology: Concepts and Applications Vol 2,Ananya Iyer,Oxford University Press,3,2
+9789350000031,LIB00031,Programming: Concepts and Applications Vol 3,Rohan Menon,S Chand,4,3
+9789350000032,LIB00032,Data Structures: Concepts and Applications Vol 3,Meera Bhat,Wiley,5,4
+9789350000033,LIB00033,Database Systems: Concepts and Applications Vol 3,Karthik Kulkarni,O'Reilly,6,5
+9789350000034,LIB00034,Operating Systems: Concepts and Applications Vol 3,Diya Shetty,BPB Publications,7,6
+9789350000035,LIB00035,Computer Networks: Concepts and Applications Vol 3,Arjun Gupta,Pearson,8,2
+9789350000036,LIB00036,Artificial Intelligence: Concepts and Applications Vol 3,Nisha Joshi,McGraw Hill,3,3
+9789350000037,LIB00037,Machine Learning: Concepts and Applications Vol 3,Dev Khan,Oxford University Press,4,4
+9789350000038,LIB00038,Cloud Computing: Concepts and Applications Vol 3,Sara Das,S Chand,5,5
+9789350000039,LIB00039,Digital Electronics: Concepts and Applications Vol 3,Ishan Ali,Wiley,6,6
+9789350000040,LIB00040,Engineering Mathematics: Concepts and Applications Vol 3,Aarav Sharma,O'Reilly,7,2
+9789350000041,LIB00041,Business Management: Concepts and Applications Vol 3,Kiara Kumar,BPB Publications,8,3
+9789350000042,LIB00042,Financial Accounting: Concepts and Applications Vol 3,Vivaan Nair,Pearson,3,4
+9789350000043,LIB00043,Marketing Management: Concepts and Applications Vol 3,Saanvi Rao,McGraw Hill,4,5
+9789350000044,LIB00044,Business Law: Concepts and Applications Vol 3,Aditya Patel,Oxford University Press,5,6
+9789350000045,LIB00045,Research Methodology: Concepts and Applications Vol 3,Ira Reddy,S Chand,6,2
+9789350000046,LIB00046,Programming: Concepts and Applications Vol 4,Kabir Jain,Wiley,7,3
+9789350000047,LIB00047,Data Structures: Concepts and Applications Vol 4,Tara Malhotra,O'Reilly,8,4
+9789350000048,LIB00048,Database Systems: Concepts and Applications Vol 4,Reyansh Thomas,BPB Publications,3,5
+9789350000049,LIB00049,Operating Systems: Concepts and Applications Vol 4,Myra Verma,Pearson,4,6
+9789350000050,LIB00050,Computer Networks: Concepts and Applications Vol 4,Aisha Iyer,McGraw Hill,5,2
+9789350000051,LIB00051,Artificial Intelligence: Concepts and Applications Vol 4,Nikhil Menon,Oxford University Press,6,3
+9789350000052,LIB00052,Machine Learning: Concepts and Applications Vol 4,Pranav Bhat,S Chand,7,4
+9789350000053,LIB00053,Cloud Computing: Concepts and Applications Vol 4,Ritika Kulkarni,Wiley,8,5
+9789350000054,LIB00054,Digital Electronics: Concepts and Applications Vol 4,Varun Shetty,O'Reilly,3,6
+9789350000055,LIB00055,Engineering Mathematics: Concepts and Applications Vol 4,Sneha Gupta,BPB Publications,4,2
+9789350000056,LIB00056,Business Management: Concepts and Applications Vol 4,Yash Joshi,Pearson,5,3
+9789350000057,LIB00057,Financial Accounting: Concepts and Applications Vol 4,Pooja Khan,McGraw Hill,6,4
+9789350000058,LIB00058,Marketing Management: Concepts and Applications Vol 4,Harsh Das,Oxford University Press,7,5
+9789350000059,LIB00059,Business Law: Concepts and Applications Vol 4,Neha Ali,S Chand,8,6
+9789350000060,LIB00060,Research Methodology: Concepts and Applications Vol 4,Ananya Sharma,Wiley,3,2
+9789350000061,LIB00061,Programming: Concepts and Applications Vol 5,Rohan Kumar,O'Reilly,4,3
+9789350000062,LIB00062,Data Structures: Concepts and Applications Vol 5,Meera Nair,BPB Publications,5,4
+9789350000063,LIB00063,Database Systems: Concepts and Applications Vol 5,Karthik Rao,Pearson,6,5
+9789350000064,LIB00064,Operating Systems: Concepts and Applications Vol 5,Diya Patel,McGraw Hill,7,6
+9789350000065,LIB00065,Computer Networks: Concepts and Applications Vol 5,Arjun Reddy,Oxford University Press,8,2
+9789350000066,LIB00066,Artificial Intelligence: Concepts and Applications Vol 5,Nisha Jain,S Chand,3,3
+9789350000067,LIB00067,Machine Learning: Concepts and Applications Vol 5,Dev Malhotra,Wiley,4,4
+9789350000068,LIB00068,Cloud Computing: Concepts and Applications Vol 5,Sara Thomas,O'Reilly,5,5
+9789350000069,LIB00069,Digital Electronics: Concepts and Applications Vol 5,Ishan Verma,BPB Publications,6,6
+9789350000070,LIB00070,Engineering Mathematics: Concepts and Applications Vol 5,Aarav Iyer,Pearson,7,2
+9789350000071,LIB00071,Business Management: Concepts and Applications Vol 5,Kiara Menon,McGraw Hill,8,3
+9789350000072,LIB00072,Financial Accounting: Concepts and Applications Vol 5,Vivaan Bhat,Oxford University Press,3,4
+9789350000073,LIB00073,Marketing Management: Concepts and Applications Vol 5,Saanvi Kulkarni,S Chand,4,5
+9789350000074,LIB00074,Business Law: Concepts and Applications Vol 5,Aditya Shetty,Wiley,5,6
+9789350000075,LIB00075,Research Methodology: Concepts and Applications Vol 5,Ira Gupta,O'Reilly,6,2
+9789350000076,LIB00076,Programming: Concepts and Applications Vol 6,Kabir Joshi,BPB Publications,7,3
+9789350000077,LIB00077,Data Structures: Concepts and Applications Vol 6,Tara Khan,Pearson,8,4
+9789350000078,LIB00078,Database Systems: Concepts and Applications Vol 6,Reyansh Das,McGraw Hill,3,5
+9789350000079,LIB00079,Operating Systems: Concepts and Applications Vol 6,Myra Ali,Oxford University Press,4,6
+9789350000080,LIB00080,Computer Networks: Concepts and Applications Vol 6,Aisha Sharma,S Chand,5,2
+9789350000081,LIB00081,Artificial Intelligence: Concepts and Applications Vol 6,Nikhil Kumar,Wiley,6,3
+9789350000082,LIB00082,Machine Learning: Concepts and Applications Vol 6,Pranav Nair,O'Reilly,7,4
+9789350000083,LIB00083,Cloud Computing: Concepts and Applications Vol 6,Ritika Rao,BPB Publications,8,5
+9789350000084,LIB00084,Digital Electronics: Concepts and Applications Vol 6,Varun Patel,Pearson,3,6
+9789350000085,LIB00085,Engineering Mathematics: Concepts and Applications Vol 6,Sneha Reddy,McGraw Hill,4,2
+9789350000086,LIB00086,Business Management: Concepts and Applications Vol 6,Yash Jain,Oxford University Press,5,3
+9789350000087,LIB00087,Financial Accounting: Concepts and Applications Vol 6,Pooja Malhotra,S Chand,6,4
+9789350000088,LIB00088,Marketing Management: Concepts and Applications Vol 6,Harsh Thomas,Wiley,7,5
+9789350000089,LIB00089,Business Law: Concepts and Applications Vol 6,Neha Verma,O'Reilly,8,6
+9789350000090,LIB00090,Research Methodology: Concepts and Applications Vol 6,Ananya Iyer,BPB Publications,3,2
+9789350000091,LIB00091,Programming: Concepts and Applications Vol 7,Rohan Menon,Pearson,4,3
+9789350000092,LIB00092,Data Structures: Concepts and Applications Vol 7,Meera Bhat,McGraw Hill,5,4
+9789350000093,LIB00093,Database Systems: Concepts and Applications Vol 7,Karthik Kulkarni,Oxford University Press,6,5
+9789350000094,LIB00094,Operating Systems: Concepts and Applications Vol 7,Diya Shetty,S Chand,7,6
+9789350000095,LIB00095,Computer Networks: Concepts and Applications Vol 7,Arjun Gupta,Wiley,8,2
+9789350000096,LIB00096,Artificial Intelligence: Concepts and Applications Vol 7,Nisha Joshi,O'Reilly,3,3
+9789350000097,LIB00097,Machine Learning: Concepts and Applications Vol 7,Dev Khan,BPB Publications,4,4
+9789350000098,LIB00098,Cloud Computing: Concepts and Applications Vol 7,Sara Das,Pearson,5,5
+9789350000099,LIB00099,Digital Electronics: Concepts and Applications Vol 7,Ishan Ali,McGraw Hill,6,6
+9789350000100,LIB00100,Engineering Mathematics: Concepts and Applications Vol 7,Aarav Sharma,Oxford University Press,7,2
+9789350000101,LIB00101,Business Management: Concepts and Applications Vol 7,Kiara Kumar,S Chand,8,3
+9789350000102,LIB00102,Financial Accounting: Concepts and Applications Vol 7,Vivaan Nair,Wiley,3,4
+9789350000103,LIB00103,Marketing Management: Concepts and Applications Vol 7,Saanvi Rao,O'Reilly,4,5
+9789350000104,LIB00104,Business Law: Concepts and Applications Vol 7,Aditya Patel,BPB Publications,5,6
+9789350000105,LIB00105,Research Methodology: Concepts and Applications Vol 7,Ira Reddy,Pearson,6,2
+9789350000106,LIB00106,Programming: Concepts and Applications Vol 8,Kabir Jain,McGraw Hill,7,3
+9789350000107,LIB00107,Data Structures: Concepts and Applications Vol 8,Tara Malhotra,Oxford University Press,8,4
+9789350000108,LIB00108,Database Systems: Concepts and Applications Vol 8,Reyansh Thomas,S Chand,3,5
+9789350000109,LIB00109,Operating Systems: Concepts and Applications Vol 8,Myra Verma,Wiley,4,6
+9789350000110,LIB00110,Computer Networks: Concepts and Applications Vol 8,Aisha Iyer,O'Reilly,5,2
+9789350000111,LIB00111,Artificial Intelligence: Concepts and Applications Vol 8,Nikhil Menon,BPB Publications,6,3
+9789350000112,LIB00112,Machine Learning: Concepts and Applications Vol 8,Pranav Bhat,Pearson,7,4
+9789350000113,LIB00113,Cloud Computing: Concepts and Applications Vol 8,Ritika Kulkarni,McGraw Hill,8,5
+9789350000114,LIB00114,Digital Electronics: Concepts and Applications Vol 8,Varun Shetty,Oxford University Press,3,6
+9789350000115,LIB00115,Engineering Mathematics: Concepts and Applications Vol 8,Sneha Gupta,S Chand,4,2
+9789350000116,LIB00116,Business Management: Concepts and Applications Vol 8,Yash Joshi,Wiley,5,3
+9789350000117,LIB00117,Financial Accounting: Concepts and Applications Vol 8,Pooja Khan,O'Reilly,6,4
+9789350000118,LIB00118,Marketing Management: Concepts and Applications Vol 8,Harsh Das,BPB Publications,7,5
+9789350000119,LIB00119,Business Law: Concepts and Applications Vol 8,Neha Ali,Pearson,8,6
+9789350000120,LIB00120,Research Methodology: Concepts and Applications Vol 8,Ananya Sharma,McGraw Hill,3,2

@@ -19,6 +19,7 @@ from app.modules.fees.model import FeeType, FeeStructure, StudentFee, FeePayment
 from app.modules.library.model import Book, BookIssue
 from app.modules.logs.model import ActivityLog
 from app.modules.notifications.model import NotificationLog
+from app.modules.teacher_content.model import StudyMaterial, Assessment, Assignment, AssignmentSubmission
 
 config = context.config
 if config.config_file_name is not None:

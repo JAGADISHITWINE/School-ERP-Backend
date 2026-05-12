@@ -1,0 +1,9 @@
+course_code,code,name,is_active
+BTECH,CSE,Computer Science Engineering,true
+BTECH,AIML,Artificial Intelligence and Machine Learning,true
+BTECH,ECE,Electronics and Communication Engineering,true
+BTECH,MECH,Mechanical Engineering,true
+BCA,CA,Computer Applications,true
+BBA,BA,Business Analytics,true
+BCOM,AT,Accounting and Taxation,true
+MCA,SE,Software Engineering,true

@@ -43,7 +43,7 @@ async def list_roles(
     pagination: Annotated[PaginationParams, Depends()],
 ):
     roles, total = await service.list_roles(
-        db, current_user["institution_id"], pagination.offset, pagination.page_size
+        db, current_user["institution_id"], pagination.offset, pagination.page_size, current_user
     )
     return paginated(
         [RoleOut.model_validate(r).model_dump() for r in roles],
@@ -98,6 +98,6 @@ async def assign_menus(
 
 
 @router.put("/users/{user_id}/roles", response_model=dict, dependencies=[Depends(require_permission(ROLE_UPDATE))])
-async def assign_roles_to_user(user_id: str, payload: AssignRolesRequest, db: Annotated[AsyncSession, Depends(get_db)]):
-    await service.assign_roles_to_user(db, user_id, [str(r) for r in payload.role_ids])
+async def assign_roles_to_user(user_id: str, payload: AssignRolesRequest, current_user: CurrentUser, db: Annotated[AsyncSession, Depends(get_db)]):
+    await service.assign_roles_to_user(db, user_id, [str(r) for r in payload.role_ids], current_user)
     return ok(message="Roles assigned to user")

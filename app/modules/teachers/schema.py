@@ -1,6 +1,6 @@
 import uuid
 from pydantic import BaseModel, EmailStr, Field, model_validator
-from datetime import date, time
+from datetime import date, datetime, time
 from app.modules.teachers.model import TimetableDay
 
 
@@ -61,6 +61,41 @@ class TeacherClassOut(BaseModel):
     branch_name: str
     academic_year_id: uuid.UUID | None
     academic_year_label: str | None = None
+
+
+class ClassMentorCreate(BaseModel):
+    teacher_id: uuid.UUID
+    academic_year_id: uuid.UUID
+    class_id: uuid.UUID
+    section_id: uuid.UUID
+
+
+class ClassMentorUpdate(BaseModel):
+    teacher_id: uuid.UUID | None = None
+    academic_year_id: uuid.UUID | None = None
+    class_id: uuid.UUID | None = None
+    section_id: uuid.UUID | None = None
+    is_active: bool | None = None
+
+
+class ClassMentorOut(BaseModel):
+    id: uuid.UUID
+    teacher_id: uuid.UUID
+    teacher_name: str
+    employee_code: str
+    academic_year_id: uuid.UUID
+    academic_year_label: str
+    course_id: uuid.UUID
+    course_name: str
+    branch_id: uuid.UUID
+    branch_name: str
+    class_id: uuid.UUID
+    class_name: str
+    section_id: uuid.UUID
+    section_name: str
+    assigned_by_user_id: uuid.UUID | None = None
+    is_active: bool
+    created_at: datetime | None = None
 
 
 class TeacherTimetableCreate(BaseModel):
@@ -185,12 +220,14 @@ class HODLinkOut(BaseModel):
 class TeacherHODSubjectLinkCreate(BaseModel):
     teacher_id: uuid.UUID
     hod_link_id: uuid.UUID
+    section_id: uuid.UUID
     subject_ids: list[uuid.UUID] = Field(default_factory=list, min_length=1)
 
 
 class TeacherHODSubjectLinkUpdate(BaseModel):
     teacher_id: uuid.UUID
     hod_link_id: uuid.UUID
+    section_id: uuid.UUID
     subject_id: uuid.UUID
 
 
@@ -206,5 +243,9 @@ class TeacherHODSubjectLinkOut(BaseModel):
     course_name: str
     branch_id: uuid.UUID
     branch_name: str
+    class_id: uuid.UUID | None = None
+    class_name: str | None = None
+    section_id: uuid.UUID | None = None
+    section_name: str | None = None
     subject_id: uuid.UUID
     subject_name: str

@@ -1,5 +1,6 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, File, Form, Query, UploadFile
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.db.session import get_db
@@ -15,13 +16,17 @@ from app.modules.students.schema import (
     StudentOut,
     AcademicRecordOut,
     AcademicRecordListItem,
+    PromotionExecuteRequest,
+    PromotionPreviewRequest,
 )
 from app.modules.users.model import User
 from app.modules.students.model import StudentAcademicRecord
 from app.modules.academic.model import Branch, Class, Section, AcademicYear
 from app.modules.roles.model import Role, UserRole
 from app.core.dependencies import CurrentUser, require_permission
+from app.core.role_context import has_any_role
 from app.constants.permissions import STUDENT_CREATE, STUDENT_READ, STUDENT_UPDATE
+from app.modules.logs.service import log_activity
 from app.utils.response import ok, paginated
 from app.utils.pagination import PaginationParams
 
@@ -98,8 +103,11 @@ async def list_students(
     pagination: Pagination,
     search: str | None = Query(default=None),
 ):
-    role_slug = await _user_role_slug(db, current_user["id"])
-    if role_slug == "teacher" and not current_user["is_superuser"]:
+    if not current_user["is_superuser"] and has_any_role(current_user, {"hod"}):
+        students, total = await service.list_students_for_hod(
+            db, current_user["institution_id"], current_user["id"], pagination.offset, pagination.page_size, search
+        )
+    elif not current_user["is_superuser"] and has_any_role(current_user, {"teacher"}):
         students, total = await service.list_students_for_teacher(
             db, current_user["institution_id"], current_user["id"], pagination.offset, pagination.page_size, search
         )
@@ -154,32 +162,123 @@ async def get_my_student_portal(current_user: CurrentUser, db: DB):
     return ok(data=data)
 
 
+@router.post("/promotions/preview", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
+async def preview_student_promotion(payload: PromotionPreviewRequest, current_user: CurrentUser, db: DB):
+    data = await service.preview_promotion(db, current_user["institution_id"], payload)
+    return ok(data=data)
+
+
+@router.post("/promotions/execute", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
+async def execute_student_promotion(payload: PromotionExecuteRequest, current_user: CurrentUser, db: DB):
+    data = await service.execute_promotion(db, current_user["institution_id"], payload, actor_user_id=current_user["id"])
+    return ok(data=data, message="Student promotion completed")
+
+
 @router.get("/{student_id}/full-profile", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
-async def get_student_full_profile(student_id: str, db: DB):
+async def get_student_full_profile(student_id: str, current_user: CurrentUser, db: DB):
+    await service.assert_can_view_student(db, current_user, student_id)
     data = await service.get_student_full_profile(db, student_id)
     return ok(data=data)
 
 
 @router.post("/documents", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
-async def create_student_document(payload: StudentDocumentCreate, db: DB):
+async def create_student_document(payload: StudentDocumentCreate, current_user: CurrentUser, db: DB):
     document = await service.create_document(db, payload)
+    await log_activity(
+        db,
+        module="students",
+        action="document_create",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student_document",
+        entity_id=str(document.id),
+        message="Student document metadata added",
+        meta={"student_id": str(payload.student_id), "document_type": payload.document_type},
+    )
     return ok(data={"id": str(document.id)}, message="Student document added")
 
 
+@router.post("/documents/upload", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
+async def upload_student_document(
+    current_user: CurrentUser,
+    db: DB,
+    student_id: Annotated[str, Form()],
+    document_type: Annotated[str, Form()],
+    title: Annotated[str, Form()],
+    status: Annotated[str, Form()] = "pending",
+    remarks: Annotated[str | None, Form()] = None,
+    file: UploadFile = File(...),
+):
+    content = await file.read()
+    document = await service.store_document_file(
+        db,
+        student_id=student_id,
+        document_type=document_type,
+        title=title,
+        status=status,
+        remarks=remarks,
+        original_name=file.filename or "document",
+        content_type=file.content_type,
+        content=content,
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+    )
+    return ok(data=StudentDocumentOut.model_validate(document).model_dump(), message="Student document uploaded")
+
+
+@router.get("/documents/{document_id}/download", dependencies=[Depends(require_permission(STUDENT_READ))])
+async def download_student_document(document_id: str, current_user: CurrentUser, db: DB):
+    document, file_path = await service.get_document_file(db, document_id, current_user["institution_id"])
+    await log_activity(
+        db,
+        module="students",
+        action="document_download",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student_document",
+        entity_id=str(document.id),
+        message="Student document downloaded",
+        meta={"student_id": str(document.student_id), "file_name": document.file_name},
+    )
+    return FileResponse(path=file_path, filename=document.file_name or file_path.name)
+
+
 @router.patch("/documents/{document_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
-async def update_student_document(document_id: str, payload: StudentDocumentUpdate, db: DB):
+async def update_student_document(document_id: str, payload: StudentDocumentUpdate, current_user: CurrentUser, db: DB):
     document = await service.update_document(db, document_id, payload)
+    await log_activity(
+        db,
+        module="students",
+        action="document_update",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student_document",
+        entity_id=str(document.id),
+        message="Student document updated",
+        meta=payload.model_dump(exclude_none=True),
+    )
     return ok(data={"id": str(document.id)}, message="Student document updated")
 
 
 @router.delete("/documents/{document_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
-async def delete_student_document(document_id: str, db: DB):
+async def delete_student_document(document_id: str, current_user: CurrentUser, db: DB):
     await service.delete_document(db, document_id)
+    await log_activity(
+        db,
+        module="students",
+        action="document_delete",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student_document",
+        entity_id=document_id,
+        message="Student document deleted",
+    )
     return ok(message="Student document deleted")
 
 
 @router.get("/{student_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_READ))])
-async def get_student(student_id: str, db: DB):
+async def get_student(student_id: str, current_user: CurrentUser, db: DB):
+    await service.assert_can_view_student(db, current_user, student_id)
     student = await service.get_student(db, student_id)
     user = (await db.execute(select(User).where(User.id == student.user_id))).scalar_one()
     current = await _current_academic_snapshot(db, student.id)
@@ -206,20 +305,52 @@ async def get_student(student_id: str, db: DB):
 
 
 @router.patch("/{student_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
-async def update_student(student_id: str, payload: StudentUpdate, db: DB):
+async def update_student(student_id: str, payload: StudentUpdate, current_user: CurrentUser, db: DB):
     student = await service.update_student(db, student_id, payload)
+    await log_activity(
+        db,
+        module="students",
+        action="student_update",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student",
+        entity_id=str(student.id),
+        message="Student profile updated",
+        meta=payload.model_dump(exclude_none=True),
+    )
     return ok(data={"id": str(student.id)}, message="Student updated")
 
 
 @router.delete("/{student_id}", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
-async def delete_student(student_id: str, db: DB):
+async def delete_student(student_id: str, current_user: CurrentUser, db: DB):
     await service.delete_student(db, student_id)
+    await log_activity(
+        db,
+        module="students",
+        action="student_deactivate",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student",
+        entity_id=student_id,
+        message="Student deactivated",
+    )
     return ok(message="Student deactivated")
 
 
 @router.patch("/{student_id}/status", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
-async def update_student_status(student_id: str, payload: StudentStatusUpdate, db: DB):
+async def update_student_status(student_id: str, payload: StudentStatusUpdate, current_user: CurrentUser, db: DB):
     record = await service.update_student_status(db, student_id, payload.status)
+    await log_activity(
+        db,
+        module="students",
+        action="student_status_update",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student",
+        entity_id=student_id,
+        message="Student status updated",
+        meta={"status": payload.status},
+    )
     return ok(
         data={
             "student_id": str(record.student_id),
@@ -232,8 +363,19 @@ async def update_student_status(student_id: str, payload: StudentStatusUpdate, d
 
 
 @router.post("/{student_id}/academic-record", response_model=dict, dependencies=[Depends(require_permission(STUDENT_UPDATE))])
-async def add_academic_record(student_id: str, payload: AcademicRecordCreate, db: DB):
+async def add_academic_record(student_id: str, payload: AcademicRecordCreate, current_user: CurrentUser, db: DB):
     record = await service.create_academic_record(db, student_id, payload)
+    await log_activity(
+        db,
+        module="students",
+        action="academic_record_create",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="student_academic_record",
+        entity_id=str(record.id),
+        message="Student academic record created",
+        meta=payload.model_dump(),
+    )
     return ok(data=AcademicRecordOut.model_validate(record).model_dump(), message="Academic record added")
 
 

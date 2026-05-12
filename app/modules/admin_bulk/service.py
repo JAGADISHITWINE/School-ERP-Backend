@@ -4,6 +4,7 @@ import csv
 from datetime import date
 from io import BytesIO, StringIO
 from typing import Any, Callable
+import re
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,7 +17,7 @@ from app.modules.fees.model import FeePayment, FeeStatus, FeeStructure, FeeType,
 from app.modules.library.model import Book
 from app.modules.roles.model import Role, UserRole
 from app.modules.students.model import Student, StudentAcademicRecord, StudentDocument, StudentStatus
-from app.modules.teachers.model import Teacher
+from app.modules.teachers.model import HODLink, Teacher, TeacherHODSubjectLink
 from app.modules.users.model import User
 
 
@@ -234,15 +235,50 @@ async def import_rows(db: AsyncSession, institution_id: str, resource: str, rows
     if not handler:
         raise NotFoundError("Unknown bulk resource")
 
-    result = {"created": 0, "updated": 0, "skipped": 0, "errors": []}
+    result = {
+        "total_rows": len(rows),
+        "created": 0,
+        "updated": 0,
+        "skipped": 0,
+        "success_count": 0,
+        "failed_count": 0,
+        "status": "processing",
+        "errors": [],
+    }
     for index, row in enumerate(rows, start=2):
         try:
             action = await handler(db, institution_id, row)
             result[action] += 1
+            result["success_count"] += 1
         except Exception as exc:
-            result["errors"].append({"row": index, "error": str(exc), "data": row})
+            result["failed_count"] += 1
+            result["errors"].append(_format_import_error(index, row, exc))
     await db.flush()
+    result["status"] = "failed" if result["success_count"] == 0 and result["failed_count"] else "completed_with_errors" if result["failed_count"] else "completed"
     return result
+
+
+def _format_import_error(row_number: int, row: dict[str, str], exc: Exception) -> dict[str, Any]:
+    message = str(exc) or exc.__class__.__name__
+    field = ""
+    value = ""
+    match = re.search(r"([A-Za-z _-]+) not found: ([^.;]+)", message)
+    if match:
+        field = match.group(1).strip().lower().replace(" ", "_")
+        value = match.group(2).strip()
+    elif "required" in message.lower():
+        field = message.split(" ", 1)[0].strip().lower()
+    elif "already" in message.lower() and row:
+        field = next(iter(row.keys()), "")
+    if field:
+        value = value or row.get(field, "")
+    return {
+        "row": row_number,
+        "field": field or "row",
+        "message": message,
+        "provided_value": value,
+        "data": row,
+    }
 
 
 async def export_rows(db: AsyncSession, institution_id: str, resource: str) -> bytes:
@@ -417,6 +453,70 @@ async def _import_teacher(db, institution_id, row):
     item.designation = _s(row, "designation") or None
     item.joined_at = _d(row, "joined_at")
     return action
+
+
+async def _import_teacher_link(db, institution_id, row):
+    employee_code = _s(row, "employee_code")
+    if not employee_code:
+        raise ValidationError("employee_code is required")
+    teacher = await _one(db, Teacher, Teacher.employee_code == employee_code)
+    if not teacher:
+        raise NotFoundError(f"Teacher not found: {employee_code}")
+    teacher_user = await _one(db, User, User.id == teacher.user_id, User.institution_id == institution_id)
+    if not teacher_user:
+        raise ValidationError("Teacher does not belong to your institution")
+
+    course = await _course(db, institution_id, _s(row, "course_code"))
+    branch = await _branch(db, institution_id, _s(row, "branch_code"), _s(row, "course_code"))
+    class_ = await _class(db, institution_id, _s(row, "class_name"), _s(row, "course_code"), _s(row, "branch_code"))
+    section = await _one(db, Section, Section.class_id == class_.id, Section.name == _s(row, "section_name"))
+    if not section:
+        raise NotFoundError(f"Section not found: {_s(row, 'class_name')} / {_s(row, 'section_name')}")
+    subject = await _subject(db, institution_id, _s(row, "subject_code"))
+    if subject.class_id and subject.class_id != class_.id:
+        raise ValidationError("Subject does not belong to selected class")
+    if subject.course_id != course.id:
+        raise ValidationError("Subject does not belong to selected course")
+    if subject.branch_id and subject.branch_id != branch.id:
+        raise ValidationError("Subject does not belong to selected branch")
+    year_label = _s(row, "academic_year_label")
+    if year_label:
+        year = await _year(db, institution_id, year_label)
+        if class_.academic_year_id and class_.academic_year_id != year.id:
+            raise ValidationError("Class does not belong to selected academic year")
+        if subject.academic_year_id and subject.academic_year_id != year.id:
+            raise ValidationError("Subject does not belong to selected academic year")
+
+    hod_link = await _one(
+        db,
+        HODLink,
+        HODLink.institution_id == institution_id,
+        HODLink.course_id == course.id,
+        HODLink.branch_id == branch.id,
+    )
+    if not hod_link:
+        raise NotFoundError(f"HOD link not found: {_s(row, 'course_code')} / {_s(row, 'branch_code')}")
+
+    existing = await _one(
+        db,
+        TeacherHODSubjectLink,
+        TeacherHODSubjectLink.teacher_id == teacher.id,
+        TeacherHODSubjectLink.hod_link_id == hod_link.id,
+        TeacherHODSubjectLink.section_id == section.id,
+        TeacherHODSubjectLink.subject_id == subject.id,
+    )
+    if existing:
+        return "skipped"
+
+    db.add(
+        TeacherHODSubjectLink(
+            teacher_id=teacher.id,
+            hod_link_id=hod_link.id,
+            section_id=section.id,
+            subject_id=subject.id,
+        )
+    )
+    return "created"
 
 
 async def _import_fee_type(db, institution_id, row):
@@ -634,6 +734,39 @@ async def _export_students(db, institution_id):
     ]
 
 
+async def _export_teacher_links(db, institution_id):
+    rows = (
+        await db.execute(
+            select(TeacherHODSubjectLink, Teacher, User, HODLink, Course, Branch, Section, Class, Subject, AcademicYear)
+            .join(Teacher, Teacher.id == TeacherHODSubjectLink.teacher_id)
+            .join(User, User.id == Teacher.user_id)
+            .join(HODLink, HODLink.id == TeacherHODSubjectLink.hod_link_id)
+            .join(Course, Course.id == HODLink.course_id)
+            .join(Branch, Branch.id == HODLink.branch_id)
+            .join(Section, Section.id == TeacherHODSubjectLink.section_id)
+            .join(Class, Class.id == Section.class_id)
+            .join(Subject, Subject.id == TeacherHODSubjectLink.subject_id)
+            .outerjoin(AcademicYear, AcademicYear.id == Class.academic_year_id)
+            .where(User.institution_id == institution_id)
+            .order_by(User.full_name.asc(), Course.code.asc(), Branch.code.asc(), Class.name.asc(), Section.name.asc(), Subject.code.asc())
+        )
+    ).all()
+    return [
+        {
+            "employee_code": teacher.employee_code,
+            "teacher_name": user.full_name,
+            "academic_year_label": year.label if year else "",
+            "course_code": course.code,
+            "branch_code": branch.code,
+            "class_name": class_.name,
+            "section_name": section.name,
+            "subject_code": subject.code,
+            "subject_name": subject.name,
+        }
+        for _, teacher, user, _, course, branch, section, class_, subject, year in rows
+    ]
+
+
 async def _export_simple(db, institution_id, model, headers, extra: Callable | None = None):
     rows = (await db.execute(select(model))).scalars().all()
     return [extra(item) if extra else {header: getattr(item, header, "") for header in headers} for item in rows]
@@ -648,6 +781,7 @@ SPECS = {
     "subjects": {"headers": ["course_code", "class_name", "branch_code", "academic_year_label", "semester", "code", "name", "credits", "is_active"], "examples": [{"course_code": "BTECH", "class_name": "CSE Second Year - Semester 3", "branch_code": "CSE", "academic_year_label": "2026-27", "semester": "3", "code": "CS2309", "name": "Design and Analysis of Algorithms", "credits": "4", "is_active": "true"}]},
     "students": {"headers": ["full_name", "email", "username", "password", "phone", "roll_number", "date_of_birth", "gender", "guardian_name", "guardian_phone", "guardian_email", "academic_year_label", "course_code", "branch_code", "class_name", "section_name"], "examples": [{"full_name": "New Student", "email": "new.student@student.demo.edu", "username": "new.student", "password": "Demo@123", "phone": "9000099999", "roll_number": "DEC27CSEA099", "date_of_birth": "2007-05-20", "gender": "female", "guardian_name": "Demo Parent", "guardian_phone": "9000099998", "guardian_email": "demo.parent@parent.demo.edu", "academic_year_label": "2026-27", "course_code": "BTECH", "branch_code": "CSE", "class_name": "CSE Second Year - Semester 3", "section_name": "A"}]},
     "teachers": {"headers": ["full_name", "email", "username", "password", "phone", "employee_code", "designation", "joined_at"], "examples": [{"full_name": "Demo Faculty", "email": "demo.faculty@demo.edu", "username": "demo.faculty", "password": "Demo@123", "phone": "9000088888", "employee_code": "FAC-DEMO-01", "designation": "Assistant Professor", "joined_at": "2026-06-01"}]},
+    "teacher-links": {"headers": ["employee_code", "teacher_name", "academic_year_label", "course_code", "branch_code", "class_name", "section_name", "subject_code", "subject_name"], "examples": [{"employee_code": "FAC-CSE-001", "teacher_name": "Ananya Rao", "academic_year_label": "2026-27", "course_code": "BTECH", "branch_code": "CSE", "class_name": "CSE Second Year - Semester 3", "section_name": "A", "subject_code": "CS2301", "subject_name": "Data Structures"}]},
     "fee-types": {"headers": ["name", "description"], "examples": [{"name": "Development Fee", "description": "Annual development fee"}]},
     "fee-structures": {"headers": ["fee_type_name", "course_code", "academic_year_label", "amount", "frequency"], "examples": [{"fee_type_name": "Development Fee", "course_code": "BTECH", "academic_year_label": "2026-27", "amount": "12000", "frequency": "annual"}]},
     "student-fees": {"headers": ["roll_number", "fee_type_name", "course_code", "academic_year_label", "amount_due", "due_date"], "examples": [{"roll_number": "DEC26CSEA001", "fee_type_name": "Development Fee", "course_code": "BTECH", "academic_year_label": "2026-27", "amount_due": "12000", "due_date": "2026-08-15"}]},
@@ -667,6 +801,7 @@ IMPORTERS = {
     "subjects": _import_subject,
     "students": _import_student,
     "teachers": _import_teacher,
+    "teacher-links": _import_teacher_link,
     "fee-types": _import_fee_type,
     "fee-structures": _import_fee_structure,
     "student-fees": _import_student_fee,
@@ -679,4 +814,5 @@ IMPORTERS = {
 
 EXPORTERS = {key: _export_empty for key in SPECS}
 EXPORTERS["students"] = _export_students
+EXPORTERS["teacher-links"] = _export_teacher_links
 EXPORTERS["library-books"] = _export_library_books

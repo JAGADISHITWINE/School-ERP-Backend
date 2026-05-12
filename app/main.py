@@ -29,6 +29,7 @@ from app.modules.notifications.router import router as notifications_router
 from app.modules.reports.router import router as reports_router
 from app.modules.parents.router import router as parents_router
 from app.modules.admin_bulk.router import router as admin_bulk_router
+from app.modules.teacher_content.router import router as teacher_content_router
 
 
 @asynccontextmanager
@@ -121,6 +122,7 @@ app.include_router(notifications_router, prefix=API)
 app.include_router(reports_router,    prefix=API)
 app.include_router(parents_router,    prefix=API)
 app.include_router(admin_bulk_router, prefix=API)
+app.include_router(teacher_content_router, prefix=API)
 
 
 @app.get("/", tags=["Health"])

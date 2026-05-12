@@ -1,0 +1,17 @@
+course_code,branch_code,academic_year_label,name,year_no,semester,intake_capacity
+BTECH,CSE,2026-27,CSE Semester 1,1,1,60
+BTECH,CSE,2026-27,CSE Semester 2,1,2,60
+BTECH,AIML,2026-27,AIML Semester 1,1,1,60
+BTECH,AIML,2026-27,AIML Semester 2,1,2,60
+BTECH,ECE,2026-27,ECE Semester 1,1,1,60
+BTECH,ECE,2026-27,ECE Semester 2,1,2,60
+BTECH,MECH,2026-27,MECH Semester 1,1,1,60
+BTECH,MECH,2026-27,MECH Semester 2,1,2,60
+BCA,CA,2026-27,CA Semester 1,1,1,60
+BCA,CA,2026-27,CA Semester 2,1,2,60
+BBA,BA,2026-27,BA Semester 1,1,1,60
+BBA,BA,2026-27,BA Semester 2,1,2,60
+BCOM,AT,2026-27,AT Semester 1,1,1,60
+BCOM,AT,2026-27,AT Semester 2,1,2,60
+MCA,SE,2026-27,SE Semester 1,1,1,50
+MCA,SE,2026-27,SE Semester 2,1,2,50

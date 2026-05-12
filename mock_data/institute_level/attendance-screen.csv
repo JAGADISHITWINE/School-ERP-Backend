@@ -1,0 +1,751 @@
+attendance_date,session,period,teacher_employee_code,class_name,section_name,subject_code,roll_number,status,remarks
+2026-07-02,Forenoon,2,FAC001,CSE Semester 1,A,CSE101,CSE26A001,present,
+2026-07-02,Forenoon,2,FAC001,CSE Semester 1,A,CSE101,CSE26B002,present,
+2026-07-02,Forenoon,2,FAC001,CSE Semester 1,A,CSE101,CSE26A003,present,
+2026-07-02,Forenoon,2,FAC001,CSE Semester 1,A,CSE101,CSE26B004,present,
+2026-07-02,Forenoon,2,FAC001,CSE Semester 1,A,CSE101,CSE26A033,late,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC002,CSE Semester 1,B,CSE102,CSE26A001,present,
+2026-07-03,Afternoon,3,FAC002,CSE Semester 1,B,CSE102,CSE26B002,present,
+2026-07-03,Afternoon,3,FAC002,CSE Semester 1,B,CSE102,CSE26A003,present,
+2026-07-03,Afternoon,3,FAC002,CSE Semester 1,B,CSE102,CSE26B004,present,
+2026-07-03,Afternoon,3,FAC002,CSE Semester 1,B,CSE102,CSE26A033,late,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC003,CSE Semester 1,A,CSE103,CSE26A001,present,
+2026-07-04,Forenoon,4,FAC003,CSE Semester 1,A,CSE103,CSE26B002,present,
+2026-07-04,Forenoon,4,FAC003,CSE Semester 1,A,CSE103,CSE26A003,present,
+2026-07-04,Forenoon,4,FAC003,CSE Semester 1,A,CSE103,CSE26B004,present,
+2026-07-04,Forenoon,4,FAC003,CSE Semester 1,A,CSE103,CSE26A033,late,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC004,CSE Semester 1,B,CSE104,CSE26A001,present,
+2026-07-05,Afternoon,5,FAC004,CSE Semester 1,B,CSE104,CSE26B002,present,
+2026-07-05,Afternoon,5,FAC004,CSE Semester 1,B,CSE104,CSE26A003,present,
+2026-07-05,Afternoon,5,FAC004,CSE Semester 1,B,CSE104,CSE26B004,present,
+2026-07-05,Afternoon,5,FAC004,CSE Semester 1,B,CSE104,CSE26A033,late,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC005,CSE Semester 1,A,CSE105,CSE26A001,present,
+2026-07-06,Forenoon,6,FAC005,CSE Semester 1,A,CSE105,CSE26B002,present,
+2026-07-06,Forenoon,6,FAC005,CSE Semester 1,A,CSE105,CSE26A003,present,
+2026-07-06,Forenoon,6,FAC005,CSE Semester 1,A,CSE105,CSE26B004,present,
+2026-07-06,Forenoon,6,FAC005,CSE Semester 1,A,CSE105,CSE26A033,late,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC006,CSE Semester 2,B,CSE201,CSE26A001,present,
+2026-07-07,Afternoon,1,FAC006,CSE Semester 2,B,CSE201,CSE26B002,present,
+2026-07-07,Afternoon,1,FAC006,CSE Semester 2,B,CSE201,CSE26A003,present,
+2026-07-07,Afternoon,1,FAC006,CSE Semester 2,B,CSE201,CSE26B004,present,
+2026-07-07,Afternoon,1,FAC006,CSE Semester 2,B,CSE201,CSE26A033,late,Marked during mock attendance test
+2026-07-08,Forenoon,2,FAC007,CSE Semester 2,A,CSE202,CSE26A001,present,
+2026-07-08,Forenoon,2,FAC007,CSE Semester 2,A,CSE202,CSE26B002,present,
+2026-07-08,Forenoon,2,FAC007,CSE Semester 2,A,CSE202,CSE26A003,present,
+2026-07-08,Forenoon,2,FAC007,CSE Semester 2,A,CSE202,CSE26B004,present,
+2026-07-08,Forenoon,2,FAC007,CSE Semester 2,A,CSE202,CSE26A033,late,Marked during mock attendance test
+2026-07-09,Afternoon,3,FAC008,CSE Semester 2,B,CSE203,CSE26A001,present,
+2026-07-09,Afternoon,3,FAC008,CSE Semester 2,B,CSE203,CSE26B002,present,
+2026-07-09,Afternoon,3,FAC008,CSE Semester 2,B,CSE203,CSE26A003,present,
+2026-07-09,Afternoon,3,FAC008,CSE Semester 2,B,CSE203,CSE26B004,present,
+2026-07-09,Afternoon,3,FAC008,CSE Semester 2,B,CSE203,CSE26A033,late,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC009,CSE Semester 2,A,CSE204,CSE26A001,present,
+2026-07-10,Forenoon,4,FAC009,CSE Semester 2,A,CSE204,CSE26B002,present,
+2026-07-10,Forenoon,4,FAC009,CSE Semester 2,A,CSE204,CSE26A003,present,
+2026-07-10,Forenoon,4,FAC009,CSE Semester 2,A,CSE204,CSE26B004,present,
+2026-07-10,Forenoon,4,FAC009,CSE Semester 2,A,CSE204,CSE26A033,late,Marked during mock attendance test
+2026-07-11,Afternoon,5,FAC010,CSE Semester 2,B,CSE205,CSE26A001,present,
+2026-07-11,Afternoon,5,FAC010,CSE Semester 2,B,CSE205,CSE26B002,present,
+2026-07-11,Afternoon,5,FAC010,CSE Semester 2,B,CSE205,CSE26A003,present,
+2026-07-11,Afternoon,5,FAC010,CSE Semester 2,B,CSE205,CSE26B004,present,
+2026-07-11,Afternoon,5,FAC010,CSE Semester 2,B,CSE205,CSE26A033,late,Marked during mock attendance test
+2026-07-12,Forenoon,6,FAC011,AIML Semester 1,A,AIML101,AIML26A005,present,
+2026-07-12,Forenoon,6,FAC011,AIML Semester 1,A,AIML101,AIML26B006,present,
+2026-07-12,Forenoon,6,FAC011,AIML Semester 1,A,AIML101,AIML26A007,present,
+2026-07-12,Forenoon,6,FAC011,AIML Semester 1,A,AIML101,AIML26B008,present,
+2026-07-12,Forenoon,6,FAC011,AIML Semester 1,A,AIML101,AIML26A037,late,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC012,AIML Semester 1,B,AIML102,AIML26A005,present,
+2026-07-13,Afternoon,1,FAC012,AIML Semester 1,B,AIML102,AIML26B006,present,
+2026-07-13,Afternoon,1,FAC012,AIML Semester 1,B,AIML102,AIML26A007,present,
+2026-07-13,Afternoon,1,FAC012,AIML Semester 1,B,AIML102,AIML26B008,present,
+2026-07-13,Afternoon,1,FAC012,AIML Semester 1,B,AIML102,AIML26A037,late,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC013,AIML Semester 1,A,AIML103,AIML26A005,present,
+2026-07-14,Forenoon,2,FAC013,AIML Semester 1,A,AIML103,AIML26B006,present,
+2026-07-14,Forenoon,2,FAC013,AIML Semester 1,A,AIML103,AIML26A007,present,
+2026-07-14,Forenoon,2,FAC013,AIML Semester 1,A,AIML103,AIML26B008,absent,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC013,AIML Semester 1,A,AIML103,AIML26A037,late,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC014,AIML Semester 1,B,AIML104,AIML26A005,present,
+2026-07-15,Afternoon,3,FAC014,AIML Semester 1,B,AIML104,AIML26B006,present,
+2026-07-15,Afternoon,3,FAC014,AIML Semester 1,B,AIML104,AIML26A007,absent,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC014,AIML Semester 1,B,AIML104,AIML26B008,present,
+2026-07-15,Afternoon,3,FAC014,AIML Semester 1,B,AIML104,AIML26A037,late,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC015,AIML Semester 1,A,AIML105,AIML26A005,present,
+2026-07-16,Forenoon,4,FAC015,AIML Semester 1,A,AIML105,AIML26B006,absent,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC015,AIML Semester 1,A,AIML105,AIML26A007,present,
+2026-07-16,Forenoon,4,FAC015,AIML Semester 1,A,AIML105,AIML26B008,present,
+2026-07-16,Forenoon,4,FAC015,AIML Semester 1,A,AIML105,AIML26A037,late,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC016,AIML Semester 2,B,AIML201,AIML26A005,absent,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC016,AIML Semester 2,B,AIML201,AIML26B006,present,
+2026-07-17,Afternoon,5,FAC016,AIML Semester 2,B,AIML201,AIML26A007,present,
+2026-07-17,Afternoon,5,FAC016,AIML Semester 2,B,AIML201,AIML26B008,present,
+2026-07-17,Afternoon,5,FAC016,AIML Semester 2,B,AIML201,AIML26A037,late,Marked during mock attendance test
+2026-07-18,Forenoon,6,FAC017,AIML Semester 2,A,AIML202,AIML26A005,present,
+2026-07-18,Forenoon,6,FAC017,AIML Semester 2,A,AIML202,AIML26B006,present,
+2026-07-18,Forenoon,6,FAC017,AIML Semester 2,A,AIML202,AIML26A007,present,
+2026-07-18,Forenoon,6,FAC017,AIML Semester 2,A,AIML202,AIML26B008,present,
+2026-07-18,Forenoon,6,FAC017,AIML Semester 2,A,AIML202,AIML26A037,late,Marked during mock attendance test
+2026-07-19,Afternoon,1,FAC018,AIML Semester 2,B,AIML203,AIML26A005,present,
+2026-07-19,Afternoon,1,FAC018,AIML Semester 2,B,AIML203,AIML26B006,present,
+2026-07-19,Afternoon,1,FAC018,AIML Semester 2,B,AIML203,AIML26A007,present,
+2026-07-19,Afternoon,1,FAC018,AIML Semester 2,B,AIML203,AIML26B008,present,
+2026-07-19,Afternoon,1,FAC018,AIML Semester 2,B,AIML203,AIML26A037,late,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC019,AIML Semester 2,A,AIML204,AIML26A005,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 2,A,AIML204,AIML26B006,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 2,A,AIML204,AIML26A007,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 2,A,AIML204,AIML26B008,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 2,A,AIML204,AIML26A037,late,Marked during mock attendance test
+2026-07-21,Afternoon,3,FAC020,AIML Semester 2,B,AIML205,AIML26A005,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 2,B,AIML205,AIML26B006,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 2,B,AIML205,AIML26A007,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 2,B,AIML205,AIML26B008,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 2,B,AIML205,AIML26A037,late,Marked during mock attendance test
+2026-07-22,Forenoon,4,FAC021,ECE Semester 1,A,ECE101,ECE26A009,present,
+2026-07-22,Forenoon,4,FAC021,ECE Semester 1,A,ECE101,ECE26B010,present,
+2026-07-22,Forenoon,4,FAC021,ECE Semester 1,A,ECE101,ECE26A011,present,
+2026-07-22,Forenoon,4,FAC021,ECE Semester 1,A,ECE101,ECE26B012,present,
+2026-07-22,Forenoon,4,FAC021,ECE Semester 1,A,ECE101,ECE26A041,late,Marked during mock attendance test
+2026-07-23,Afternoon,5,FAC022,ECE Semester 1,B,ECE102,ECE26A009,present,
+2026-07-23,Afternoon,5,FAC022,ECE Semester 1,B,ECE102,ECE26B010,present,
+2026-07-23,Afternoon,5,FAC022,ECE Semester 1,B,ECE102,ECE26A011,present,
+2026-07-23,Afternoon,5,FAC022,ECE Semester 1,B,ECE102,ECE26B012,present,
+2026-07-23,Afternoon,5,FAC022,ECE Semester 1,B,ECE102,ECE26A041,late,Marked during mock attendance test
+2026-07-24,Forenoon,6,FAC023,ECE Semester 1,A,ECE103,ECE26A009,present,
+2026-07-24,Forenoon,6,FAC023,ECE Semester 1,A,ECE103,ECE26B010,present,
+2026-07-24,Forenoon,6,FAC023,ECE Semester 1,A,ECE103,ECE26A011,present,
+2026-07-24,Forenoon,6,FAC023,ECE Semester 1,A,ECE103,ECE26B012,present,
+2026-07-24,Forenoon,6,FAC023,ECE Semester 1,A,ECE103,ECE26A041,late,Marked during mock attendance test
+2026-07-01,Afternoon,1,FAC024,ECE Semester 1,B,ECE104,ECE26A009,present,
+2026-07-01,Afternoon,1,FAC024,ECE Semester 1,B,ECE104,ECE26B010,present,
+2026-07-01,Afternoon,1,FAC024,ECE Semester 1,B,ECE104,ECE26A011,present,
+2026-07-01,Afternoon,1,FAC024,ECE Semester 1,B,ECE104,ECE26B012,present,
+2026-07-01,Afternoon,1,FAC024,ECE Semester 1,B,ECE104,ECE26A041,late,Marked during mock attendance test
+2026-07-02,Forenoon,2,FAC025,ECE Semester 1,A,ECE105,ECE26A009,present,
+2026-07-02,Forenoon,2,FAC025,ECE Semester 1,A,ECE105,ECE26B010,present,
+2026-07-02,Forenoon,2,FAC025,ECE Semester 1,A,ECE105,ECE26A011,present,
+2026-07-02,Forenoon,2,FAC025,ECE Semester 1,A,ECE105,ECE26B012,present,
+2026-07-02,Forenoon,2,FAC025,ECE Semester 1,A,ECE105,ECE26A041,late,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC026,ECE Semester 2,B,ECE201,ECE26A009,present,
+2026-07-03,Afternoon,3,FAC026,ECE Semester 2,B,ECE201,ECE26B010,present,
+2026-07-03,Afternoon,3,FAC026,ECE Semester 2,B,ECE201,ECE26A011,present,
+2026-07-03,Afternoon,3,FAC026,ECE Semester 2,B,ECE201,ECE26B012,present,
+2026-07-03,Afternoon,3,FAC026,ECE Semester 2,B,ECE201,ECE26A041,late,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC027,ECE Semester 2,A,ECE202,ECE26A009,present,
+2026-07-04,Forenoon,4,FAC027,ECE Semester 2,A,ECE202,ECE26B010,present,
+2026-07-04,Forenoon,4,FAC027,ECE Semester 2,A,ECE202,ECE26A011,present,
+2026-07-04,Forenoon,4,FAC027,ECE Semester 2,A,ECE202,ECE26B012,present,
+2026-07-04,Forenoon,4,FAC027,ECE Semester 2,A,ECE202,ECE26A041,late,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC028,ECE Semester 2,B,ECE203,ECE26A009,present,
+2026-07-05,Afternoon,5,FAC028,ECE Semester 2,B,ECE203,ECE26B010,present,
+2026-07-05,Afternoon,5,FAC028,ECE Semester 2,B,ECE203,ECE26A011,present,
+2026-07-05,Afternoon,5,FAC028,ECE Semester 2,B,ECE203,ECE26B012,present,
+2026-07-05,Afternoon,5,FAC028,ECE Semester 2,B,ECE203,ECE26A041,late,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC029,ECE Semester 2,A,ECE204,ECE26A009,present,
+2026-07-06,Forenoon,6,FAC029,ECE Semester 2,A,ECE204,ECE26B010,present,
+2026-07-06,Forenoon,6,FAC029,ECE Semester 2,A,ECE204,ECE26A011,present,
+2026-07-06,Forenoon,6,FAC029,ECE Semester 2,A,ECE204,ECE26B012,present,
+2026-07-06,Forenoon,6,FAC029,ECE Semester 2,A,ECE204,ECE26A041,late,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC030,ECE Semester 2,B,ECE205,ECE26A009,present,
+2026-07-07,Afternoon,1,FAC030,ECE Semester 2,B,ECE205,ECE26B010,present,
+2026-07-07,Afternoon,1,FAC030,ECE Semester 2,B,ECE205,ECE26A011,present,
+2026-07-07,Afternoon,1,FAC030,ECE Semester 2,B,ECE205,ECE26B012,absent,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC030,ECE Semester 2,B,ECE205,ECE26A041,late,Marked during mock attendance test
+2026-07-08,Forenoon,2,FAC031,MECH Semester 1,A,MECH101,MECH26A013,present,
+2026-07-08,Forenoon,2,FAC031,MECH Semester 1,A,MECH101,MECH26B014,present,
+2026-07-08,Forenoon,2,FAC031,MECH Semester 1,A,MECH101,MECH26A015,absent,Marked during mock attendance test
+2026-07-08,Forenoon,2,FAC031,MECH Semester 1,A,MECH101,MECH26B016,present,
+2026-07-08,Forenoon,2,FAC031,MECH Semester 1,A,MECH101,MECH26A045,late,Marked during mock attendance test
+2026-07-09,Afternoon,3,FAC032,MECH Semester 1,B,MECH102,MECH26A013,present,
+2026-07-09,Afternoon,3,FAC032,MECH Semester 1,B,MECH102,MECH26B014,absent,Marked during mock attendance test
+2026-07-09,Afternoon,3,FAC032,MECH Semester 1,B,MECH102,MECH26A015,present,
+2026-07-09,Afternoon,3,FAC032,MECH Semester 1,B,MECH102,MECH26B016,present,
+2026-07-09,Afternoon,3,FAC032,MECH Semester 1,B,MECH102,MECH26A045,late,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC033,MECH Semester 1,A,MECH103,MECH26A013,absent,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC033,MECH Semester 1,A,MECH103,MECH26B014,present,
+2026-07-10,Forenoon,4,FAC033,MECH Semester 1,A,MECH103,MECH26A015,present,
+2026-07-10,Forenoon,4,FAC033,MECH Semester 1,A,MECH103,MECH26B016,present,
+2026-07-10,Forenoon,4,FAC033,MECH Semester 1,A,MECH103,MECH26A045,late,Marked during mock attendance test
+2026-07-11,Afternoon,5,FAC034,MECH Semester 1,B,MECH104,MECH26A013,present,
+2026-07-11,Afternoon,5,FAC034,MECH Semester 1,B,MECH104,MECH26B014,present,
+2026-07-11,Afternoon,5,FAC034,MECH Semester 1,B,MECH104,MECH26A015,present,
+2026-07-11,Afternoon,5,FAC034,MECH Semester 1,B,MECH104,MECH26B016,present,
+2026-07-11,Afternoon,5,FAC034,MECH Semester 1,B,MECH104,MECH26A045,late,Marked during mock attendance test
+2026-07-12,Forenoon,6,FAC035,MECH Semester 1,A,MECH105,MECH26A013,present,
+2026-07-12,Forenoon,6,FAC035,MECH Semester 1,A,MECH105,MECH26B014,present,
+2026-07-12,Forenoon,6,FAC035,MECH Semester 1,A,MECH105,MECH26A015,present,
+2026-07-12,Forenoon,6,FAC035,MECH Semester 1,A,MECH105,MECH26B016,present,
+2026-07-12,Forenoon,6,FAC035,MECH Semester 1,A,MECH105,MECH26A045,late,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC036,MECH Semester 2,B,MECH201,MECH26A013,present,
+2026-07-13,Afternoon,1,FAC036,MECH Semester 2,B,MECH201,MECH26B014,present,
+2026-07-13,Afternoon,1,FAC036,MECH Semester 2,B,MECH201,MECH26A015,present,
+2026-07-13,Afternoon,1,FAC036,MECH Semester 2,B,MECH201,MECH26B016,present,
+2026-07-13,Afternoon,1,FAC036,MECH Semester 2,B,MECH201,MECH26A045,late,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC001,MECH Semester 2,A,MECH202,MECH26A013,present,
+2026-07-14,Forenoon,2,FAC001,MECH Semester 2,A,MECH202,MECH26B014,present,
+2026-07-14,Forenoon,2,FAC001,MECH Semester 2,A,MECH202,MECH26A015,present,
+2026-07-14,Forenoon,2,FAC001,MECH Semester 2,A,MECH202,MECH26B016,present,
+2026-07-14,Forenoon,2,FAC001,MECH Semester 2,A,MECH202,MECH26A045,late,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC002,MECH Semester 2,B,MECH203,MECH26A013,present,
+2026-07-15,Afternoon,3,FAC002,MECH Semester 2,B,MECH203,MECH26B014,present,
+2026-07-15,Afternoon,3,FAC002,MECH Semester 2,B,MECH203,MECH26A015,present,
+2026-07-15,Afternoon,3,FAC002,MECH Semester 2,B,MECH203,MECH26B016,present,
+2026-07-15,Afternoon,3,FAC002,MECH Semester 2,B,MECH203,MECH26A045,late,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC003,MECH Semester 2,A,MECH204,MECH26A013,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 2,A,MECH204,MECH26B014,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 2,A,MECH204,MECH26A015,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 2,A,MECH204,MECH26B016,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 2,A,MECH204,MECH26A045,late,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC004,MECH Semester 2,B,MECH205,MECH26A013,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 2,B,MECH205,MECH26B014,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 2,B,MECH205,MECH26A015,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 2,B,MECH205,MECH26B016,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 2,B,MECH205,MECH26A045,late,Marked during mock attendance test
+2026-07-18,Forenoon,6,FAC005,CA Semester 1,A,CA101,CA26A017,present,
+2026-07-18,Forenoon,6,FAC005,CA Semester 1,A,CA101,CA26B018,present,
+2026-07-18,Forenoon,6,FAC005,CA Semester 1,A,CA101,CA26A019,present,
+2026-07-18,Forenoon,6,FAC005,CA Semester 1,A,CA101,CA26B020,present,
+2026-07-18,Forenoon,6,FAC005,CA Semester 1,A,CA101,CA26A049,late,Marked during mock attendance test
+2026-07-19,Afternoon,1,FAC006,CA Semester 1,B,CA102,CA26A017,present,
+2026-07-19,Afternoon,1,FAC006,CA Semester 1,B,CA102,CA26B018,present,
+2026-07-19,Afternoon,1,FAC006,CA Semester 1,B,CA102,CA26A019,present,
+2026-07-19,Afternoon,1,FAC006,CA Semester 1,B,CA102,CA26B020,present,
+2026-07-19,Afternoon,1,FAC006,CA Semester 1,B,CA102,CA26A049,late,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC007,CA Semester 1,A,CA103,CA26A017,present,
+2026-07-20,Forenoon,2,FAC007,CA Semester 1,A,CA103,CA26B018,present,
+2026-07-20,Forenoon,2,FAC007,CA Semester 1,A,CA103,CA26A019,present,
+2026-07-20,Forenoon,2,FAC007,CA Semester 1,A,CA103,CA26B020,present,
+2026-07-20,Forenoon,2,FAC007,CA Semester 1,A,CA103,CA26A049,late,Marked during mock attendance test
+2026-07-21,Afternoon,3,FAC008,CA Semester 1,B,CA104,CA26A017,present,
+2026-07-21,Afternoon,3,FAC008,CA Semester 1,B,CA104,CA26B018,present,
+2026-07-21,Afternoon,3,FAC008,CA Semester 1,B,CA104,CA26A019,present,
+2026-07-21,Afternoon,3,FAC008,CA Semester 1,B,CA104,CA26B020,present,
+2026-07-21,Afternoon,3,FAC008,CA Semester 1,B,CA104,CA26A049,late,Marked during mock attendance test
+2026-07-22,Forenoon,4,FAC009,CA Semester 1,A,CA105,CA26A017,present,
+2026-07-22,Forenoon,4,FAC009,CA Semester 1,A,CA105,CA26B018,present,
+2026-07-22,Forenoon,4,FAC009,CA Semester 1,A,CA105,CA26A019,present,
+2026-07-22,Forenoon,4,FAC009,CA Semester 1,A,CA105,CA26B020,present,
+2026-07-22,Forenoon,4,FAC009,CA Semester 1,A,CA105,CA26A049,late,Marked during mock attendance test
+2026-07-23,Afternoon,5,FAC010,CA Semester 2,B,CA201,CA26A017,present,
+2026-07-23,Afternoon,5,FAC010,CA Semester 2,B,CA201,CA26B018,present,
+2026-07-23,Afternoon,5,FAC010,CA Semester 2,B,CA201,CA26A019,present,
+2026-07-23,Afternoon,5,FAC010,CA Semester 2,B,CA201,CA26B020,present,
+2026-07-23,Afternoon,5,FAC010,CA Semester 2,B,CA201,CA26A049,late,Marked during mock attendance test
+2026-07-24,Forenoon,6,FAC011,CA Semester 2,A,CA202,CA26A017,present,
+2026-07-24,Forenoon,6,FAC011,CA Semester 2,A,CA202,CA26B018,present,
+2026-07-24,Forenoon,6,FAC011,CA Semester 2,A,CA202,CA26A019,present,
+2026-07-24,Forenoon,6,FAC011,CA Semester 2,A,CA202,CA26B020,absent,Marked during mock attendance test
+2026-07-24,Forenoon,6,FAC011,CA Semester 2,A,CA202,CA26A049,late,Marked during mock attendance test
+2026-07-01,Afternoon,1,FAC012,CA Semester 2,B,CA203,CA26A017,present,
+2026-07-01,Afternoon,1,FAC012,CA Semester 2,B,CA203,CA26B018,present,
+2026-07-01,Afternoon,1,FAC012,CA Semester 2,B,CA203,CA26A019,absent,Marked during mock attendance test
+2026-07-01,Afternoon,1,FAC012,CA Semester 2,B,CA203,CA26B020,present,
+2026-07-01,Afternoon,1,FAC012,CA Semester 2,B,CA203,CA26A049,late,Marked during mock attendance test
+2026-07-02,Forenoon,2,FAC013,CA Semester 2,A,CA204,CA26A017,present,
+2026-07-02,Forenoon,2,FAC013,CA Semester 2,A,CA204,CA26B018,absent,Marked during mock attendance test
+2026-07-02,Forenoon,2,FAC013,CA Semester 2,A,CA204,CA26A019,present,
+2026-07-02,Forenoon,2,FAC013,CA Semester 2,A,CA204,CA26B020,present,
+2026-07-02,Forenoon,2,FAC013,CA Semester 2,A,CA204,CA26A049,late,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC014,CA Semester 2,B,CA205,CA26A017,absent,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC014,CA Semester 2,B,CA205,CA26B018,present,
+2026-07-03,Afternoon,3,FAC014,CA Semester 2,B,CA205,CA26A019,present,
+2026-07-03,Afternoon,3,FAC014,CA Semester 2,B,CA205,CA26B020,present,
+2026-07-03,Afternoon,3,FAC014,CA Semester 2,B,CA205,CA26A049,late,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC015,BA Semester 1,A,BA101,BA26A021,present,
+2026-07-04,Forenoon,4,FAC015,BA Semester 1,A,BA101,BA26B022,present,
+2026-07-04,Forenoon,4,FAC015,BA Semester 1,A,BA101,BA26A023,present,
+2026-07-04,Forenoon,4,FAC015,BA Semester 1,A,BA101,BA26B024,present,
+2026-07-04,Forenoon,4,FAC015,BA Semester 1,A,BA101,BA26A053,late,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC016,BA Semester 1,B,BA102,BA26A021,present,
+2026-07-05,Afternoon,5,FAC016,BA Semester 1,B,BA102,BA26B022,present,
+2026-07-05,Afternoon,5,FAC016,BA Semester 1,B,BA102,BA26A023,present,
+2026-07-05,Afternoon,5,FAC016,BA Semester 1,B,BA102,BA26B024,present,
+2026-07-05,Afternoon,5,FAC016,BA Semester 1,B,BA102,BA26A053,late,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC017,BA Semester 1,A,BA103,BA26A021,present,
+2026-07-06,Forenoon,6,FAC017,BA Semester 1,A,BA103,BA26B022,present,
+2026-07-06,Forenoon,6,FAC017,BA Semester 1,A,BA103,BA26A023,present,
+2026-07-06,Forenoon,6,FAC017,BA Semester 1,A,BA103,BA26B024,present,
+2026-07-06,Forenoon,6,FAC017,BA Semester 1,A,BA103,BA26A053,late,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC018,BA Semester 1,B,BA104,BA26A021,present,
+2026-07-07,Afternoon,1,FAC018,BA Semester 1,B,BA104,BA26B022,present,
+2026-07-07,Afternoon,1,FAC018,BA Semester 1,B,BA104,BA26A023,present,
+2026-07-07,Afternoon,1,FAC018,BA Semester 1,B,BA104,BA26B024,present,
+2026-07-07,Afternoon,1,FAC018,BA Semester 1,B,BA104,BA26A053,late,Marked during mock attendance test
+2026-07-08,Forenoon,2,FAC019,BA Semester 1,A,BA105,BA26A021,present,
+2026-07-08,Forenoon,2,FAC019,BA Semester 1,A,BA105,BA26B022,present,
+2026-07-08,Forenoon,2,FAC019,BA Semester 1,A,BA105,BA26A023,present,
+2026-07-08,Forenoon,2,FAC019,BA Semester 1,A,BA105,BA26B024,present,
+2026-07-08,Forenoon,2,FAC019,BA Semester 1,A,BA105,BA26A053,late,Marked during mock attendance test
+2026-07-09,Afternoon,3,FAC020,BA Semester 2,B,BA201,BA26A021,present,
+2026-07-09,Afternoon,3,FAC020,BA Semester 2,B,BA201,BA26B022,present,
+2026-07-09,Afternoon,3,FAC020,BA Semester 2,B,BA201,BA26A023,present,
+2026-07-09,Afternoon,3,FAC020,BA Semester 2,B,BA201,BA26B024,present,
+2026-07-09,Afternoon,3,FAC020,BA Semester 2,B,BA201,BA26A053,late,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC021,BA Semester 2,A,BA202,BA26A021,present,
+2026-07-10,Forenoon,4,FAC021,BA Semester 2,A,BA202,BA26B022,present,
+2026-07-10,Forenoon,4,FAC021,BA Semester 2,A,BA202,BA26A023,present,
+2026-07-10,Forenoon,4,FAC021,BA Semester 2,A,BA202,BA26B024,present,
+2026-07-10,Forenoon,4,FAC021,BA Semester 2,A,BA202,BA26A053,late,Marked during mock attendance test
+2026-07-11,Afternoon,5,FAC022,BA Semester 2,B,BA203,BA26A021,present,
+2026-07-11,Afternoon,5,FAC022,BA Semester 2,B,BA203,BA26B022,present,
+2026-07-11,Afternoon,5,FAC022,BA Semester 2,B,BA203,BA26A023,present,
+2026-07-11,Afternoon,5,FAC022,BA Semester 2,B,BA203,BA26B024,present,
+2026-07-11,Afternoon,5,FAC022,BA Semester 2,B,BA203,BA26A053,late,Marked during mock attendance test
+2026-07-12,Forenoon,6,FAC023,BA Semester 2,A,BA204,BA26A021,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 2,A,BA204,BA26B022,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 2,A,BA204,BA26A023,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 2,A,BA204,BA26B024,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 2,A,BA204,BA26A053,late,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC024,BA Semester 2,B,BA205,BA26A021,present,
+2026-07-13,Afternoon,1,FAC024,BA Semester 2,B,BA205,BA26B022,present,
+2026-07-13,Afternoon,1,FAC024,BA Semester 2,B,BA205,BA26A023,present,
+2026-07-13,Afternoon,1,FAC024,BA Semester 2,B,BA205,BA26B024,present,
+2026-07-13,Afternoon,1,FAC024,BA Semester 2,B,BA205,BA26A053,late,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC025,AT Semester 1,A,AT101,AT26A025,present,
+2026-07-14,Forenoon,2,FAC025,AT Semester 1,A,AT101,AT26B026,present,
+2026-07-14,Forenoon,2,FAC025,AT Semester 1,A,AT101,AT26A027,present,
+2026-07-14,Forenoon,2,FAC025,AT Semester 1,A,AT101,AT26B028,present,
+2026-07-14,Forenoon,2,FAC025,AT Semester 1,A,AT101,AT26A057,late,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC026,AT Semester 1,B,AT102,AT26A025,present,
+2026-07-15,Afternoon,3,FAC026,AT Semester 1,B,AT102,AT26B026,present,
+2026-07-15,Afternoon,3,FAC026,AT Semester 1,B,AT102,AT26A027,present,
+2026-07-15,Afternoon,3,FAC026,AT Semester 1,B,AT102,AT26B028,present,
+2026-07-15,Afternoon,3,FAC026,AT Semester 1,B,AT102,AT26A057,late,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC027,AT Semester 1,A,AT103,AT26A025,present,
+2026-07-16,Forenoon,4,FAC027,AT Semester 1,A,AT103,AT26B026,present,
+2026-07-16,Forenoon,4,FAC027,AT Semester 1,A,AT103,AT26A027,present,
+2026-07-16,Forenoon,4,FAC027,AT Semester 1,A,AT103,AT26B028,present,
+2026-07-16,Forenoon,4,FAC027,AT Semester 1,A,AT103,AT26A057,late,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC028,AT Semester 1,B,AT104,AT26A025,present,
+2026-07-17,Afternoon,5,FAC028,AT Semester 1,B,AT104,AT26B026,present,
+2026-07-17,Afternoon,5,FAC028,AT Semester 1,B,AT104,AT26A027,present,
+2026-07-17,Afternoon,5,FAC028,AT Semester 1,B,AT104,AT26B028,absent,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC028,AT Semester 1,B,AT104,AT26A057,late,Marked during mock attendance test
+2026-07-18,Forenoon,6,FAC029,AT Semester 1,A,AT105,AT26A025,present,
+2026-07-18,Forenoon,6,FAC029,AT Semester 1,A,AT105,AT26B026,present,
+2026-07-18,Forenoon,6,FAC029,AT Semester 1,A,AT105,AT26A027,absent,Marked during mock attendance test
+2026-07-18,Forenoon,6,FAC029,AT Semester 1,A,AT105,AT26B028,present,
+2026-07-18,Forenoon,6,FAC029,AT Semester 1,A,AT105,AT26A057,late,Marked during mock attendance test
+2026-07-19,Afternoon,1,FAC030,AT Semester 2,B,AT201,AT26A025,present,
+2026-07-19,Afternoon,1,FAC030,AT Semester 2,B,AT201,AT26B026,absent,Marked during mock attendance test
+2026-07-19,Afternoon,1,FAC030,AT Semester 2,B,AT201,AT26A027,present,
+2026-07-19,Afternoon,1,FAC030,AT Semester 2,B,AT201,AT26B028,present,
+2026-07-19,Afternoon,1,FAC030,AT Semester 2,B,AT201,AT26A057,late,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC031,AT Semester 2,A,AT202,AT26A025,absent,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC031,AT Semester 2,A,AT202,AT26B026,present,
+2026-07-20,Forenoon,2,FAC031,AT Semester 2,A,AT202,AT26A027,present,
+2026-07-20,Forenoon,2,FAC031,AT Semester 2,A,AT202,AT26B028,present,
+2026-07-20,Forenoon,2,FAC031,AT Semester 2,A,AT202,AT26A057,late,Marked during mock attendance test
+2026-07-21,Afternoon,3,FAC032,AT Semester 2,B,AT203,AT26A025,present,
+2026-07-21,Afternoon,3,FAC032,AT Semester 2,B,AT203,AT26B026,present,
+2026-07-21,Afternoon,3,FAC032,AT Semester 2,B,AT203,AT26A027,present,
+2026-07-21,Afternoon,3,FAC032,AT Semester 2,B,AT203,AT26B028,present,
+2026-07-21,Afternoon,3,FAC032,AT Semester 2,B,AT203,AT26A057,late,Marked during mock attendance test
+2026-07-22,Forenoon,4,FAC033,AT Semester 2,A,AT204,AT26A025,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 2,A,AT204,AT26B026,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 2,A,AT204,AT26A027,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 2,A,AT204,AT26B028,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 2,A,AT204,AT26A057,late,Marked during mock attendance test
+2026-07-23,Afternoon,5,FAC034,AT Semester 2,B,AT205,AT26A025,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 2,B,AT205,AT26B026,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 2,B,AT205,AT26A027,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 2,B,AT205,AT26B028,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 2,B,AT205,AT26A057,late,Marked during mock attendance test
+2026-07-24,Forenoon,6,FAC035,SE Semester 1,A,SE101,SE26A029,present,
+2026-07-24,Forenoon,6,FAC035,SE Semester 1,A,SE101,SE26B030,present,
+2026-07-24,Forenoon,6,FAC035,SE Semester 1,A,SE101,SE26A031,present,
+2026-07-24,Forenoon,6,FAC035,SE Semester 1,A,SE101,SE26B032,present,
+2026-07-24,Forenoon,6,FAC035,SE Semester 1,A,SE101,SE26A061,late,Marked during mock attendance test
+2026-07-01,Afternoon,1,FAC036,SE Semester 1,B,SE102,SE26A029,present,
+2026-07-01,Afternoon,1,FAC036,SE Semester 1,B,SE102,SE26B030,present,
+2026-07-01,Afternoon,1,FAC036,SE Semester 1,B,SE102,SE26A031,present,
+2026-07-01,Afternoon,1,FAC036,SE Semester 1,B,SE102,SE26B032,present,
+2026-07-01,Afternoon,1,FAC036,SE Semester 1,B,SE102,SE26A061,late,Marked during mock attendance test
+2026-07-02,Forenoon,2,FAC001,SE Semester 1,A,SE103,SE26A029,present,
+2026-07-02,Forenoon,2,FAC001,SE Semester 1,A,SE103,SE26B030,present,
+2026-07-02,Forenoon,2,FAC001,SE Semester 1,A,SE103,SE26A031,present,
+2026-07-02,Forenoon,2,FAC001,SE Semester 1,A,SE103,SE26B032,present,
+2026-07-02,Forenoon,2,FAC001,SE Semester 1,A,SE103,SE26A061,late,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC002,SE Semester 1,B,SE104,SE26A029,present,
+2026-07-03,Afternoon,3,FAC002,SE Semester 1,B,SE104,SE26B030,present,
+2026-07-03,Afternoon,3,FAC002,SE Semester 1,B,SE104,SE26A031,present,
+2026-07-03,Afternoon,3,FAC002,SE Semester 1,B,SE104,SE26B032,present,
+2026-07-03,Afternoon,3,FAC002,SE Semester 1,B,SE104,SE26A061,late,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC003,SE Semester 1,A,SE105,SE26A029,present,
+2026-07-04,Forenoon,4,FAC003,SE Semester 1,A,SE105,SE26B030,present,
+2026-07-04,Forenoon,4,FAC003,SE Semester 1,A,SE105,SE26A031,present,
+2026-07-04,Forenoon,4,FAC003,SE Semester 1,A,SE105,SE26B032,present,
+2026-07-04,Forenoon,4,FAC003,SE Semester 1,A,SE105,SE26A061,late,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC004,SE Semester 2,B,SE201,SE26A029,present,
+2026-07-05,Afternoon,5,FAC004,SE Semester 2,B,SE201,SE26B030,present,
+2026-07-05,Afternoon,5,FAC004,SE Semester 2,B,SE201,SE26A031,present,
+2026-07-05,Afternoon,5,FAC004,SE Semester 2,B,SE201,SE26B032,present,
+2026-07-05,Afternoon,5,FAC004,SE Semester 2,B,SE201,SE26A061,late,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC005,SE Semester 2,A,SE202,SE26A029,present,
+2026-07-06,Forenoon,6,FAC005,SE Semester 2,A,SE202,SE26B030,present,
+2026-07-06,Forenoon,6,FAC005,SE Semester 2,A,SE202,SE26A031,present,
+2026-07-06,Forenoon,6,FAC005,SE Semester 2,A,SE202,SE26B032,present,
+2026-07-06,Forenoon,6,FAC005,SE Semester 2,A,SE202,SE26A061,late,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC006,SE Semester 2,B,SE203,SE26A029,present,
+2026-07-07,Afternoon,1,FAC006,SE Semester 2,B,SE203,SE26B030,present,
+2026-07-07,Afternoon,1,FAC006,SE Semester 2,B,SE203,SE26A031,present,
+2026-07-07,Afternoon,1,FAC006,SE Semester 2,B,SE203,SE26B032,present,
+2026-07-07,Afternoon,1,FAC006,SE Semester 2,B,SE203,SE26A061,late,Marked during mock attendance test
+2026-07-08,Forenoon,2,FAC007,SE Semester 2,A,SE204,SE26A029,present,
+2026-07-08,Forenoon,2,FAC007,SE Semester 2,A,SE204,SE26B030,present,
+2026-07-08,Forenoon,2,FAC007,SE Semester 2,A,SE204,SE26A031,present,
+2026-07-08,Forenoon,2,FAC007,SE Semester 2,A,SE204,SE26B032,present,
+2026-07-08,Forenoon,2,FAC007,SE Semester 2,A,SE204,SE26A061,late,Marked during mock attendance test
+2026-07-09,Afternoon,3,FAC008,SE Semester 2,B,SE205,SE26A029,present,
+2026-07-09,Afternoon,3,FAC008,SE Semester 2,B,SE205,SE26B030,present,
+2026-07-09,Afternoon,3,FAC008,SE Semester 2,B,SE205,SE26A031,present,
+2026-07-09,Afternoon,3,FAC008,SE Semester 2,B,SE205,SE26B032,present,
+2026-07-09,Afternoon,3,FAC008,SE Semester 2,B,SE205,SE26A061,late,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC009,CSE Semester 1,A,CSE101,CSE26A001,present,
+2026-07-10,Forenoon,4,FAC009,CSE Semester 1,A,CSE101,CSE26B002,present,
+2026-07-10,Forenoon,4,FAC009,CSE Semester 1,A,CSE101,CSE26A003,present,
+2026-07-10,Forenoon,4,FAC009,CSE Semester 1,A,CSE101,CSE26B004,absent,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC009,CSE Semester 1,A,CSE101,CSE26A033,late,Marked during mock attendance test
+2026-07-11,Afternoon,5,FAC010,CSE Semester 1,B,CSE102,CSE26A001,present,
+2026-07-11,Afternoon,5,FAC010,CSE Semester 1,B,CSE102,CSE26B002,present,
+2026-07-11,Afternoon,5,FAC010,CSE Semester 1,B,CSE102,CSE26A003,absent,Marked during mock attendance test
+2026-07-11,Afternoon,5,FAC010,CSE Semester 1,B,CSE102,CSE26B004,present,
+2026-07-11,Afternoon,5,FAC010,CSE Semester 1,B,CSE102,CSE26A033,late,Marked during mock attendance test
+2026-07-12,Forenoon,6,FAC011,CSE Semester 1,A,CSE103,CSE26A001,present,
+2026-07-12,Forenoon,6,FAC011,CSE Semester 1,A,CSE103,CSE26B002,absent,Marked during mock attendance test
+2026-07-12,Forenoon,6,FAC011,CSE Semester 1,A,CSE103,CSE26A003,present,
+2026-07-12,Forenoon,6,FAC011,CSE Semester 1,A,CSE103,CSE26B004,present,
+2026-07-12,Forenoon,6,FAC011,CSE Semester 1,A,CSE103,CSE26A033,late,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC012,CSE Semester 1,B,CSE104,CSE26A001,absent,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC012,CSE Semester 1,B,CSE104,CSE26B002,present,
+2026-07-13,Afternoon,1,FAC012,CSE Semester 1,B,CSE104,CSE26A003,present,
+2026-07-13,Afternoon,1,FAC012,CSE Semester 1,B,CSE104,CSE26B004,present,
+2026-07-13,Afternoon,1,FAC012,CSE Semester 1,B,CSE104,CSE26A033,late,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC013,CSE Semester 1,A,CSE105,CSE26A001,present,
+2026-07-14,Forenoon,2,FAC013,CSE Semester 1,A,CSE105,CSE26B002,present,
+2026-07-14,Forenoon,2,FAC013,CSE Semester 1,A,CSE105,CSE26A003,present,
+2026-07-14,Forenoon,2,FAC013,CSE Semester 1,A,CSE105,CSE26B004,present,
+2026-07-14,Forenoon,2,FAC013,CSE Semester 1,A,CSE105,CSE26A033,late,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC014,CSE Semester 2,B,CSE201,CSE26A001,present,
+2026-07-15,Afternoon,3,FAC014,CSE Semester 2,B,CSE201,CSE26B002,present,
+2026-07-15,Afternoon,3,FAC014,CSE Semester 2,B,CSE201,CSE26A003,present,
+2026-07-15,Afternoon,3,FAC014,CSE Semester 2,B,CSE201,CSE26B004,present,
+2026-07-15,Afternoon,3,FAC014,CSE Semester 2,B,CSE201,CSE26A033,late,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC015,CSE Semester 2,A,CSE202,CSE26A001,present,
+2026-07-16,Forenoon,4,FAC015,CSE Semester 2,A,CSE202,CSE26B002,present,
+2026-07-16,Forenoon,4,FAC015,CSE Semester 2,A,CSE202,CSE26A003,present,
+2026-07-16,Forenoon,4,FAC015,CSE Semester 2,A,CSE202,CSE26B004,present,
+2026-07-16,Forenoon,4,FAC015,CSE Semester 2,A,CSE202,CSE26A033,late,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC016,CSE Semester 2,B,CSE203,CSE26A001,present,
+2026-07-17,Afternoon,5,FAC016,CSE Semester 2,B,CSE203,CSE26B002,present,
+2026-07-17,Afternoon,5,FAC016,CSE Semester 2,B,CSE203,CSE26A003,present,
+2026-07-17,Afternoon,5,FAC016,CSE Semester 2,B,CSE203,CSE26B004,present,
+2026-07-17,Afternoon,5,FAC016,CSE Semester 2,B,CSE203,CSE26A033,late,Marked during mock attendance test
+2026-07-18,Forenoon,6,FAC017,CSE Semester 2,A,CSE204,CSE26A001,present,
+2026-07-18,Forenoon,6,FAC017,CSE Semester 2,A,CSE204,CSE26B002,present,
+2026-07-18,Forenoon,6,FAC017,CSE Semester 2,A,CSE204,CSE26A003,present,
+2026-07-18,Forenoon,6,FAC017,CSE Semester 2,A,CSE204,CSE26B004,present,
+2026-07-18,Forenoon,6,FAC017,CSE Semester 2,A,CSE204,CSE26A033,late,Marked during mock attendance test
+2026-07-19,Afternoon,1,FAC018,CSE Semester 2,B,CSE205,CSE26A001,present,
+2026-07-19,Afternoon,1,FAC018,CSE Semester 2,B,CSE205,CSE26B002,present,
+2026-07-19,Afternoon,1,FAC018,CSE Semester 2,B,CSE205,CSE26A003,present,
+2026-07-19,Afternoon,1,FAC018,CSE Semester 2,B,CSE205,CSE26B004,present,
+2026-07-19,Afternoon,1,FAC018,CSE Semester 2,B,CSE205,CSE26A033,late,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC019,AIML Semester 1,A,AIML101,AIML26A005,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 1,A,AIML101,AIML26B006,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 1,A,AIML101,AIML26A007,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 1,A,AIML101,AIML26B008,present,
+2026-07-20,Forenoon,2,FAC019,AIML Semester 1,A,AIML101,AIML26A037,late,Marked during mock attendance test
+2026-07-21,Afternoon,3,FAC020,AIML Semester 1,B,AIML102,AIML26A005,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 1,B,AIML102,AIML26B006,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 1,B,AIML102,AIML26A007,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 1,B,AIML102,AIML26B008,present,
+2026-07-21,Afternoon,3,FAC020,AIML Semester 1,B,AIML102,AIML26A037,late,Marked during mock attendance test
+2026-07-22,Forenoon,4,FAC021,AIML Semester 1,A,AIML103,AIML26A005,present,
+2026-07-22,Forenoon,4,FAC021,AIML Semester 1,A,AIML103,AIML26B006,present,
+2026-07-22,Forenoon,4,FAC021,AIML Semester 1,A,AIML103,AIML26A007,present,
+2026-07-22,Forenoon,4,FAC021,AIML Semester 1,A,AIML103,AIML26B008,present,
+2026-07-22,Forenoon,4,FAC021,AIML Semester 1,A,AIML103,AIML26A037,late,Marked during mock attendance test
+2026-07-23,Afternoon,5,FAC022,AIML Semester 1,B,AIML104,AIML26A005,present,
+2026-07-23,Afternoon,5,FAC022,AIML Semester 1,B,AIML104,AIML26B006,present,
+2026-07-23,Afternoon,5,FAC022,AIML Semester 1,B,AIML104,AIML26A007,present,
+2026-07-23,Afternoon,5,FAC022,AIML Semester 1,B,AIML104,AIML26B008,present,
+2026-07-23,Afternoon,5,FAC022,AIML Semester 1,B,AIML104,AIML26A037,late,Marked during mock attendance test
+2026-07-24,Forenoon,6,FAC023,AIML Semester 1,A,AIML105,AIML26A005,present,
+2026-07-24,Forenoon,6,FAC023,AIML Semester 1,A,AIML105,AIML26B006,present,
+2026-07-24,Forenoon,6,FAC023,AIML Semester 1,A,AIML105,AIML26A007,present,
+2026-07-24,Forenoon,6,FAC023,AIML Semester 1,A,AIML105,AIML26B008,present,
+2026-07-24,Forenoon,6,FAC023,AIML Semester 1,A,AIML105,AIML26A037,late,Marked during mock attendance test
+2026-07-01,Afternoon,1,FAC024,AIML Semester 2,B,AIML201,AIML26A005,present,
+2026-07-01,Afternoon,1,FAC024,AIML Semester 2,B,AIML201,AIML26B006,present,
+2026-07-01,Afternoon,1,FAC024,AIML Semester 2,B,AIML201,AIML26A007,present,
+2026-07-01,Afternoon,1,FAC024,AIML Semester 2,B,AIML201,AIML26B008,present,
+2026-07-01,Afternoon,1,FAC024,AIML Semester 2,B,AIML201,AIML26A037,late,Marked during mock attendance test
+2026-07-02,Forenoon,2,FAC025,AIML Semester 2,A,AIML202,AIML26A005,present,
+2026-07-02,Forenoon,2,FAC025,AIML Semester 2,A,AIML202,AIML26B006,present,
+2026-07-02,Forenoon,2,FAC025,AIML Semester 2,A,AIML202,AIML26A007,present,
+2026-07-02,Forenoon,2,FAC025,AIML Semester 2,A,AIML202,AIML26B008,present,
+2026-07-02,Forenoon,2,FAC025,AIML Semester 2,A,AIML202,AIML26A037,late,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC026,AIML Semester 2,B,AIML203,AIML26A005,present,
+2026-07-03,Afternoon,3,FAC026,AIML Semester 2,B,AIML203,AIML26B006,present,
+2026-07-03,Afternoon,3,FAC026,AIML Semester 2,B,AIML203,AIML26A007,present,
+2026-07-03,Afternoon,3,FAC026,AIML Semester 2,B,AIML203,AIML26B008,absent,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC026,AIML Semester 2,B,AIML203,AIML26A037,late,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC027,AIML Semester 2,A,AIML204,AIML26A005,present,
+2026-07-04,Forenoon,4,FAC027,AIML Semester 2,A,AIML204,AIML26B006,present,
+2026-07-04,Forenoon,4,FAC027,AIML Semester 2,A,AIML204,AIML26A007,absent,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC027,AIML Semester 2,A,AIML204,AIML26B008,present,
+2026-07-04,Forenoon,4,FAC027,AIML Semester 2,A,AIML204,AIML26A037,late,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC028,AIML Semester 2,B,AIML205,AIML26A005,present,
+2026-07-05,Afternoon,5,FAC028,AIML Semester 2,B,AIML205,AIML26B006,absent,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC028,AIML Semester 2,B,AIML205,AIML26A007,present,
+2026-07-05,Afternoon,5,FAC028,AIML Semester 2,B,AIML205,AIML26B008,present,
+2026-07-05,Afternoon,5,FAC028,AIML Semester 2,B,AIML205,AIML26A037,late,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC029,ECE Semester 1,A,ECE101,ECE26A009,absent,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC029,ECE Semester 1,A,ECE101,ECE26B010,present,
+2026-07-06,Forenoon,6,FAC029,ECE Semester 1,A,ECE101,ECE26A011,present,
+2026-07-06,Forenoon,6,FAC029,ECE Semester 1,A,ECE101,ECE26B012,present,
+2026-07-06,Forenoon,6,FAC029,ECE Semester 1,A,ECE101,ECE26A041,late,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC030,ECE Semester 1,B,ECE102,ECE26A009,present,
+2026-07-07,Afternoon,1,FAC030,ECE Semester 1,B,ECE102,ECE26B010,present,
+2026-07-07,Afternoon,1,FAC030,ECE Semester 1,B,ECE102,ECE26A011,present,
+2026-07-07,Afternoon,1,FAC030,ECE Semester 1,B,ECE102,ECE26B012,present,
+2026-07-07,Afternoon,1,FAC030,ECE Semester 1,B,ECE102,ECE26A041,late,Marked during mock attendance test
+2026-07-08,Forenoon,2,FAC031,ECE Semester 1,A,ECE103,ECE26A009,present,
+2026-07-08,Forenoon,2,FAC031,ECE Semester 1,A,ECE103,ECE26B010,present,
+2026-07-08,Forenoon,2,FAC031,ECE Semester 1,A,ECE103,ECE26A011,present,
+2026-07-08,Forenoon,2,FAC031,ECE Semester 1,A,ECE103,ECE26B012,present,
+2026-07-08,Forenoon,2,FAC031,ECE Semester 1,A,ECE103,ECE26A041,late,Marked during mock attendance test
+2026-07-09,Afternoon,3,FAC032,ECE Semester 1,B,ECE104,ECE26A009,present,
+2026-07-09,Afternoon,3,FAC032,ECE Semester 1,B,ECE104,ECE26B010,present,
+2026-07-09,Afternoon,3,FAC032,ECE Semester 1,B,ECE104,ECE26A011,present,
+2026-07-09,Afternoon,3,FAC032,ECE Semester 1,B,ECE104,ECE26B012,present,
+2026-07-09,Afternoon,3,FAC032,ECE Semester 1,B,ECE104,ECE26A041,late,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC033,ECE Semester 1,A,ECE105,ECE26A009,present,
+2026-07-10,Forenoon,4,FAC033,ECE Semester 1,A,ECE105,ECE26B010,present,
+2026-07-10,Forenoon,4,FAC033,ECE Semester 1,A,ECE105,ECE26A011,present,
+2026-07-10,Forenoon,4,FAC033,ECE Semester 1,A,ECE105,ECE26B012,present,
+2026-07-10,Forenoon,4,FAC033,ECE Semester 1,A,ECE105,ECE26A041,late,Marked during mock attendance test
+2026-07-11,Afternoon,5,FAC034,ECE Semester 2,B,ECE201,ECE26A009,present,
+2026-07-11,Afternoon,5,FAC034,ECE Semester 2,B,ECE201,ECE26B010,present,
+2026-07-11,Afternoon,5,FAC034,ECE Semester 2,B,ECE201,ECE26A011,present,
+2026-07-11,Afternoon,5,FAC034,ECE Semester 2,B,ECE201,ECE26B012,present,
+2026-07-11,Afternoon,5,FAC034,ECE Semester 2,B,ECE201,ECE26A041,late,Marked during mock attendance test
+2026-07-12,Forenoon,6,FAC035,ECE Semester 2,A,ECE202,ECE26A009,present,
+2026-07-12,Forenoon,6,FAC035,ECE Semester 2,A,ECE202,ECE26B010,present,
+2026-07-12,Forenoon,6,FAC035,ECE Semester 2,A,ECE202,ECE26A011,present,
+2026-07-12,Forenoon,6,FAC035,ECE Semester 2,A,ECE202,ECE26B012,present,
+2026-07-12,Forenoon,6,FAC035,ECE Semester 2,A,ECE202,ECE26A041,late,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC036,ECE Semester 2,B,ECE203,ECE26A009,present,
+2026-07-13,Afternoon,1,FAC036,ECE Semester 2,B,ECE203,ECE26B010,present,
+2026-07-13,Afternoon,1,FAC036,ECE Semester 2,B,ECE203,ECE26A011,present,
+2026-07-13,Afternoon,1,FAC036,ECE Semester 2,B,ECE203,ECE26B012,present,
+2026-07-13,Afternoon,1,FAC036,ECE Semester 2,B,ECE203,ECE26A041,late,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC001,ECE Semester 2,A,ECE204,ECE26A009,present,
+2026-07-14,Forenoon,2,FAC001,ECE Semester 2,A,ECE204,ECE26B010,present,
+2026-07-14,Forenoon,2,FAC001,ECE Semester 2,A,ECE204,ECE26A011,present,
+2026-07-14,Forenoon,2,FAC001,ECE Semester 2,A,ECE204,ECE26B012,present,
+2026-07-14,Forenoon,2,FAC001,ECE Semester 2,A,ECE204,ECE26A041,late,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC002,ECE Semester 2,B,ECE205,ECE26A009,present,
+2026-07-15,Afternoon,3,FAC002,ECE Semester 2,B,ECE205,ECE26B010,present,
+2026-07-15,Afternoon,3,FAC002,ECE Semester 2,B,ECE205,ECE26A011,present,
+2026-07-15,Afternoon,3,FAC002,ECE Semester 2,B,ECE205,ECE26B012,present,
+2026-07-15,Afternoon,3,FAC002,ECE Semester 2,B,ECE205,ECE26A041,late,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC003,MECH Semester 1,A,MECH101,MECH26A013,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 1,A,MECH101,MECH26B014,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 1,A,MECH101,MECH26A015,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 1,A,MECH101,MECH26B016,present,
+2026-07-16,Forenoon,4,FAC003,MECH Semester 1,A,MECH101,MECH26A045,late,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC004,MECH Semester 1,B,MECH102,MECH26A013,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 1,B,MECH102,MECH26B014,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 1,B,MECH102,MECH26A015,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 1,B,MECH102,MECH26B016,present,
+2026-07-17,Afternoon,5,FAC004,MECH Semester 1,B,MECH102,MECH26A045,late,Marked during mock attendance test
+2026-07-18,Forenoon,6,FAC005,MECH Semester 1,A,MECH103,MECH26A013,present,
+2026-07-18,Forenoon,6,FAC005,MECH Semester 1,A,MECH103,MECH26B014,present,
+2026-07-18,Forenoon,6,FAC005,MECH Semester 1,A,MECH103,MECH26A015,present,
+2026-07-18,Forenoon,6,FAC005,MECH Semester 1,A,MECH103,MECH26B016,present,
+2026-07-18,Forenoon,6,FAC005,MECH Semester 1,A,MECH103,MECH26A045,late,Marked during mock attendance test
+2026-07-19,Afternoon,1,FAC006,MECH Semester 1,B,MECH104,MECH26A013,present,
+2026-07-19,Afternoon,1,FAC006,MECH Semester 1,B,MECH104,MECH26B014,present,
+2026-07-19,Afternoon,1,FAC006,MECH Semester 1,B,MECH104,MECH26A015,present,
+2026-07-19,Afternoon,1,FAC006,MECH Semester 1,B,MECH104,MECH26B016,present,
+2026-07-19,Afternoon,1,FAC006,MECH Semester 1,B,MECH104,MECH26A045,late,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC007,MECH Semester 1,A,MECH105,MECH26A013,present,
+2026-07-20,Forenoon,2,FAC007,MECH Semester 1,A,MECH105,MECH26B014,present,
+2026-07-20,Forenoon,2,FAC007,MECH Semester 1,A,MECH105,MECH26A015,present,
+2026-07-20,Forenoon,2,FAC007,MECH Semester 1,A,MECH105,MECH26B016,absent,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC007,MECH Semester 1,A,MECH105,MECH26A045,late,Marked during mock attendance test
+2026-07-21,Afternoon,3,FAC008,MECH Semester 2,B,MECH201,MECH26A013,present,
+2026-07-21,Afternoon,3,FAC008,MECH Semester 2,B,MECH201,MECH26B014,present,
+2026-07-21,Afternoon,3,FAC008,MECH Semester 2,B,MECH201,MECH26A015,absent,Marked during mock attendance test
+2026-07-21,Afternoon,3,FAC008,MECH Semester 2,B,MECH201,MECH26B016,present,
+2026-07-21,Afternoon,3,FAC008,MECH Semester 2,B,MECH201,MECH26A045,late,Marked during mock attendance test
+2026-07-22,Forenoon,4,FAC009,MECH Semester 2,A,MECH202,MECH26A013,present,
+2026-07-22,Forenoon,4,FAC009,MECH Semester 2,A,MECH202,MECH26B014,absent,Marked during mock attendance test
+2026-07-22,Forenoon,4,FAC009,MECH Semester 2,A,MECH202,MECH26A015,present,
+2026-07-22,Forenoon,4,FAC009,MECH Semester 2,A,MECH202,MECH26B016,present,
+2026-07-22,Forenoon,4,FAC009,MECH Semester 2,A,MECH202,MECH26A045,late,Marked during mock attendance test
+2026-07-23,Afternoon,5,FAC010,MECH Semester 2,B,MECH203,MECH26A013,absent,Marked during mock attendance test
+2026-07-23,Afternoon,5,FAC010,MECH Semester 2,B,MECH203,MECH26B014,present,
+2026-07-23,Afternoon,5,FAC010,MECH Semester 2,B,MECH203,MECH26A015,present,
+2026-07-23,Afternoon,5,FAC010,MECH Semester 2,B,MECH203,MECH26B016,present,
+2026-07-23,Afternoon,5,FAC010,MECH Semester 2,B,MECH203,MECH26A045,late,Marked during mock attendance test
+2026-07-24,Forenoon,6,FAC011,MECH Semester 2,A,MECH204,MECH26A013,present,
+2026-07-24,Forenoon,6,FAC011,MECH Semester 2,A,MECH204,MECH26B014,present,
+2026-07-24,Forenoon,6,FAC011,MECH Semester 2,A,MECH204,MECH26A015,present,
+2026-07-24,Forenoon,6,FAC011,MECH Semester 2,A,MECH204,MECH26B016,present,
+2026-07-24,Forenoon,6,FAC011,MECH Semester 2,A,MECH204,MECH26A045,late,Marked during mock attendance test
+2026-07-01,Afternoon,1,FAC012,MECH Semester 2,B,MECH205,MECH26A013,present,
+2026-07-01,Afternoon,1,FAC012,MECH Semester 2,B,MECH205,MECH26B014,present,
+2026-07-01,Afternoon,1,FAC012,MECH Semester 2,B,MECH205,MECH26A015,present,
+2026-07-01,Afternoon,1,FAC012,MECH Semester 2,B,MECH205,MECH26B016,present,
+2026-07-01,Afternoon,1,FAC012,MECH Semester 2,B,MECH205,MECH26A045,late,Marked during mock attendance test
+2026-07-02,Forenoon,2,FAC013,CA Semester 1,A,CA101,CA26A017,present,
+2026-07-02,Forenoon,2,FAC013,CA Semester 1,A,CA101,CA26B018,present,
+2026-07-02,Forenoon,2,FAC013,CA Semester 1,A,CA101,CA26A019,present,
+2026-07-02,Forenoon,2,FAC013,CA Semester 1,A,CA101,CA26B020,present,
+2026-07-02,Forenoon,2,FAC013,CA Semester 1,A,CA101,CA26A049,late,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC014,CA Semester 1,B,CA102,CA26A017,present,
+2026-07-03,Afternoon,3,FAC014,CA Semester 1,B,CA102,CA26B018,present,
+2026-07-03,Afternoon,3,FAC014,CA Semester 1,B,CA102,CA26A019,present,
+2026-07-03,Afternoon,3,FAC014,CA Semester 1,B,CA102,CA26B020,present,
+2026-07-03,Afternoon,3,FAC014,CA Semester 1,B,CA102,CA26A049,late,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC015,CA Semester 1,A,CA103,CA26A017,present,
+2026-07-04,Forenoon,4,FAC015,CA Semester 1,A,CA103,CA26B018,present,
+2026-07-04,Forenoon,4,FAC015,CA Semester 1,A,CA103,CA26A019,present,
+2026-07-04,Forenoon,4,FAC015,CA Semester 1,A,CA103,CA26B020,present,
+2026-07-04,Forenoon,4,FAC015,CA Semester 1,A,CA103,CA26A049,late,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC016,CA Semester 1,B,CA104,CA26A017,present,
+2026-07-05,Afternoon,5,FAC016,CA Semester 1,B,CA104,CA26B018,present,
+2026-07-05,Afternoon,5,FAC016,CA Semester 1,B,CA104,CA26A019,present,
+2026-07-05,Afternoon,5,FAC016,CA Semester 1,B,CA104,CA26B020,present,
+2026-07-05,Afternoon,5,FAC016,CA Semester 1,B,CA104,CA26A049,late,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC017,CA Semester 1,A,CA105,CA26A017,present,
+2026-07-06,Forenoon,6,FAC017,CA Semester 1,A,CA105,CA26B018,present,
+2026-07-06,Forenoon,6,FAC017,CA Semester 1,A,CA105,CA26A019,present,
+2026-07-06,Forenoon,6,FAC017,CA Semester 1,A,CA105,CA26B020,present,
+2026-07-06,Forenoon,6,FAC017,CA Semester 1,A,CA105,CA26A049,late,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC018,CA Semester 2,B,CA201,CA26A017,present,
+2026-07-07,Afternoon,1,FAC018,CA Semester 2,B,CA201,CA26B018,present,
+2026-07-07,Afternoon,1,FAC018,CA Semester 2,B,CA201,CA26A019,present,
+2026-07-07,Afternoon,1,FAC018,CA Semester 2,B,CA201,CA26B020,present,
+2026-07-07,Afternoon,1,FAC018,CA Semester 2,B,CA201,CA26A049,late,Marked during mock attendance test
+2026-07-08,Forenoon,2,FAC019,CA Semester 2,A,CA202,CA26A017,present,
+2026-07-08,Forenoon,2,FAC019,CA Semester 2,A,CA202,CA26B018,present,
+2026-07-08,Forenoon,2,FAC019,CA Semester 2,A,CA202,CA26A019,present,
+2026-07-08,Forenoon,2,FAC019,CA Semester 2,A,CA202,CA26B020,present,
+2026-07-08,Forenoon,2,FAC019,CA Semester 2,A,CA202,CA26A049,late,Marked during mock attendance test
+2026-07-09,Afternoon,3,FAC020,CA Semester 2,B,CA203,CA26A017,present,
+2026-07-09,Afternoon,3,FAC020,CA Semester 2,B,CA203,CA26B018,present,
+2026-07-09,Afternoon,3,FAC020,CA Semester 2,B,CA203,CA26A019,present,
+2026-07-09,Afternoon,3,FAC020,CA Semester 2,B,CA203,CA26B020,present,
+2026-07-09,Afternoon,3,FAC020,CA Semester 2,B,CA203,CA26A049,late,Marked during mock attendance test
+2026-07-10,Forenoon,4,FAC021,CA Semester 2,A,CA204,CA26A017,present,
+2026-07-10,Forenoon,4,FAC021,CA Semester 2,A,CA204,CA26B018,present,
+2026-07-10,Forenoon,4,FAC021,CA Semester 2,A,CA204,CA26A019,present,
+2026-07-10,Forenoon,4,FAC021,CA Semester 2,A,CA204,CA26B020,present,
+2026-07-10,Forenoon,4,FAC021,CA Semester 2,A,CA204,CA26A049,late,Marked during mock attendance test
+2026-07-11,Afternoon,5,FAC022,CA Semester 2,B,CA205,CA26A017,present,
+2026-07-11,Afternoon,5,FAC022,CA Semester 2,B,CA205,CA26B018,present,
+2026-07-11,Afternoon,5,FAC022,CA Semester 2,B,CA205,CA26A019,present,
+2026-07-11,Afternoon,5,FAC022,CA Semester 2,B,CA205,CA26B020,present,
+2026-07-11,Afternoon,5,FAC022,CA Semester 2,B,CA205,CA26A049,late,Marked during mock attendance test
+2026-07-12,Forenoon,6,FAC023,BA Semester 1,A,BA101,BA26A021,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 1,A,BA101,BA26B022,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 1,A,BA101,BA26A023,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 1,A,BA101,BA26B024,present,
+2026-07-12,Forenoon,6,FAC023,BA Semester 1,A,BA101,BA26A053,late,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC024,BA Semester 1,B,BA102,BA26A021,present,
+2026-07-13,Afternoon,1,FAC024,BA Semester 1,B,BA102,BA26B022,present,
+2026-07-13,Afternoon,1,FAC024,BA Semester 1,B,BA102,BA26A023,present,
+2026-07-13,Afternoon,1,FAC024,BA Semester 1,B,BA102,BA26B024,absent,Marked during mock attendance test
+2026-07-13,Afternoon,1,FAC024,BA Semester 1,B,BA102,BA26A053,late,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC025,BA Semester 1,A,BA103,BA26A021,present,
+2026-07-14,Forenoon,2,FAC025,BA Semester 1,A,BA103,BA26B022,present,
+2026-07-14,Forenoon,2,FAC025,BA Semester 1,A,BA103,BA26A023,absent,Marked during mock attendance test
+2026-07-14,Forenoon,2,FAC025,BA Semester 1,A,BA103,BA26B024,present,
+2026-07-14,Forenoon,2,FAC025,BA Semester 1,A,BA103,BA26A053,late,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC026,BA Semester 1,B,BA104,BA26A021,present,
+2026-07-15,Afternoon,3,FAC026,BA Semester 1,B,BA104,BA26B022,absent,Marked during mock attendance test
+2026-07-15,Afternoon,3,FAC026,BA Semester 1,B,BA104,BA26A023,present,
+2026-07-15,Afternoon,3,FAC026,BA Semester 1,B,BA104,BA26B024,present,
+2026-07-15,Afternoon,3,FAC026,BA Semester 1,B,BA104,BA26A053,late,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC027,BA Semester 1,A,BA105,BA26A021,absent,Marked during mock attendance test
+2026-07-16,Forenoon,4,FAC027,BA Semester 1,A,BA105,BA26B022,present,
+2026-07-16,Forenoon,4,FAC027,BA Semester 1,A,BA105,BA26A023,present,
+2026-07-16,Forenoon,4,FAC027,BA Semester 1,A,BA105,BA26B024,present,
+2026-07-16,Forenoon,4,FAC027,BA Semester 1,A,BA105,BA26A053,late,Marked during mock attendance test
+2026-07-17,Afternoon,5,FAC028,BA Semester 2,B,BA201,BA26A021,present,
+2026-07-17,Afternoon,5,FAC028,BA Semester 2,B,BA201,BA26B022,present,
+2026-07-17,Afternoon,5,FAC028,BA Semester 2,B,BA201,BA26A023,present,
+2026-07-17,Afternoon,5,FAC028,BA Semester 2,B,BA201,BA26B024,present,
+2026-07-17,Afternoon,5,FAC028,BA Semester 2,B,BA201,BA26A053,late,Marked during mock attendance test
+2026-07-18,Forenoon,6,FAC029,BA Semester 2,A,BA202,BA26A021,present,
+2026-07-18,Forenoon,6,FAC029,BA Semester 2,A,BA202,BA26B022,present,
+2026-07-18,Forenoon,6,FAC029,BA Semester 2,A,BA202,BA26A023,present,
+2026-07-18,Forenoon,6,FAC029,BA Semester 2,A,BA202,BA26B024,present,
+2026-07-18,Forenoon,6,FAC029,BA Semester 2,A,BA202,BA26A053,late,Marked during mock attendance test
+2026-07-19,Afternoon,1,FAC030,BA Semester 2,B,BA203,BA26A021,present,
+2026-07-19,Afternoon,1,FAC030,BA Semester 2,B,BA203,BA26B022,present,
+2026-07-19,Afternoon,1,FAC030,BA Semester 2,B,BA203,BA26A023,present,
+2026-07-19,Afternoon,1,FAC030,BA Semester 2,B,BA203,BA26B024,present,
+2026-07-19,Afternoon,1,FAC030,BA Semester 2,B,BA203,BA26A053,late,Marked during mock attendance test
+2026-07-20,Forenoon,2,FAC031,BA Semester 2,A,BA204,BA26A021,present,
+2026-07-20,Forenoon,2,FAC031,BA Semester 2,A,BA204,BA26B022,present,
+2026-07-20,Forenoon,2,FAC031,BA Semester 2,A,BA204,BA26A023,present,
+2026-07-20,Forenoon,2,FAC031,BA Semester 2,A,BA204,BA26B024,present,
+2026-07-20,Forenoon,2,FAC031,BA Semester 2,A,BA204,BA26A053,late,Marked during mock attendance test
+2026-07-21,Afternoon,3,FAC032,BA Semester 2,B,BA205,BA26A021,present,
+2026-07-21,Afternoon,3,FAC032,BA Semester 2,B,BA205,BA26B022,present,
+2026-07-21,Afternoon,3,FAC032,BA Semester 2,B,BA205,BA26A023,present,
+2026-07-21,Afternoon,3,FAC032,BA Semester 2,B,BA205,BA26B024,present,
+2026-07-21,Afternoon,3,FAC032,BA Semester 2,B,BA205,BA26A053,late,Marked during mock attendance test
+2026-07-22,Forenoon,4,FAC033,AT Semester 1,A,AT101,AT26A025,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 1,A,AT101,AT26B026,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 1,A,AT101,AT26A027,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 1,A,AT101,AT26B028,present,
+2026-07-22,Forenoon,4,FAC033,AT Semester 1,A,AT101,AT26A057,late,Marked during mock attendance test
+2026-07-23,Afternoon,5,FAC034,AT Semester 1,B,AT102,AT26A025,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 1,B,AT102,AT26B026,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 1,B,AT102,AT26A027,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 1,B,AT102,AT26B028,present,
+2026-07-23,Afternoon,5,FAC034,AT Semester 1,B,AT102,AT26A057,late,Marked during mock attendance test
+2026-07-24,Forenoon,6,FAC035,AT Semester 1,A,AT103,AT26A025,present,
+2026-07-24,Forenoon,6,FAC035,AT Semester 1,A,AT103,AT26B026,present,
+2026-07-24,Forenoon,6,FAC035,AT Semester 1,A,AT103,AT26A027,present,
+2026-07-24,Forenoon,6,FAC035,AT Semester 1,A,AT103,AT26B028,present,
+2026-07-24,Forenoon,6,FAC035,AT Semester 1,A,AT103,AT26A057,late,Marked during mock attendance test
+2026-07-01,Afternoon,1,FAC036,AT Semester 1,B,AT104,AT26A025,present,
+2026-07-01,Afternoon,1,FAC036,AT Semester 1,B,AT104,AT26B026,present,
+2026-07-01,Afternoon,1,FAC036,AT Semester 1,B,AT104,AT26A027,present,
+2026-07-01,Afternoon,1,FAC036,AT Semester 1,B,AT104,AT26B028,present,
+2026-07-01,Afternoon,1,FAC036,AT Semester 1,B,AT104,AT26A057,late,Marked during mock attendance test
+2026-07-02,Forenoon,2,FAC001,AT Semester 1,A,AT105,AT26A025,present,
+2026-07-02,Forenoon,2,FAC001,AT Semester 1,A,AT105,AT26B026,present,
+2026-07-02,Forenoon,2,FAC001,AT Semester 1,A,AT105,AT26A027,present,
+2026-07-02,Forenoon,2,FAC001,AT Semester 1,A,AT105,AT26B028,present,
+2026-07-02,Forenoon,2,FAC001,AT Semester 1,A,AT105,AT26A057,late,Marked during mock attendance test
+2026-07-03,Afternoon,3,FAC002,AT Semester 2,B,AT201,AT26A025,present,
+2026-07-03,Afternoon,3,FAC002,AT Semester 2,B,AT201,AT26B026,present,
+2026-07-03,Afternoon,3,FAC002,AT Semester 2,B,AT201,AT26A027,present,
+2026-07-03,Afternoon,3,FAC002,AT Semester 2,B,AT201,AT26B028,present,
+2026-07-03,Afternoon,3,FAC002,AT Semester 2,B,AT201,AT26A057,late,Marked during mock attendance test
+2026-07-04,Forenoon,4,FAC003,AT Semester 2,A,AT202,AT26A025,present,
+2026-07-04,Forenoon,4,FAC003,AT Semester 2,A,AT202,AT26B026,present,
+2026-07-04,Forenoon,4,FAC003,AT Semester 2,A,AT202,AT26A027,present,
+2026-07-04,Forenoon,4,FAC003,AT Semester 2,A,AT202,AT26B028,present,
+2026-07-04,Forenoon,4,FAC003,AT Semester 2,A,AT202,AT26A057,late,Marked during mock attendance test
+2026-07-05,Afternoon,5,FAC004,AT Semester 2,B,AT203,AT26A025,present,
+2026-07-05,Afternoon,5,FAC004,AT Semester 2,B,AT203,AT26B026,present,
+2026-07-05,Afternoon,5,FAC004,AT Semester 2,B,AT203,AT26A027,present,
+2026-07-05,Afternoon,5,FAC004,AT Semester 2,B,AT203,AT26B028,present,
+2026-07-05,Afternoon,5,FAC004,AT Semester 2,B,AT203,AT26A057,late,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC005,AT Semester 2,A,AT204,AT26A025,present,
+2026-07-06,Forenoon,6,FAC005,AT Semester 2,A,AT204,AT26B026,present,
+2026-07-06,Forenoon,6,FAC005,AT Semester 2,A,AT204,AT26A027,present,
+2026-07-06,Forenoon,6,FAC005,AT Semester 2,A,AT204,AT26B028,absent,Marked during mock attendance test
+2026-07-06,Forenoon,6,FAC005,AT Semester 2,A,AT204,AT26A057,late,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC006,AT Semester 2,B,AT205,AT26A025,present,
+2026-07-07,Afternoon,1,FAC006,AT Semester 2,B,AT205,AT26B026,present,
+2026-07-07,Afternoon,1,FAC006,AT Semester 2,B,AT205,AT26A027,absent,Marked during mock attendance test
+2026-07-07,Afternoon,1,FAC006,AT Semester 2,B,AT205,AT26B028,present,
+2026-07-07,Afternoon,1,FAC006,AT Semester 2,B,AT205,AT26A057,late,Marked during mock attendance test

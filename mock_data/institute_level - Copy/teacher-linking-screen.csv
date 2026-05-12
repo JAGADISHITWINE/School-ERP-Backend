@@ -1,0 +1,161 @@
+academic_year_label,teacher_employee_code,teacher_name,course_code,branch_code,class_name,section_name,subject_code,subject_name
+2026-27,FAC001,Rahul Iyer,BTECH,CSE,CSE Semester 1,A,CSE101,Engineering Mathematics I
+2026-27,FAC001,Rahul Iyer,BTECH,CSE,CSE Semester 1,B,CSE101,Engineering Mathematics I
+2026-27,FAC002,Neha Kulkarni,BTECH,CSE,CSE Semester 1,A,CSE102,Python Programming
+2026-27,FAC002,Neha Kulkarni,BTECH,CSE,CSE Semester 1,B,CSE102,Python Programming
+2026-27,FAC003,Kavitha Nair,BTECH,CSE,CSE Semester 1,A,CSE103,Digital Logic Design
+2026-27,FAC003,Kavitha Nair,BTECH,CSE,CSE Semester 1,B,CSE103,Digital Logic Design
+2026-27,FAC004,Deepak Rao,BTECH,CSE,CSE Semester 1,A,CSE104,Computer Organization
+2026-27,FAC004,Deepak Rao,BTECH,CSE,CSE Semester 1,B,CSE104,Computer Organization
+2026-27,FAC005,Sana Khan,BTECH,CSE,CSE Semester 1,A,CSE105,Professional Communication
+2026-27,FAC005,Sana Khan,BTECH,CSE,CSE Semester 1,B,CSE105,Professional Communication
+2026-27,FAC006,Priya Bhat,BTECH,CSE,CSE Semester 2,A,CSE201,Engineering Mathematics I II
+2026-27,FAC006,Priya Bhat,BTECH,CSE,CSE Semester 2,B,CSE201,Engineering Mathematics I II
+2026-27,FAC007,Amit Varma,BTECH,CSE,CSE Semester 2,A,CSE202,Python Programming II
+2026-27,FAC007,Amit Varma,BTECH,CSE,CSE Semester 2,B,CSE202,Python Programming II
+2026-27,FAC008,Farah Ali,BTECH,CSE,CSE Semester 2,A,CSE203,Digital Logic Design II
+2026-27,FAC008,Farah Ali,BTECH,CSE,CSE Semester 2,B,CSE203,Digital Logic Design II
+2026-27,FAC009,Joseph Thomas,BTECH,CSE,CSE Semester 2,A,CSE204,Computer Organization II
+2026-27,FAC009,Joseph Thomas,BTECH,CSE,CSE Semester 2,B,CSE204,Computer Organization II
+2026-27,FAC010,Leela Krishnan,BTECH,CSE,CSE Semester 2,A,CSE205,Professional Communication II
+2026-27,FAC010,Leela Krishnan,BTECH,CSE,CSE Semester 2,B,CSE205,Professional Communication II
+2026-27,FAC011,Ritika Desai,BTECH,AIML,AIML Semester 1,A,AIML101,Linear Algebra for AI
+2026-27,FAC011,Ritika Desai,BTECH,AIML,AIML Semester 1,B,AIML101,Linear Algebra for AI
+2026-27,FAC012,Manoj Pillai,BTECH,AIML,AIML Semester 1,A,AIML102,Python for AI
+2026-27,FAC012,Manoj Pillai,BTECH,AIML,AIML Semester 1,B,AIML102,Python for AI
+2026-27,FAC013,Suresh Nambiar,BTECH,AIML,AIML Semester 1,A,AIML103,Data Visualization
+2026-27,FAC013,Suresh Nambiar,BTECH,AIML,AIML Semester 1,B,AIML103,Data Visualization
+2026-27,FAC014,Pallavi Shah,BTECH,AIML,AIML Semester 1,A,AIML104,Statistics for Data Science
+2026-27,FAC014,Pallavi Shah,BTECH,AIML,AIML Semester 1,B,AIML104,Statistics for Data Science
+2026-27,FAC015,Imran Qureshi,BTECH,AIML,AIML Semester 1,A,AIML105,AI Workshop
+2026-27,FAC015,Imran Qureshi,BTECH,AIML,AIML Semester 1,B,AIML105,AI Workshop
+2026-27,FAC016,Vandana Hegde,BTECH,AIML,AIML Semester 2,A,AIML201,Linear Algebra for AI II
+2026-27,FAC016,Vandana Hegde,BTECH,AIML,AIML Semester 2,B,AIML201,Linear Algebra for AI II
+2026-27,FAC017,Rakesh Sinha,BTECH,AIML,AIML Semester 2,A,AIML202,Python for AI II
+2026-27,FAC017,Rakesh Sinha,BTECH,AIML,AIML Semester 2,B,AIML202,Python for AI II
+2026-27,FAC018,Anita Dsouza,BTECH,AIML,AIML Semester 2,A,AIML203,Data Visualization II
+2026-27,FAC018,Anita Dsouza,BTECH,AIML,AIML Semester 2,B,AIML203,Data Visualization II
+2026-27,FAC019,Girish Prabhu,BTECH,AIML,AIML Semester 2,A,AIML204,Statistics for Data Science II
+2026-27,FAC019,Girish Prabhu,BTECH,AIML,AIML Semester 2,B,AIML204,Statistics for Data Science II
+2026-27,FAC020,Swati Mehra,BTECH,AIML,AIML Semester 2,A,AIML205,AI Workshop II
+2026-27,FAC020,Swati Mehra,BTECH,AIML,AIML Semester 2,B,AIML205,AI Workshop II
+2026-27,FAC021,Naveen Chandra,BTECH,ECE,ECE Semester 1,A,ECE101,Engineering Mathematics I
+2026-27,FAC021,Naveen Chandra,BTECH,ECE,ECE Semester 1,B,ECE101,Engineering Mathematics I
+2026-27,FAC022,Meghna Rao,BTECH,ECE,ECE Semester 1,A,ECE102,Basic Electronics
+2026-27,FAC022,Meghna Rao,BTECH,ECE,ECE Semester 1,B,ECE102,Basic Electronics
+2026-27,FAC023,Arvind Shetty,BTECH,ECE,ECE Semester 1,A,ECE103,Network Analysis
+2026-27,FAC023,Arvind Shetty,BTECH,ECE,ECE Semester 1,B,ECE103,Network Analysis
+2026-27,FAC024,Shalini Gupta,BTECH,ECE,ECE Semester 1,A,ECE104,Signals and Systems
+2026-27,FAC024,Shalini Gupta,BTECH,ECE,ECE Semester 1,B,ECE104,Signals and Systems
+2026-27,FAC025,Harini Subramanian,BTECH,ECE,ECE Semester 1,A,ECE105,Electronic Workshop
+2026-27,FAC025,Harini Subramanian,BTECH,ECE,ECE Semester 1,B,ECE105,Electronic Workshop
+2026-27,FAC026,Kiran Babu,BTECH,ECE,ECE Semester 2,A,ECE201,Engineering Mathematics I II
+2026-27,FAC026,Kiran Babu,BTECH,ECE,ECE Semester 2,B,ECE201,Engineering Mathematics I II
+2026-27,FAC027,Pavan Raj,BTECH,ECE,ECE Semester 2,A,ECE202,Basic Electronics II
+2026-27,FAC027,Pavan Raj,BTECH,ECE,ECE Semester 2,B,ECE202,Basic Electronics II
+2026-27,FAC028,Maya George,BTECH,ECE,ECE Semester 2,A,ECE203,Network Analysis II
+2026-27,FAC028,Maya George,BTECH,ECE,ECE Semester 2,B,ECE203,Network Analysis II
+2026-27,FAC029,Rohit Bansal,BTECH,ECE,ECE Semester 2,A,ECE204,Signals and Systems II
+2026-27,FAC029,Rohit Bansal,BTECH,ECE,ECE Semester 2,B,ECE204,Signals and Systems II
+2026-27,FAC030,Divya Shenoy,BTECH,ECE,ECE Semester 2,A,ECE205,Electronic Workshop II
+2026-27,FAC030,Divya Shenoy,BTECH,ECE,ECE Semester 2,B,ECE205,Electronic Workshop II
+2026-27,FAC031,Nandita Bose,BTECH,MECH,MECH Semester 1,A,MECH101,Engineering Mechanics
+2026-27,FAC031,Nandita Bose,BTECH,MECH,MECH Semester 1,B,MECH101,Engineering Mechanics
+2026-27,FAC032,Sameer Kulkarni,BTECH,MECH,MECH Semester 1,A,MECH102,Engineering Graphics
+2026-27,FAC032,Sameer Kulkarni,BTECH,MECH,MECH Semester 1,B,MECH102,Engineering Graphics
+2026-27,FAC033,Bhavana Murthy,BTECH,MECH,MECH Semester 1,A,MECH103,Manufacturing Process
+2026-27,FAC033,Bhavana Murthy,BTECH,MECH,MECH Semester 1,B,MECH103,Manufacturing Process
+2026-27,FAC034,Vijay Narayan,BTECH,MECH,MECH Semester 1,A,MECH104,Material Science
+2026-27,FAC034,Vijay Narayan,BTECH,MECH,MECH Semester 1,B,MECH104,Material Science
+2026-27,FAC035,Asha Rao,BTECH,MECH,MECH Semester 1,A,MECH105,Workshop Practice
+2026-27,FAC035,Asha Rao,BTECH,MECH,MECH Semester 1,B,MECH105,Workshop Practice
+2026-27,FAC036,Vikram Menon,BTECH,MECH,MECH Semester 2,A,MECH201,Engineering Mechanics II
+2026-27,FAC036,Vikram Menon,BTECH,MECH,MECH Semester 2,B,MECH201,Engineering Mechanics II
+2026-27,FAC001,Rahul Iyer,BTECH,MECH,MECH Semester 2,A,MECH202,Engineering Graphics II
+2026-27,FAC001,Rahul Iyer,BTECH,MECH,MECH Semester 2,B,MECH202,Engineering Graphics II
+2026-27,FAC002,Neha Kulkarni,BTECH,MECH,MECH Semester 2,A,MECH203,Manufacturing Process II
+2026-27,FAC002,Neha Kulkarni,BTECH,MECH,MECH Semester 2,B,MECH203,Manufacturing Process II
+2026-27,FAC003,Kavitha Nair,BTECH,MECH,MECH Semester 2,A,MECH204,Material Science II
+2026-27,FAC003,Kavitha Nair,BTECH,MECH,MECH Semester 2,B,MECH204,Material Science II
+2026-27,FAC004,Deepak Rao,BTECH,MECH,MECH Semester 2,A,MECH205,Workshop Practice II
+2026-27,FAC004,Deepak Rao,BTECH,MECH,MECH Semester 2,B,MECH205,Workshop Practice II
+2026-27,FAC005,Sana Khan,BCA,CA,CA Semester 1,A,CA101,Programming in C
+2026-27,FAC005,Sana Khan,BCA,CA,CA Semester 1,B,CA101,Programming in C
+2026-27,FAC006,Priya Bhat,BCA,CA,CA Semester 1,A,CA102,Digital Computer Fundamentals
+2026-27,FAC006,Priya Bhat,BCA,CA,CA Semester 1,B,CA102,Digital Computer Fundamentals
+2026-27,FAC007,Amit Varma,BCA,CA,CA Semester 1,A,CA103,Mathematics for Computing
+2026-27,FAC007,Amit Varma,BCA,CA,CA Semester 1,B,CA103,Mathematics for Computing
+2026-27,FAC008,Farah Ali,BCA,CA,CA Semester 1,A,CA104,Office Automation
+2026-27,FAC008,Farah Ali,BCA,CA,CA Semester 1,B,CA104,Office Automation
+2026-27,FAC009,Joseph Thomas,BCA,CA,CA Semester 1,A,CA105,Web Fundamentals
+2026-27,FAC009,Joseph Thomas,BCA,CA,CA Semester 1,B,CA105,Web Fundamentals
+2026-27,FAC010,Leela Krishnan,BCA,CA,CA Semester 2,A,CA201,Programming in C II
+2026-27,FAC010,Leela Krishnan,BCA,CA,CA Semester 2,B,CA201,Programming in C II
+2026-27,FAC011,Ritika Desai,BCA,CA,CA Semester 2,A,CA202,Digital Computer Fundamentals II
+2026-27,FAC011,Ritika Desai,BCA,CA,CA Semester 2,B,CA202,Digital Computer Fundamentals II
+2026-27,FAC012,Manoj Pillai,BCA,CA,CA Semester 2,A,CA203,Mathematics for Computing II
+2026-27,FAC012,Manoj Pillai,BCA,CA,CA Semester 2,B,CA203,Mathematics for Computing II
+2026-27,FAC013,Suresh Nambiar,BCA,CA,CA Semester 2,A,CA204,Office Automation II
+2026-27,FAC013,Suresh Nambiar,BCA,CA,CA Semester 2,B,CA204,Office Automation II
+2026-27,FAC014,Pallavi Shah,BCA,CA,CA Semester 2,A,CA205,Web Fundamentals II
+2026-27,FAC014,Pallavi Shah,BCA,CA,CA Semester 2,B,CA205,Web Fundamentals II
+2026-27,FAC015,Imran Qureshi,BBA,BA,BA Semester 1,A,BA101,Principles of Management
+2026-27,FAC015,Imran Qureshi,BBA,BA,BA Semester 1,B,BA101,Principles of Management
+2026-27,FAC016,Vandana Hegde,BBA,BA,BA Semester 1,A,BA102,Business Economics
+2026-27,FAC016,Vandana Hegde,BBA,BA,BA Semester 1,B,BA102,Business Economics
+2026-27,FAC017,Rakesh Sinha,BBA,BA,BA Semester 1,A,BA103,Business Mathematics
+2026-27,FAC017,Rakesh Sinha,BBA,BA,BA Semester 1,B,BA103,Business Mathematics
+2026-27,FAC018,Anita Dsouza,BBA,BA,BA Semester 1,A,BA104,Organizational Behaviour
+2026-27,FAC018,Anita Dsouza,BBA,BA,BA Semester 1,B,BA104,Organizational Behaviour
+2026-27,FAC019,Girish Prabhu,BBA,BA,BA Semester 1,A,BA105,Business Communication
+2026-27,FAC019,Girish Prabhu,BBA,BA,BA Semester 1,B,BA105,Business Communication
+2026-27,FAC020,Swati Mehra,BBA,BA,BA Semester 2,A,BA201,Principles of Management II
+2026-27,FAC020,Swati Mehra,BBA,BA,BA Semester 2,B,BA201,Principles of Management II
+2026-27,FAC021,Naveen Chandra,BBA,BA,BA Semester 2,A,BA202,Business Economics II
+2026-27,FAC021,Naveen Chandra,BBA,BA,BA Semester 2,B,BA202,Business Economics II
+2026-27,FAC022,Meghna Rao,BBA,BA,BA Semester 2,A,BA203,Business Mathematics II
+2026-27,FAC022,Meghna Rao,BBA,BA,BA Semester 2,B,BA203,Business Mathematics II
+2026-27,FAC023,Arvind Shetty,BBA,BA,BA Semester 2,A,BA204,Organizational Behaviour II
+2026-27,FAC023,Arvind Shetty,BBA,BA,BA Semester 2,B,BA204,Organizational Behaviour II
+2026-27,FAC024,Shalini Gupta,BBA,BA,BA Semester 2,A,BA205,Business Communication II
+2026-27,FAC024,Shalini Gupta,BBA,BA,BA Semester 2,B,BA205,Business Communication II
+2026-27,FAC025,Harini Subramanian,BCOM,AT,AT Semester 1,A,AT101,Financial Accounting
+2026-27,FAC025,Harini Subramanian,BCOM,AT,AT Semester 1,B,AT101,Financial Accounting
+2026-27,FAC026,Kiran Babu,BCOM,AT,AT Semester 1,A,AT102,Business Law
+2026-27,FAC026,Kiran Babu,BCOM,AT,AT Semester 1,B,AT102,Business Law
+2026-27,FAC027,Pavan Raj,BCOM,AT,AT Semester 1,A,AT103,Corporate Accounting
+2026-27,FAC027,Pavan Raj,BCOM,AT,AT Semester 1,B,AT103,Corporate Accounting
+2026-27,FAC028,Maya George,BCOM,AT,AT Semester 1,A,AT104,Taxation Basics
+2026-27,FAC028,Maya George,BCOM,AT,AT Semester 1,B,AT104,Taxation Basics
+2026-27,FAC029,Rohit Bansal,BCOM,AT,AT Semester 1,A,AT105,Cost Accounting
+2026-27,FAC029,Rohit Bansal,BCOM,AT,AT Semester 1,B,AT105,Cost Accounting
+2026-27,FAC030,Divya Shenoy,BCOM,AT,AT Semester 2,A,AT201,Financial Accounting II
+2026-27,FAC030,Divya Shenoy,BCOM,AT,AT Semester 2,B,AT201,Financial Accounting II
+2026-27,FAC031,Nandita Bose,BCOM,AT,AT Semester 2,A,AT202,Business Law II
+2026-27,FAC031,Nandita Bose,BCOM,AT,AT Semester 2,B,AT202,Business Law II
+2026-27,FAC032,Sameer Kulkarni,BCOM,AT,AT Semester 2,A,AT203,Corporate Accounting II
+2026-27,FAC032,Sameer Kulkarni,BCOM,AT,AT Semester 2,B,AT203,Corporate Accounting II
+2026-27,FAC033,Bhavana Murthy,BCOM,AT,AT Semester 2,A,AT204,Taxation Basics II
+2026-27,FAC033,Bhavana Murthy,BCOM,AT,AT Semester 2,B,AT204,Taxation Basics II
+2026-27,FAC034,Vijay Narayan,BCOM,AT,AT Semester 2,A,AT205,Cost Accounting II
+2026-27,FAC034,Vijay Narayan,BCOM,AT,AT Semester 2,B,AT205,Cost Accounting II
+2026-27,FAC035,Asha Rao,MCA,SE,SE Semester 1,A,SE101,Advanced Database Systems
+2026-27,FAC035,Asha Rao,MCA,SE,SE Semester 1,B,SE101,Advanced Database Systems
+2026-27,FAC036,Vikram Menon,MCA,SE,SE Semester 1,A,SE102,Software Engineering
+2026-27,FAC036,Vikram Menon,MCA,SE,SE Semester 1,B,SE102,Software Engineering
+2026-27,FAC001,Rahul Iyer,MCA,SE,SE Semester 1,A,SE103,Cloud Computing
+2026-27,FAC001,Rahul Iyer,MCA,SE,SE Semester 1,B,SE103,Cloud Computing
+2026-27,FAC002,Neha Kulkarni,MCA,SE,SE Semester 1,A,SE104,Machine Learning
+2026-27,FAC002,Neha Kulkarni,MCA,SE,SE Semester 1,B,SE104,Machine Learning
+2026-27,FAC003,Kavitha Nair,MCA,SE,SE Semester 1,A,SE105,Research Methodology
+2026-27,FAC003,Kavitha Nair,MCA,SE,SE Semester 1,B,SE105,Research Methodology
+2026-27,FAC004,Deepak Rao,MCA,SE,SE Semester 2,A,SE201,Advanced Database Systems II
+2026-27,FAC004,Deepak Rao,MCA,SE,SE Semester 2,B,SE201,Advanced Database Systems II
+2026-27,FAC005,Sana Khan,MCA,SE,SE Semester 2,A,SE202,Software Engineering II
+2026-27,FAC005,Sana Khan,MCA,SE,SE Semester 2,B,SE202,Software Engineering II
+2026-27,FAC006,Priya Bhat,MCA,SE,SE Semester 2,A,SE203,Cloud Computing II
+2026-27,FAC006,Priya Bhat,MCA,SE,SE Semester 2,B,SE203,Cloud Computing II
+2026-27,FAC007,Amit Varma,MCA,SE,SE Semester 2,A,SE204,Machine Learning II
+2026-27,FAC007,Amit Varma,MCA,SE,SE Semester 2,B,SE204,Machine Learning II
+2026-27,FAC008,Farah Ali,MCA,SE,SE Semester 2,A,SE205,Research Methodology II
+2026-27,FAC008,Farah Ali,MCA,SE,SE Semester 2,B,SE205,Research Methodology II

@@ -1,0 +1,6 @@
+report_name,filter_1,filter_2,expected_result
+Student Complete Report,academic_year=2026-27,roll_number=CSE26A008,"Admission, academics, fees, attendance and performance sections visible"
+Class Attendance Report,class=CSE Semester 1,section=A,Daily present/absent/late summary
+Subject Attendance Report,subject=CSE101,month=July 2026,Subject-wise percentage and low attendance list
+Fee Due Report,academic_year=2026-27,status=unpaid/partial,Pending tuition and exam fee rows
+Marks Report,exam=Unit Test 1,branch=CSE,Marks and absent flags for selected subject mappings

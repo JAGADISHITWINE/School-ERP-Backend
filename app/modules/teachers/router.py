@@ -12,6 +12,9 @@ from app.modules.teachers.schema import (
     SubjectAssignRequest,
     TeacherClassAssignRequest,
     TeacherClassOut,
+    ClassMentorCreate,
+    ClassMentorUpdate,
+    ClassMentorOut,
     TeacherCandidateOut,
     TeacherTimetableCreate,
     TeacherTimetableUpdate,
@@ -70,7 +73,13 @@ async def list_hod_candidates(current_user: CurrentUser, db: DB):
 
 @router.get("", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
 async def list_teachers(current_user: CurrentUser, db: DB, pagination: Annotated[PaginationParams, Depends()]):
-    teachers, total = await service.list_teachers(db, current_user["institution_id"], pagination.offset, pagination.page_size)
+    teachers, total = await service.list_teachers(
+        db,
+        current_user["institution_id"],
+        pagination.offset,
+        pagination.page_size,
+        current_user,
+    )
     out = []
     for t in teachers:
         user = (await db.execute(select(User).where(User.id == t.user_id))).scalar_one()
@@ -94,7 +103,7 @@ async def list_teachers(current_user: CurrentUser, db: DB, pagination: Annotated
     return paginated(out, total, pagination.page, pagination.page_size)
 
 
-@router.get("/self/teaching-scope", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+@router.get("/self/teaching-scope", response_model=dict)
 async def my_teaching_scope(
     current_user: CurrentUser,
     db: DB,
@@ -115,14 +124,54 @@ async def my_teaching_scope(
     return ok(data=data)
 
 
+@router.get("/class-mentors", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+async def list_class_mentors(
+    current_user: CurrentUser,
+    db: DB,
+    academic_year_id: str | None = None,
+    branch_id: str | None = None,
+    class_id: str | None = None,
+    section_id: str | None = None,
+):
+    rows = await service.list_class_mentors(
+        db,
+        current_user,
+        academic_year_id=academic_year_id,
+        branch_id=branch_id,
+        class_id=class_id,
+        section_id=section_id,
+    )
+    return ok(data=[ClassMentorOut(**row).model_dump() for row in rows])
+
+
+@router.post("/class-mentors", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def create_class_mentor(payload: ClassMentorCreate, current_user: CurrentUser, db: DB):
+    mentor = await service.create_class_mentor(db, payload, current_user)
+    return ok(data={"id": str(mentor.id)}, message="Class mentor assigned")
+
+
+@router.patch("/class-mentors/{mentor_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def update_class_mentor(mentor_id: str, payload: ClassMentorUpdate, current_user: CurrentUser, db: DB):
+    mentor = await service.update_class_mentor(db, mentor_id, payload, current_user)
+    return ok(data={"id": str(mentor.id)}, message="Class mentor updated")
+
+
+@router.delete("/class-mentors/{mentor_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
+async def delete_class_mentor(mentor_id: str, current_user: CurrentUser, db: DB):
+    await service.delete_class_mentor(db, mentor_id, current_user)
+    return ok(message="Class mentor removed")
+
+
 @router.get("/{teacher_id}/teaching-scope", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
 async def list_teacher_teaching_scope(
     teacher_id: str,
+    current_user: CurrentUser,
     db: DB,
     branch_id: str | None = None,
     class_id: str | None = None,
     section_id: str | None = None,
 ):
+    await service.assert_can_view_teacher(db, current_user, teacher_id)
     data = await service.list_teacher_teaching_scope(
         db,
         teacher_id,
@@ -134,7 +183,8 @@ async def list_teacher_teaching_scope(
 
 
 @router.get("/{teacher_id}", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
-async def get_teacher(teacher_id: str, db: DB):
+async def get_teacher(teacher_id: str, current_user: CurrentUser, db: DB):
+    await service.assert_can_view_teacher(db, current_user, teacher_id)
     teacher = await service.get_teacher(db, teacher_id)
     user = (await db.execute(select(User).where(User.id == teacher.user_id))).scalar_one()
     data = TeacherOut(
@@ -162,7 +212,8 @@ async def assign_subject(teacher_id: str, payload: SubjectAssignRequest, db: DB)
 
 
 @router.get("/{teacher_id}/classes", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
-async def list_teacher_classes(teacher_id: str, db: DB):
+async def list_teacher_classes(teacher_id: str, current_user: CurrentUser, db: DB):
+    await service.assert_can_view_teacher(db, current_user, teacher_id)
     items = await service.list_teacher_classes(db, teacher_id)
     return ok(data=[TeacherClassOut(**item).model_dump() for item in items])
 
@@ -194,12 +245,19 @@ async def create_hod_link(payload: HODLinkCreate, db: DB):
 
 @router.get("/links/hod", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
 async def list_hod_links(
+    current_user: CurrentUser,
     db: DB,
     institution_id: str | None = None,
     course_id: str | None = None,
     branch_id: str | None = None,
 ):
-    rows = await service.list_hod_links(db, institution_id=institution_id, course_id=course_id, branch_id=branch_id)
+    rows = await service.list_hod_links(
+        db,
+        institution_id=institution_id,
+        course_id=course_id,
+        branch_id=branch_id,
+        current_user=current_user,
+    )
     return ok(data=[HODLinkOut(**row).model_dump() for row in rows])
 
 
@@ -225,27 +283,40 @@ async def update_hod_link(link_id: str, payload: HODLinkUpdate, db: DB):
 
 @router.post("/links/teacher-hod-subjects", response_model=dict, dependencies=[Depends(require_permission(TEACHER_UPDATE))])
 async def create_teacher_hod_subject_links(payload: TeacherHODSubjectLinkCreate, db: DB):
-    links = await service.create_teacher_hod_subject_links(
+    result = await service.create_teacher_hod_subject_links(
         db,
         payload.teacher_id,
         payload.hod_link_id,
+        payload.section_id,
         payload.subject_ids,
     )
+    links = result["created"]
+    skipped_subject_ids = result["skipped_subject_ids"]
     return ok(
-        data={"created_ids": [str(link.id) for link in links], "created_count": len(links)},
-        message="Teacher linked with HOD subjects",
+        data={
+            "created_ids": [str(link.id) for link in links],
+            "created_count": len(links),
+            "skipped_count": len(skipped_subject_ids),
+            "skipped_subject_ids": skipped_subject_ids,
+        },
+        message="Teacher linked with HOD subjects" if links else "Selected teacher links already exist",
     )
 
 
 @router.get("/links/teacher-hod-subjects", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
 async def list_teacher_hod_subject_links(
+    current_user: CurrentUser,
     db: DB,
     institution_id: str | None = None,
     course_id: str | None = None,
     branch_id: str | None = None,
 ):
     rows = await service.list_teacher_hod_subject_links(
-        db, institution_id=institution_id, course_id=course_id, branch_id=branch_id
+        db,
+        institution_id=institution_id,
+        course_id=course_id,
+        branch_id=branch_id,
+        current_user=current_user,
     )
     return ok(data=[TeacherHODSubjectLinkOut(**row).model_dump() for row in rows])
 
@@ -271,6 +342,7 @@ async def update_teacher_hod_subject_link(link_id: str, payload: TeacherHODSubje
         link_id,
         payload.teacher_id,
         payload.hod_link_id,
+        payload.section_id,
         payload.subject_id,
     )
     return ok(data={"id": str(link.id)}, message="Teacher-HOD subject link updated")
@@ -287,7 +359,13 @@ async def list_all_teacher_timetables(current_user: CurrentUser, db: DB, day_of_
 
 
 @router.get("/{teacher_id}/timetable", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
-async def list_teacher_timetable(teacher_id: str, db: DB, day_of_week: TimetableDay | None = None):
+async def list_teacher_timetable(
+    teacher_id: str,
+    current_user: CurrentUser,
+    db: DB,
+    day_of_week: TimetableDay | None = None,
+):
+    await service.assert_can_view_teacher(db, current_user, teacher_id)
     items = await service.list_teacher_timetable(db, teacher_id, day_of_week=day_of_week)
     return ok(data=[TeacherTimetableOut(**item).model_dump() for item in items])
 
@@ -330,7 +408,7 @@ async def delete_teacher_timetable(entry_id: str, db: DB):
     return ok(message="Timetable entry deleted")
 
 
-@router.get("/self/my-timetable", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+@router.get("/self/my-timetable", response_model=dict)
 async def my_timetable(current_user: CurrentUser, db: DB):
     teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
     if not teacher:
@@ -339,7 +417,7 @@ async def my_timetable(current_user: CurrentUser, db: DB):
     return ok(data=[TeacherTimetableOut(**item).model_dump() for item in items])
 
 
-@router.get("/self/dashboard", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+@router.get("/self/dashboard", response_model=dict)
 async def my_dashboard(current_user: CurrentUser, db: DB):
     teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
     if not teacher:
@@ -376,13 +454,13 @@ async def my_dashboard(current_user: CurrentUser, db: DB):
     )
 
 
-@router.get("/self/hod-analytics", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+@router.get("/self/hod-analytics", response_model=dict)
 async def my_hod_analytics(current_user: CurrentUser, db: DB, academic_year_id: str | None = None):
     data = await service.get_hod_branch_analytics(db, current_user["id"], academic_year_id)
     return ok(data=data)
 
 
-@router.get("/self/today-classes", response_model=dict, dependencies=[Depends(require_permission(TEACHER_READ))])
+@router.get("/self/today-classes", response_model=dict)
 async def today_classes(current_user: CurrentUser, db: DB):
     teacher = (await db.execute(select(Teacher).where(Teacher.user_id == current_user["id"]))).scalar_one_or_none()
     if not teacher:

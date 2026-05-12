@@ -14,8 +14,20 @@ DB = Annotated[AsyncSession, Depends(get_db)]
 
 
 @router.post("", response_model=dict, dependencies=[Depends(require_permission(EXAM_CREATE))])
-async def create_exam(payload: ExamCreate, db: DB):
+async def create_exam(payload: ExamCreate, current_user: CurrentUser, db: DB):
     exam = await service.create_exam(db, payload)
+    from app.modules.logs.service import log_activity
+    await log_activity(
+        db,
+        module="exams",
+        action="exam_create",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="exam",
+        entity_id=str(exam.id),
+        message="Exam created",
+        meta=payload.model_dump(),
+    )
     return ok(data=ExamOut.model_validate(exam).model_dump(), message="Exam created")
 
 
@@ -52,8 +64,20 @@ async def get_marks(exam_subject_id: str, db: DB):
 
 
 @router.post("/{exam_id}/subjects", response_model=dict, dependencies=[Depends(require_permission(EXAM_MANAGE))])
-async def add_exam_subject(exam_id: str, payload: ExamSubjectCreate, db: DB):
+async def add_exam_subject(exam_id: str, payload: ExamSubjectCreate, current_user: CurrentUser, db: DB):
     es = await service.add_exam_subject(db, exam_id, payload)
+    from app.modules.logs.service import log_activity
+    await log_activity(
+        db,
+        module="exams",
+        action="exam_subject_add",
+        actor_user_id=current_user["id"],
+        institution_id=current_user["institution_id"],
+        entity_type="exam_subject",
+        entity_id=str(es.id),
+        message="Subject added to exam",
+        meta={"exam_id": exam_id, **payload.model_dump()},
+    )
     return ok(data={"id": str(es.id)}, message="Subject added to exam")
 
 

@@ -2,7 +2,45 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, delete, func
 from app.modules.roles.model import Role, UserRole, RolePermission, Permission, RoleMenu, Menu
 from app.modules.roles.schema import RoleCreate, RoleUpdate
-from app.core.exceptions import NotFoundError, ConflictError, ValidationError
+from app.core.exceptions import NotFoundError, ConflictError, ValidationError, ForbiddenError
+
+
+SUPERADMIN_SLUGS = {"superadmin", "super_admin"}
+ADMIN_ALLOWED_ROLE_SLUGS = {
+    "admin",
+    "administrator",
+    "college admin",
+    "school admin",
+    "institute admin",
+    "institution admin",
+    "hod",
+    "head_of_department",
+    "head of department",
+    "teacher",
+    "teachers",
+    "faculty",
+    "lecturer",
+    "student",
+    "students",
+    "parent",
+    "guardian",
+    "principal",
+    "principle",
+}
+
+
+async def _actor_can_manage_superadmin(db: AsyncSession, actor: dict) -> bool:
+    if actor.get("is_superuser"):
+        return True
+    row = (
+        await db.execute(
+            select(Role.id)
+            .join(UserRole, UserRole.role_id == Role.id)
+            .where(UserRole.user_id == actor["id"], func.lower(Role.slug).in_(SUPERADMIN_SLUGS))
+            .limit(1)
+        )
+    ).first()
+    return row is not None
 
 
 async def get_role_for_institution(db: AsyncSession, role_id: str, institution_id: str) -> Role:
@@ -27,12 +65,16 @@ async def create_role(db: AsyncSession, data: RoleCreate) -> Role:
     return role
 
 
-async def list_roles(db: AsyncSession, institution_id: str, offset: int, limit: int):
-    total_q = await db.execute(select(func.count()).select_from(Role).where(Role.institution_id == institution_id))
+async def list_roles(db: AsyncSession, institution_id: str, offset: int, limit: int, actor: dict | None = None):
+    q = select(Role).where(Role.institution_id == institution_id)
+    if actor and not await _actor_can_manage_superadmin(db, actor):
+        q = q.where(
+            func.lower(Role.slug).in_(ADMIN_ALLOWED_ROLE_SLUGS)
+            | func.lower(Role.name).in_(ADMIN_ALLOWED_ROLE_SLUGS)
+        )
+    total_q = await db.execute(select(func.count()).select_from(q.subquery()))
     total = total_q.scalar()
-    result = await db.execute(
-        select(Role).where(Role.institution_id == institution_id).offset(offset).limit(limit)
-    )
+    result = await db.execute(q.order_by(Role.name.asc()).offset(offset).limit(limit))
     return result.scalars().all(), total
 
 
@@ -100,7 +142,23 @@ async def assign_menus(
     await db.flush()
 
 
-async def assign_roles_to_user(db: AsyncSession, user_id: str, role_ids: list[str]):
+async def assign_roles_to_user(db: AsyncSession, user_id: str, role_ids: list[str], actor: dict | None = None):
+    if actor and not await _actor_can_manage_superadmin(db, actor):
+        target_superadmin = (
+            await db.execute(
+                select(Role.id)
+                .join(UserRole, UserRole.role_id == Role.id)
+                .where(UserRole.user_id == user_id, func.lower(Role.slug).in_(SUPERADMIN_SLUGS))
+                .limit(1)
+            )
+        ).first()
+        if target_superadmin:
+            raise ForbiddenError("Admin cannot assign roles to Superadmin users")
+        incoming_superadmin = (
+            await db.execute(select(Role.id).where(Role.id.in_(role_ids), func.lower(Role.slug).in_(SUPERADMIN_SLUGS)))
+        ).first()
+        if incoming_superadmin:
+            raise ForbiddenError("Admin cannot assign Superadmin role")
     await db.execute(delete(UserRole).where(UserRole.user_id == user_id))
     if role_ids:
         await db.execute(

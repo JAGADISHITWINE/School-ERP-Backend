@@ -1,0 +1,451 @@
+roll_number,document_type,title,file_name,file_url,status,remarks
+CSE26A001,identity,Aadhaar Card,cse26a001-identity.pdf,https://files.scholaris.demo.edu/students/cse26a001-identity.pdf,verified,Clear copy verified
+CSE26A001,marks_card,Class 12 Marks Card,cse26a001-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a001-marks_card.pdf,verified,Clear copy verified
+CSE26A001,transfer_certificate,Transfer Certificate,cse26a001-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a001-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B002,identity,Aadhaar Card,cse26b002-identity.pdf,https://files.scholaris.demo.edu/students/cse26b002-identity.pdf,verified,Clear copy verified
+CSE26B002,marks_card,Class 12 Marks Card,cse26b002-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b002-marks_card.pdf,verified,Clear copy verified
+CSE26A003,identity,Aadhaar Card,cse26a003-identity.pdf,https://files.scholaris.demo.edu/students/cse26a003-identity.pdf,verified,Clear copy verified
+CSE26A003,marks_card,Class 12 Marks Card,cse26a003-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a003-marks_card.pdf,verified,Clear copy verified
+CSE26A003,transfer_certificate,Transfer Certificate,cse26a003-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a003-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B004,identity,Aadhaar Card,cse26b004-identity.pdf,https://files.scholaris.demo.edu/students/cse26b004-identity.pdf,verified,Clear copy verified
+CSE26B004,marks_card,Class 12 Marks Card,cse26b004-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b004-marks_card.pdf,verified,Clear copy verified
+AIML26A005,identity,Aadhaar Card,aiml26a005-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a005-identity.pdf,pending,Verification pending
+AIML26A005,marks_card,Class 12 Marks Card,aiml26a005-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a005-marks_card.pdf,pending,Verification pending
+AIML26A005,transfer_certificate,Transfer Certificate,aiml26a005-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a005-transfer_certificate.pdf,pending,Verification pending
+AIML26B006,identity,Aadhaar Card,aiml26b006-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b006-identity.pdf,verified,Clear copy verified
+AIML26B006,marks_card,Class 12 Marks Card,aiml26b006-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b006-marks_card.pdf,verified,Clear copy verified
+AIML26A007,identity,Aadhaar Card,aiml26a007-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a007-identity.pdf,verified,Clear copy verified
+AIML26A007,marks_card,Class 12 Marks Card,aiml26a007-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a007-marks_card.pdf,verified,Clear copy verified
+AIML26A007,transfer_certificate,Transfer Certificate,aiml26a007-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a007-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B008,identity,Aadhaar Card,aiml26b008-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b008-identity.pdf,verified,Clear copy verified
+AIML26B008,marks_card,Class 12 Marks Card,aiml26b008-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b008-marks_card.pdf,verified,Clear copy verified
+ECE26A009,identity,Aadhaar Card,ece26a009-identity.pdf,https://files.scholaris.demo.edu/students/ece26a009-identity.pdf,verified,Clear copy verified
+ECE26A009,marks_card,Class 12 Marks Card,ece26a009-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a009-marks_card.pdf,verified,Clear copy verified
+ECE26A009,transfer_certificate,Transfer Certificate,ece26a009-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a009-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B010,identity,Aadhaar Card,ece26b010-identity.pdf,https://files.scholaris.demo.edu/students/ece26b010-identity.pdf,pending,Verification pending
+ECE26B010,marks_card,Class 12 Marks Card,ece26b010-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b010-marks_card.pdf,pending,Verification pending
+ECE26A011,identity,Aadhaar Card,ece26a011-identity.pdf,https://files.scholaris.demo.edu/students/ece26a011-identity.pdf,verified,Clear copy verified
+ECE26A011,marks_card,Class 12 Marks Card,ece26a011-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a011-marks_card.pdf,verified,Clear copy verified
+ECE26A011,transfer_certificate,Transfer Certificate,ece26a011-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a011-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B012,identity,Aadhaar Card,ece26b012-identity.pdf,https://files.scholaris.demo.edu/students/ece26b012-identity.pdf,verified,Clear copy verified
+ECE26B012,marks_card,Class 12 Marks Card,ece26b012-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b012-marks_card.pdf,verified,Clear copy verified
+MECH26A013,identity,Aadhaar Card,mech26a013-identity.pdf,https://files.scholaris.demo.edu/students/mech26a013-identity.pdf,verified,Clear copy verified
+MECH26A013,marks_card,Class 12 Marks Card,mech26a013-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a013-marks_card.pdf,verified,Clear copy verified
+MECH26A013,transfer_certificate,Transfer Certificate,mech26a013-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a013-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B014,identity,Aadhaar Card,mech26b014-identity.pdf,https://files.scholaris.demo.edu/students/mech26b014-identity.pdf,verified,Clear copy verified
+MECH26B014,marks_card,Class 12 Marks Card,mech26b014-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b014-marks_card.pdf,verified,Clear copy verified
+MECH26A015,identity,Aadhaar Card,mech26a015-identity.pdf,https://files.scholaris.demo.edu/students/mech26a015-identity.pdf,pending,Verification pending
+MECH26A015,marks_card,Class 12 Marks Card,mech26a015-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a015-marks_card.pdf,pending,Verification pending
+MECH26A015,transfer_certificate,Transfer Certificate,mech26a015-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a015-transfer_certificate.pdf,pending,Verification pending
+MECH26B016,identity,Aadhaar Card,mech26b016-identity.pdf,https://files.scholaris.demo.edu/students/mech26b016-identity.pdf,verified,Clear copy verified
+MECH26B016,marks_card,Class 12 Marks Card,mech26b016-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b016-marks_card.pdf,verified,Clear copy verified
+CA26A017,identity,Aadhaar Card,ca26a017-identity.pdf,https://files.scholaris.demo.edu/students/ca26a017-identity.pdf,verified,Clear copy verified
+CA26A017,marks_card,Class 12 Marks Card,ca26a017-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a017-marks_card.pdf,verified,Clear copy verified
+CA26A017,transfer_certificate,Transfer Certificate,ca26a017-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a017-transfer_certificate.pdf,verified,Clear copy verified
+CA26B018,identity,Aadhaar Card,ca26b018-identity.pdf,https://files.scholaris.demo.edu/students/ca26b018-identity.pdf,verified,Clear copy verified
+CA26B018,marks_card,Class 12 Marks Card,ca26b018-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b018-marks_card.pdf,verified,Clear copy verified
+CA26A019,identity,Aadhaar Card,ca26a019-identity.pdf,https://files.scholaris.demo.edu/students/ca26a019-identity.pdf,verified,Clear copy verified
+CA26A019,marks_card,Class 12 Marks Card,ca26a019-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a019-marks_card.pdf,verified,Clear copy verified
+CA26A019,transfer_certificate,Transfer Certificate,ca26a019-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a019-transfer_certificate.pdf,verified,Clear copy verified
+CA26B020,identity,Aadhaar Card,ca26b020-identity.pdf,https://files.scholaris.demo.edu/students/ca26b020-identity.pdf,pending,Verification pending
+CA26B020,marks_card,Class 12 Marks Card,ca26b020-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b020-marks_card.pdf,pending,Verification pending
+BA26A021,identity,Aadhaar Card,ba26a021-identity.pdf,https://files.scholaris.demo.edu/students/ba26a021-identity.pdf,verified,Clear copy verified
+BA26A021,marks_card,Class 12 Marks Card,ba26a021-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a021-marks_card.pdf,verified,Clear copy verified
+BA26A021,transfer_certificate,Transfer Certificate,ba26a021-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a021-transfer_certificate.pdf,verified,Clear copy verified
+BA26B022,identity,Aadhaar Card,ba26b022-identity.pdf,https://files.scholaris.demo.edu/students/ba26b022-identity.pdf,verified,Clear copy verified
+BA26B022,marks_card,Class 12 Marks Card,ba26b022-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b022-marks_card.pdf,verified,Clear copy verified
+BA26A023,identity,Aadhaar Card,ba26a023-identity.pdf,https://files.scholaris.demo.edu/students/ba26a023-identity.pdf,verified,Clear copy verified
+BA26A023,marks_card,Class 12 Marks Card,ba26a023-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a023-marks_card.pdf,verified,Clear copy verified
+BA26A023,transfer_certificate,Transfer Certificate,ba26a023-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a023-transfer_certificate.pdf,verified,Clear copy verified
+BA26B024,identity,Aadhaar Card,ba26b024-identity.pdf,https://files.scholaris.demo.edu/students/ba26b024-identity.pdf,verified,Clear copy verified
+BA26B024,marks_card,Class 12 Marks Card,ba26b024-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b024-marks_card.pdf,verified,Clear copy verified
+AT26A025,identity,Aadhaar Card,at26a025-identity.pdf,https://files.scholaris.demo.edu/students/at26a025-identity.pdf,pending,Verification pending
+AT26A025,marks_card,Class 12 Marks Card,at26a025-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a025-marks_card.pdf,pending,Verification pending
+AT26A025,transfer_certificate,Transfer Certificate,at26a025-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a025-transfer_certificate.pdf,pending,Verification pending
+AT26B026,identity,Aadhaar Card,at26b026-identity.pdf,https://files.scholaris.demo.edu/students/at26b026-identity.pdf,verified,Clear copy verified
+AT26B026,marks_card,Class 12 Marks Card,at26b026-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b026-marks_card.pdf,verified,Clear copy verified
+AT26A027,identity,Aadhaar Card,at26a027-identity.pdf,https://files.scholaris.demo.edu/students/at26a027-identity.pdf,verified,Clear copy verified
+AT26A027,marks_card,Class 12 Marks Card,at26a027-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a027-marks_card.pdf,verified,Clear copy verified
+AT26A027,transfer_certificate,Transfer Certificate,at26a027-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a027-transfer_certificate.pdf,verified,Clear copy verified
+AT26B028,identity,Aadhaar Card,at26b028-identity.pdf,https://files.scholaris.demo.edu/students/at26b028-identity.pdf,verified,Clear copy verified
+AT26B028,marks_card,Class 12 Marks Card,at26b028-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b028-marks_card.pdf,verified,Clear copy verified
+SE26A029,identity,Aadhaar Card,se26a029-identity.pdf,https://files.scholaris.demo.edu/students/se26a029-identity.pdf,verified,Clear copy verified
+SE26A029,marks_card,Class 12 Marks Card,se26a029-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a029-marks_card.pdf,verified,Clear copy verified
+SE26A029,transfer_certificate,Transfer Certificate,se26a029-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a029-transfer_certificate.pdf,verified,Clear copy verified
+SE26B030,identity,Aadhaar Card,se26b030-identity.pdf,https://files.scholaris.demo.edu/students/se26b030-identity.pdf,pending,Verification pending
+SE26B030,marks_card,Class 12 Marks Card,se26b030-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b030-marks_card.pdf,pending,Verification pending
+SE26A031,identity,Aadhaar Card,se26a031-identity.pdf,https://files.scholaris.demo.edu/students/se26a031-identity.pdf,verified,Clear copy verified
+SE26A031,marks_card,Class 12 Marks Card,se26a031-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a031-marks_card.pdf,verified,Clear copy verified
+SE26A031,transfer_certificate,Transfer Certificate,se26a031-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a031-transfer_certificate.pdf,verified,Clear copy verified
+SE26B032,identity,Aadhaar Card,se26b032-identity.pdf,https://files.scholaris.demo.edu/students/se26b032-identity.pdf,verified,Clear copy verified
+SE26B032,marks_card,Class 12 Marks Card,se26b032-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b032-marks_card.pdf,verified,Clear copy verified
+CSE26A033,identity,Aadhaar Card,cse26a033-identity.pdf,https://files.scholaris.demo.edu/students/cse26a033-identity.pdf,verified,Clear copy verified
+CSE26A033,marks_card,Class 12 Marks Card,cse26a033-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a033-marks_card.pdf,verified,Clear copy verified
+CSE26A033,transfer_certificate,Transfer Certificate,cse26a033-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a033-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B034,identity,Aadhaar Card,cse26b034-identity.pdf,https://files.scholaris.demo.edu/students/cse26b034-identity.pdf,verified,Clear copy verified
+CSE26B034,marks_card,Class 12 Marks Card,cse26b034-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b034-marks_card.pdf,verified,Clear copy verified
+CSE26A035,identity,Aadhaar Card,cse26a035-identity.pdf,https://files.scholaris.demo.edu/students/cse26a035-identity.pdf,pending,Verification pending
+CSE26A035,marks_card,Class 12 Marks Card,cse26a035-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a035-marks_card.pdf,pending,Verification pending
+CSE26A035,transfer_certificate,Transfer Certificate,cse26a035-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a035-transfer_certificate.pdf,pending,Verification pending
+CSE26B036,identity,Aadhaar Card,cse26b036-identity.pdf,https://files.scholaris.demo.edu/students/cse26b036-identity.pdf,verified,Clear copy verified
+CSE26B036,marks_card,Class 12 Marks Card,cse26b036-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b036-marks_card.pdf,verified,Clear copy verified
+AIML26A037,identity,Aadhaar Card,aiml26a037-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a037-identity.pdf,verified,Clear copy verified
+AIML26A037,marks_card,Class 12 Marks Card,aiml26a037-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a037-marks_card.pdf,verified,Clear copy verified
+AIML26A037,transfer_certificate,Transfer Certificate,aiml26a037-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a037-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B038,identity,Aadhaar Card,aiml26b038-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b038-identity.pdf,verified,Clear copy verified
+AIML26B038,marks_card,Class 12 Marks Card,aiml26b038-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b038-marks_card.pdf,verified,Clear copy verified
+AIML26A039,identity,Aadhaar Card,aiml26a039-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a039-identity.pdf,verified,Clear copy verified
+AIML26A039,marks_card,Class 12 Marks Card,aiml26a039-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a039-marks_card.pdf,verified,Clear copy verified
+AIML26A039,transfer_certificate,Transfer Certificate,aiml26a039-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a039-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B040,identity,Aadhaar Card,aiml26b040-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b040-identity.pdf,pending,Verification pending
+AIML26B040,marks_card,Class 12 Marks Card,aiml26b040-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b040-marks_card.pdf,pending,Verification pending
+ECE26A041,identity,Aadhaar Card,ece26a041-identity.pdf,https://files.scholaris.demo.edu/students/ece26a041-identity.pdf,verified,Clear copy verified
+ECE26A041,marks_card,Class 12 Marks Card,ece26a041-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a041-marks_card.pdf,verified,Clear copy verified
+ECE26A041,transfer_certificate,Transfer Certificate,ece26a041-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a041-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B042,identity,Aadhaar Card,ece26b042-identity.pdf,https://files.scholaris.demo.edu/students/ece26b042-identity.pdf,verified,Clear copy verified
+ECE26B042,marks_card,Class 12 Marks Card,ece26b042-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b042-marks_card.pdf,verified,Clear copy verified
+ECE26A043,identity,Aadhaar Card,ece26a043-identity.pdf,https://files.scholaris.demo.edu/students/ece26a043-identity.pdf,verified,Clear copy verified
+ECE26A043,marks_card,Class 12 Marks Card,ece26a043-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a043-marks_card.pdf,verified,Clear copy verified
+ECE26A043,transfer_certificate,Transfer Certificate,ece26a043-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a043-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B044,identity,Aadhaar Card,ece26b044-identity.pdf,https://files.scholaris.demo.edu/students/ece26b044-identity.pdf,verified,Clear copy verified
+ECE26B044,marks_card,Class 12 Marks Card,ece26b044-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b044-marks_card.pdf,verified,Clear copy verified
+MECH26A045,identity,Aadhaar Card,mech26a045-identity.pdf,https://files.scholaris.demo.edu/students/mech26a045-identity.pdf,pending,Verification pending
+MECH26A045,marks_card,Class 12 Marks Card,mech26a045-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a045-marks_card.pdf,pending,Verification pending
+MECH26A045,transfer_certificate,Transfer Certificate,mech26a045-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a045-transfer_certificate.pdf,pending,Verification pending
+MECH26B046,identity,Aadhaar Card,mech26b046-identity.pdf,https://files.scholaris.demo.edu/students/mech26b046-identity.pdf,verified,Clear copy verified
+MECH26B046,marks_card,Class 12 Marks Card,mech26b046-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b046-marks_card.pdf,verified,Clear copy verified
+MECH26A047,identity,Aadhaar Card,mech26a047-identity.pdf,https://files.scholaris.demo.edu/students/mech26a047-identity.pdf,verified,Clear copy verified
+MECH26A047,marks_card,Class 12 Marks Card,mech26a047-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a047-marks_card.pdf,verified,Clear copy verified
+MECH26A047,transfer_certificate,Transfer Certificate,mech26a047-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a047-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B048,identity,Aadhaar Card,mech26b048-identity.pdf,https://files.scholaris.demo.edu/students/mech26b048-identity.pdf,verified,Clear copy verified
+MECH26B048,marks_card,Class 12 Marks Card,mech26b048-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b048-marks_card.pdf,verified,Clear copy verified
+CA26A049,identity,Aadhaar Card,ca26a049-identity.pdf,https://files.scholaris.demo.edu/students/ca26a049-identity.pdf,verified,Clear copy verified
+CA26A049,marks_card,Class 12 Marks Card,ca26a049-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a049-marks_card.pdf,verified,Clear copy verified
+CA26A049,transfer_certificate,Transfer Certificate,ca26a049-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a049-transfer_certificate.pdf,verified,Clear copy verified
+CA26B050,identity,Aadhaar Card,ca26b050-identity.pdf,https://files.scholaris.demo.edu/students/ca26b050-identity.pdf,pending,Verification pending
+CA26B050,marks_card,Class 12 Marks Card,ca26b050-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b050-marks_card.pdf,pending,Verification pending
+CA26A051,identity,Aadhaar Card,ca26a051-identity.pdf,https://files.scholaris.demo.edu/students/ca26a051-identity.pdf,verified,Clear copy verified
+CA26A051,marks_card,Class 12 Marks Card,ca26a051-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a051-marks_card.pdf,verified,Clear copy verified
+CA26A051,transfer_certificate,Transfer Certificate,ca26a051-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a051-transfer_certificate.pdf,verified,Clear copy verified
+CA26B052,identity,Aadhaar Card,ca26b052-identity.pdf,https://files.scholaris.demo.edu/students/ca26b052-identity.pdf,verified,Clear copy verified
+CA26B052,marks_card,Class 12 Marks Card,ca26b052-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b052-marks_card.pdf,verified,Clear copy verified
+BA26A053,identity,Aadhaar Card,ba26a053-identity.pdf,https://files.scholaris.demo.edu/students/ba26a053-identity.pdf,verified,Clear copy verified
+BA26A053,marks_card,Class 12 Marks Card,ba26a053-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a053-marks_card.pdf,verified,Clear copy verified
+BA26A053,transfer_certificate,Transfer Certificate,ba26a053-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a053-transfer_certificate.pdf,verified,Clear copy verified
+BA26B054,identity,Aadhaar Card,ba26b054-identity.pdf,https://files.scholaris.demo.edu/students/ba26b054-identity.pdf,verified,Clear copy verified
+BA26B054,marks_card,Class 12 Marks Card,ba26b054-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b054-marks_card.pdf,verified,Clear copy verified
+BA26A055,identity,Aadhaar Card,ba26a055-identity.pdf,https://files.scholaris.demo.edu/students/ba26a055-identity.pdf,pending,Verification pending
+BA26A055,marks_card,Class 12 Marks Card,ba26a055-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a055-marks_card.pdf,pending,Verification pending
+BA26A055,transfer_certificate,Transfer Certificate,ba26a055-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a055-transfer_certificate.pdf,pending,Verification pending
+BA26B056,identity,Aadhaar Card,ba26b056-identity.pdf,https://files.scholaris.demo.edu/students/ba26b056-identity.pdf,verified,Clear copy verified
+BA26B056,marks_card,Class 12 Marks Card,ba26b056-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b056-marks_card.pdf,verified,Clear copy verified
+AT26A057,identity,Aadhaar Card,at26a057-identity.pdf,https://files.scholaris.demo.edu/students/at26a057-identity.pdf,verified,Clear copy verified
+AT26A057,marks_card,Class 12 Marks Card,at26a057-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a057-marks_card.pdf,verified,Clear copy verified
+AT26A057,transfer_certificate,Transfer Certificate,at26a057-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a057-transfer_certificate.pdf,verified,Clear copy verified
+AT26B058,identity,Aadhaar Card,at26b058-identity.pdf,https://files.scholaris.demo.edu/students/at26b058-identity.pdf,verified,Clear copy verified
+AT26B058,marks_card,Class 12 Marks Card,at26b058-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b058-marks_card.pdf,verified,Clear copy verified
+AT26A059,identity,Aadhaar Card,at26a059-identity.pdf,https://files.scholaris.demo.edu/students/at26a059-identity.pdf,verified,Clear copy verified
+AT26A059,marks_card,Class 12 Marks Card,at26a059-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a059-marks_card.pdf,verified,Clear copy verified
+AT26A059,transfer_certificate,Transfer Certificate,at26a059-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a059-transfer_certificate.pdf,verified,Clear copy verified
+AT26B060,identity,Aadhaar Card,at26b060-identity.pdf,https://files.scholaris.demo.edu/students/at26b060-identity.pdf,pending,Verification pending
+AT26B060,marks_card,Class 12 Marks Card,at26b060-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b060-marks_card.pdf,pending,Verification pending
+SE26A061,identity,Aadhaar Card,se26a061-identity.pdf,https://files.scholaris.demo.edu/students/se26a061-identity.pdf,verified,Clear copy verified
+SE26A061,marks_card,Class 12 Marks Card,se26a061-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a061-marks_card.pdf,verified,Clear copy verified
+SE26A061,transfer_certificate,Transfer Certificate,se26a061-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a061-transfer_certificate.pdf,verified,Clear copy verified
+SE26B062,identity,Aadhaar Card,se26b062-identity.pdf,https://files.scholaris.demo.edu/students/se26b062-identity.pdf,verified,Clear copy verified
+SE26B062,marks_card,Class 12 Marks Card,se26b062-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b062-marks_card.pdf,verified,Clear copy verified
+SE26A063,identity,Aadhaar Card,se26a063-identity.pdf,https://files.scholaris.demo.edu/students/se26a063-identity.pdf,verified,Clear copy verified
+SE26A063,marks_card,Class 12 Marks Card,se26a063-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a063-marks_card.pdf,verified,Clear copy verified
+SE26A063,transfer_certificate,Transfer Certificate,se26a063-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a063-transfer_certificate.pdf,verified,Clear copy verified
+SE26B064,identity,Aadhaar Card,se26b064-identity.pdf,https://files.scholaris.demo.edu/students/se26b064-identity.pdf,verified,Clear copy verified
+SE26B064,marks_card,Class 12 Marks Card,se26b064-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b064-marks_card.pdf,verified,Clear copy verified
+CSE26A065,identity,Aadhaar Card,cse26a065-identity.pdf,https://files.scholaris.demo.edu/students/cse26a065-identity.pdf,pending,Verification pending
+CSE26A065,marks_card,Class 12 Marks Card,cse26a065-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a065-marks_card.pdf,pending,Verification pending
+CSE26A065,transfer_certificate,Transfer Certificate,cse26a065-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a065-transfer_certificate.pdf,pending,Verification pending
+CSE26B066,identity,Aadhaar Card,cse26b066-identity.pdf,https://files.scholaris.demo.edu/students/cse26b066-identity.pdf,verified,Clear copy verified
+CSE26B066,marks_card,Class 12 Marks Card,cse26b066-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b066-marks_card.pdf,verified,Clear copy verified
+CSE26A067,identity,Aadhaar Card,cse26a067-identity.pdf,https://files.scholaris.demo.edu/students/cse26a067-identity.pdf,verified,Clear copy verified
+CSE26A067,marks_card,Class 12 Marks Card,cse26a067-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a067-marks_card.pdf,verified,Clear copy verified
+CSE26A067,transfer_certificate,Transfer Certificate,cse26a067-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a067-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B068,identity,Aadhaar Card,cse26b068-identity.pdf,https://files.scholaris.demo.edu/students/cse26b068-identity.pdf,verified,Clear copy verified
+CSE26B068,marks_card,Class 12 Marks Card,cse26b068-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b068-marks_card.pdf,verified,Clear copy verified
+AIML26A069,identity,Aadhaar Card,aiml26a069-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a069-identity.pdf,verified,Clear copy verified
+AIML26A069,marks_card,Class 12 Marks Card,aiml26a069-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a069-marks_card.pdf,verified,Clear copy verified
+AIML26A069,transfer_certificate,Transfer Certificate,aiml26a069-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a069-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B070,identity,Aadhaar Card,aiml26b070-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b070-identity.pdf,pending,Verification pending
+AIML26B070,marks_card,Class 12 Marks Card,aiml26b070-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b070-marks_card.pdf,pending,Verification pending
+AIML26A071,identity,Aadhaar Card,aiml26a071-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a071-identity.pdf,verified,Clear copy verified
+AIML26A071,marks_card,Class 12 Marks Card,aiml26a071-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a071-marks_card.pdf,verified,Clear copy verified
+AIML26A071,transfer_certificate,Transfer Certificate,aiml26a071-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a071-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B072,identity,Aadhaar Card,aiml26b072-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b072-identity.pdf,verified,Clear copy verified
+AIML26B072,marks_card,Class 12 Marks Card,aiml26b072-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b072-marks_card.pdf,verified,Clear copy verified
+ECE26A073,identity,Aadhaar Card,ece26a073-identity.pdf,https://files.scholaris.demo.edu/students/ece26a073-identity.pdf,verified,Clear copy verified
+ECE26A073,marks_card,Class 12 Marks Card,ece26a073-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a073-marks_card.pdf,verified,Clear copy verified
+ECE26A073,transfer_certificate,Transfer Certificate,ece26a073-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a073-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B074,identity,Aadhaar Card,ece26b074-identity.pdf,https://files.scholaris.demo.edu/students/ece26b074-identity.pdf,verified,Clear copy verified
+ECE26B074,marks_card,Class 12 Marks Card,ece26b074-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b074-marks_card.pdf,verified,Clear copy verified
+ECE26A075,identity,Aadhaar Card,ece26a075-identity.pdf,https://files.scholaris.demo.edu/students/ece26a075-identity.pdf,pending,Verification pending
+ECE26A075,marks_card,Class 12 Marks Card,ece26a075-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a075-marks_card.pdf,pending,Verification pending
+ECE26A075,transfer_certificate,Transfer Certificate,ece26a075-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a075-transfer_certificate.pdf,pending,Verification pending
+ECE26B076,identity,Aadhaar Card,ece26b076-identity.pdf,https://files.scholaris.demo.edu/students/ece26b076-identity.pdf,verified,Clear copy verified
+ECE26B076,marks_card,Class 12 Marks Card,ece26b076-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b076-marks_card.pdf,verified,Clear copy verified
+MECH26A077,identity,Aadhaar Card,mech26a077-identity.pdf,https://files.scholaris.demo.edu/students/mech26a077-identity.pdf,verified,Clear copy verified
+MECH26A077,marks_card,Class 12 Marks Card,mech26a077-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a077-marks_card.pdf,verified,Clear copy verified
+MECH26A077,transfer_certificate,Transfer Certificate,mech26a077-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a077-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B078,identity,Aadhaar Card,mech26b078-identity.pdf,https://files.scholaris.demo.edu/students/mech26b078-identity.pdf,verified,Clear copy verified
+MECH26B078,marks_card,Class 12 Marks Card,mech26b078-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b078-marks_card.pdf,verified,Clear copy verified
+MECH26A079,identity,Aadhaar Card,mech26a079-identity.pdf,https://files.scholaris.demo.edu/students/mech26a079-identity.pdf,verified,Clear copy verified
+MECH26A079,marks_card,Class 12 Marks Card,mech26a079-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a079-marks_card.pdf,verified,Clear copy verified
+MECH26A079,transfer_certificate,Transfer Certificate,mech26a079-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a079-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B080,identity,Aadhaar Card,mech26b080-identity.pdf,https://files.scholaris.demo.edu/students/mech26b080-identity.pdf,pending,Verification pending
+MECH26B080,marks_card,Class 12 Marks Card,mech26b080-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b080-marks_card.pdf,pending,Verification pending
+CA26A081,identity,Aadhaar Card,ca26a081-identity.pdf,https://files.scholaris.demo.edu/students/ca26a081-identity.pdf,verified,Clear copy verified
+CA26A081,marks_card,Class 12 Marks Card,ca26a081-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a081-marks_card.pdf,verified,Clear copy verified
+CA26A081,transfer_certificate,Transfer Certificate,ca26a081-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a081-transfer_certificate.pdf,verified,Clear copy verified
+CA26B082,identity,Aadhaar Card,ca26b082-identity.pdf,https://files.scholaris.demo.edu/students/ca26b082-identity.pdf,verified,Clear copy verified
+CA26B082,marks_card,Class 12 Marks Card,ca26b082-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b082-marks_card.pdf,verified,Clear copy verified
+CA26A083,identity,Aadhaar Card,ca26a083-identity.pdf,https://files.scholaris.demo.edu/students/ca26a083-identity.pdf,verified,Clear copy verified
+CA26A083,marks_card,Class 12 Marks Card,ca26a083-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a083-marks_card.pdf,verified,Clear copy verified
+CA26A083,transfer_certificate,Transfer Certificate,ca26a083-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a083-transfer_certificate.pdf,verified,Clear copy verified
+CA26B084,identity,Aadhaar Card,ca26b084-identity.pdf,https://files.scholaris.demo.edu/students/ca26b084-identity.pdf,verified,Clear copy verified
+CA26B084,marks_card,Class 12 Marks Card,ca26b084-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b084-marks_card.pdf,verified,Clear copy verified
+BA26A085,identity,Aadhaar Card,ba26a085-identity.pdf,https://files.scholaris.demo.edu/students/ba26a085-identity.pdf,pending,Verification pending
+BA26A085,marks_card,Class 12 Marks Card,ba26a085-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a085-marks_card.pdf,pending,Verification pending
+BA26A085,transfer_certificate,Transfer Certificate,ba26a085-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a085-transfer_certificate.pdf,pending,Verification pending
+BA26B086,identity,Aadhaar Card,ba26b086-identity.pdf,https://files.scholaris.demo.edu/students/ba26b086-identity.pdf,verified,Clear copy verified
+BA26B086,marks_card,Class 12 Marks Card,ba26b086-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b086-marks_card.pdf,verified,Clear copy verified
+BA26A087,identity,Aadhaar Card,ba26a087-identity.pdf,https://files.scholaris.demo.edu/students/ba26a087-identity.pdf,verified,Clear copy verified
+BA26A087,marks_card,Class 12 Marks Card,ba26a087-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a087-marks_card.pdf,verified,Clear copy verified
+BA26A087,transfer_certificate,Transfer Certificate,ba26a087-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a087-transfer_certificate.pdf,verified,Clear copy verified
+BA26B088,identity,Aadhaar Card,ba26b088-identity.pdf,https://files.scholaris.demo.edu/students/ba26b088-identity.pdf,verified,Clear copy verified
+BA26B088,marks_card,Class 12 Marks Card,ba26b088-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b088-marks_card.pdf,verified,Clear copy verified
+AT26A089,identity,Aadhaar Card,at26a089-identity.pdf,https://files.scholaris.demo.edu/students/at26a089-identity.pdf,verified,Clear copy verified
+AT26A089,marks_card,Class 12 Marks Card,at26a089-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a089-marks_card.pdf,verified,Clear copy verified
+AT26A089,transfer_certificate,Transfer Certificate,at26a089-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a089-transfer_certificate.pdf,verified,Clear copy verified
+AT26B090,identity,Aadhaar Card,at26b090-identity.pdf,https://files.scholaris.demo.edu/students/at26b090-identity.pdf,pending,Verification pending
+AT26B090,marks_card,Class 12 Marks Card,at26b090-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b090-marks_card.pdf,pending,Verification pending
+AT26A091,identity,Aadhaar Card,at26a091-identity.pdf,https://files.scholaris.demo.edu/students/at26a091-identity.pdf,verified,Clear copy verified
+AT26A091,marks_card,Class 12 Marks Card,at26a091-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a091-marks_card.pdf,verified,Clear copy verified
+AT26A091,transfer_certificate,Transfer Certificate,at26a091-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a091-transfer_certificate.pdf,verified,Clear copy verified
+AT26B092,identity,Aadhaar Card,at26b092-identity.pdf,https://files.scholaris.demo.edu/students/at26b092-identity.pdf,verified,Clear copy verified
+AT26B092,marks_card,Class 12 Marks Card,at26b092-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b092-marks_card.pdf,verified,Clear copy verified
+SE26A093,identity,Aadhaar Card,se26a093-identity.pdf,https://files.scholaris.demo.edu/students/se26a093-identity.pdf,verified,Clear copy verified
+SE26A093,marks_card,Class 12 Marks Card,se26a093-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a093-marks_card.pdf,verified,Clear copy verified
+SE26A093,transfer_certificate,Transfer Certificate,se26a093-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a093-transfer_certificate.pdf,verified,Clear copy verified
+SE26B094,identity,Aadhaar Card,se26b094-identity.pdf,https://files.scholaris.demo.edu/students/se26b094-identity.pdf,verified,Clear copy verified
+SE26B094,marks_card,Class 12 Marks Card,se26b094-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b094-marks_card.pdf,verified,Clear copy verified
+SE26A095,identity,Aadhaar Card,se26a095-identity.pdf,https://files.scholaris.demo.edu/students/se26a095-identity.pdf,pending,Verification pending
+SE26A095,marks_card,Class 12 Marks Card,se26a095-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a095-marks_card.pdf,pending,Verification pending
+SE26A095,transfer_certificate,Transfer Certificate,se26a095-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a095-transfer_certificate.pdf,pending,Verification pending
+SE26B096,identity,Aadhaar Card,se26b096-identity.pdf,https://files.scholaris.demo.edu/students/se26b096-identity.pdf,verified,Clear copy verified
+SE26B096,marks_card,Class 12 Marks Card,se26b096-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b096-marks_card.pdf,verified,Clear copy verified
+CSE26A097,identity,Aadhaar Card,cse26a097-identity.pdf,https://files.scholaris.demo.edu/students/cse26a097-identity.pdf,verified,Clear copy verified
+CSE26A097,marks_card,Class 12 Marks Card,cse26a097-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a097-marks_card.pdf,verified,Clear copy verified
+CSE26A097,transfer_certificate,Transfer Certificate,cse26a097-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a097-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B098,identity,Aadhaar Card,cse26b098-identity.pdf,https://files.scholaris.demo.edu/students/cse26b098-identity.pdf,verified,Clear copy verified
+CSE26B098,marks_card,Class 12 Marks Card,cse26b098-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b098-marks_card.pdf,verified,Clear copy verified
+CSE26A099,identity,Aadhaar Card,cse26a099-identity.pdf,https://files.scholaris.demo.edu/students/cse26a099-identity.pdf,verified,Clear copy verified
+CSE26A099,marks_card,Class 12 Marks Card,cse26a099-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a099-marks_card.pdf,verified,Clear copy verified
+CSE26A099,transfer_certificate,Transfer Certificate,cse26a099-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a099-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B100,identity,Aadhaar Card,cse26b100-identity.pdf,https://files.scholaris.demo.edu/students/cse26b100-identity.pdf,pending,Verification pending
+CSE26B100,marks_card,Class 12 Marks Card,cse26b100-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b100-marks_card.pdf,pending,Verification pending
+AIML26A101,identity,Aadhaar Card,aiml26a101-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a101-identity.pdf,verified,Clear copy verified
+AIML26A101,marks_card,Class 12 Marks Card,aiml26a101-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a101-marks_card.pdf,verified,Clear copy verified
+AIML26A101,transfer_certificate,Transfer Certificate,aiml26a101-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a101-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B102,identity,Aadhaar Card,aiml26b102-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b102-identity.pdf,verified,Clear copy verified
+AIML26B102,marks_card,Class 12 Marks Card,aiml26b102-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b102-marks_card.pdf,verified,Clear copy verified
+AIML26A103,identity,Aadhaar Card,aiml26a103-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a103-identity.pdf,verified,Clear copy verified
+AIML26A103,marks_card,Class 12 Marks Card,aiml26a103-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a103-marks_card.pdf,verified,Clear copy verified
+AIML26A103,transfer_certificate,Transfer Certificate,aiml26a103-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a103-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B104,identity,Aadhaar Card,aiml26b104-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b104-identity.pdf,verified,Clear copy verified
+AIML26B104,marks_card,Class 12 Marks Card,aiml26b104-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b104-marks_card.pdf,verified,Clear copy verified
+ECE26A105,identity,Aadhaar Card,ece26a105-identity.pdf,https://files.scholaris.demo.edu/students/ece26a105-identity.pdf,pending,Verification pending
+ECE26A105,marks_card,Class 12 Marks Card,ece26a105-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a105-marks_card.pdf,pending,Verification pending
+ECE26A105,transfer_certificate,Transfer Certificate,ece26a105-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a105-transfer_certificate.pdf,pending,Verification pending
+ECE26B106,identity,Aadhaar Card,ece26b106-identity.pdf,https://files.scholaris.demo.edu/students/ece26b106-identity.pdf,verified,Clear copy verified
+ECE26B106,marks_card,Class 12 Marks Card,ece26b106-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b106-marks_card.pdf,verified,Clear copy verified
+ECE26A107,identity,Aadhaar Card,ece26a107-identity.pdf,https://files.scholaris.demo.edu/students/ece26a107-identity.pdf,verified,Clear copy verified
+ECE26A107,marks_card,Class 12 Marks Card,ece26a107-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a107-marks_card.pdf,verified,Clear copy verified
+ECE26A107,transfer_certificate,Transfer Certificate,ece26a107-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a107-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B108,identity,Aadhaar Card,ece26b108-identity.pdf,https://files.scholaris.demo.edu/students/ece26b108-identity.pdf,verified,Clear copy verified
+ECE26B108,marks_card,Class 12 Marks Card,ece26b108-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b108-marks_card.pdf,verified,Clear copy verified
+MECH26A109,identity,Aadhaar Card,mech26a109-identity.pdf,https://files.scholaris.demo.edu/students/mech26a109-identity.pdf,verified,Clear copy verified
+MECH26A109,marks_card,Class 12 Marks Card,mech26a109-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a109-marks_card.pdf,verified,Clear copy verified
+MECH26A109,transfer_certificate,Transfer Certificate,mech26a109-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a109-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B110,identity,Aadhaar Card,mech26b110-identity.pdf,https://files.scholaris.demo.edu/students/mech26b110-identity.pdf,pending,Verification pending
+MECH26B110,marks_card,Class 12 Marks Card,mech26b110-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b110-marks_card.pdf,pending,Verification pending
+MECH26A111,identity,Aadhaar Card,mech26a111-identity.pdf,https://files.scholaris.demo.edu/students/mech26a111-identity.pdf,verified,Clear copy verified
+MECH26A111,marks_card,Class 12 Marks Card,mech26a111-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a111-marks_card.pdf,verified,Clear copy verified
+MECH26A111,transfer_certificate,Transfer Certificate,mech26a111-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a111-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B112,identity,Aadhaar Card,mech26b112-identity.pdf,https://files.scholaris.demo.edu/students/mech26b112-identity.pdf,verified,Clear copy verified
+MECH26B112,marks_card,Class 12 Marks Card,mech26b112-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b112-marks_card.pdf,verified,Clear copy verified
+CA26A113,identity,Aadhaar Card,ca26a113-identity.pdf,https://files.scholaris.demo.edu/students/ca26a113-identity.pdf,verified,Clear copy verified
+CA26A113,marks_card,Class 12 Marks Card,ca26a113-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a113-marks_card.pdf,verified,Clear copy verified
+CA26A113,transfer_certificate,Transfer Certificate,ca26a113-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a113-transfer_certificate.pdf,verified,Clear copy verified
+CA26B114,identity,Aadhaar Card,ca26b114-identity.pdf,https://files.scholaris.demo.edu/students/ca26b114-identity.pdf,verified,Clear copy verified
+CA26B114,marks_card,Class 12 Marks Card,ca26b114-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b114-marks_card.pdf,verified,Clear copy verified
+CA26A115,identity,Aadhaar Card,ca26a115-identity.pdf,https://files.scholaris.demo.edu/students/ca26a115-identity.pdf,pending,Verification pending
+CA26A115,marks_card,Class 12 Marks Card,ca26a115-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a115-marks_card.pdf,pending,Verification pending
+CA26A115,transfer_certificate,Transfer Certificate,ca26a115-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a115-transfer_certificate.pdf,pending,Verification pending
+CA26B116,identity,Aadhaar Card,ca26b116-identity.pdf,https://files.scholaris.demo.edu/students/ca26b116-identity.pdf,verified,Clear copy verified
+CA26B116,marks_card,Class 12 Marks Card,ca26b116-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b116-marks_card.pdf,verified,Clear copy verified
+BA26A117,identity,Aadhaar Card,ba26a117-identity.pdf,https://files.scholaris.demo.edu/students/ba26a117-identity.pdf,verified,Clear copy verified
+BA26A117,marks_card,Class 12 Marks Card,ba26a117-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a117-marks_card.pdf,verified,Clear copy verified
+BA26A117,transfer_certificate,Transfer Certificate,ba26a117-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a117-transfer_certificate.pdf,verified,Clear copy verified
+BA26B118,identity,Aadhaar Card,ba26b118-identity.pdf,https://files.scholaris.demo.edu/students/ba26b118-identity.pdf,verified,Clear copy verified
+BA26B118,marks_card,Class 12 Marks Card,ba26b118-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b118-marks_card.pdf,verified,Clear copy verified
+BA26A119,identity,Aadhaar Card,ba26a119-identity.pdf,https://files.scholaris.demo.edu/students/ba26a119-identity.pdf,verified,Clear copy verified
+BA26A119,marks_card,Class 12 Marks Card,ba26a119-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a119-marks_card.pdf,verified,Clear copy verified
+BA26A119,transfer_certificate,Transfer Certificate,ba26a119-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a119-transfer_certificate.pdf,verified,Clear copy verified
+BA26B120,identity,Aadhaar Card,ba26b120-identity.pdf,https://files.scholaris.demo.edu/students/ba26b120-identity.pdf,pending,Verification pending
+BA26B120,marks_card,Class 12 Marks Card,ba26b120-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b120-marks_card.pdf,pending,Verification pending
+AT26A121,identity,Aadhaar Card,at26a121-identity.pdf,https://files.scholaris.demo.edu/students/at26a121-identity.pdf,verified,Clear copy verified
+AT26A121,marks_card,Class 12 Marks Card,at26a121-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a121-marks_card.pdf,verified,Clear copy verified
+AT26A121,transfer_certificate,Transfer Certificate,at26a121-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a121-transfer_certificate.pdf,verified,Clear copy verified
+AT26B122,identity,Aadhaar Card,at26b122-identity.pdf,https://files.scholaris.demo.edu/students/at26b122-identity.pdf,verified,Clear copy verified
+AT26B122,marks_card,Class 12 Marks Card,at26b122-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b122-marks_card.pdf,verified,Clear copy verified
+AT26A123,identity,Aadhaar Card,at26a123-identity.pdf,https://files.scholaris.demo.edu/students/at26a123-identity.pdf,verified,Clear copy verified
+AT26A123,marks_card,Class 12 Marks Card,at26a123-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a123-marks_card.pdf,verified,Clear copy verified
+AT26A123,transfer_certificate,Transfer Certificate,at26a123-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a123-transfer_certificate.pdf,verified,Clear copy verified
+AT26B124,identity,Aadhaar Card,at26b124-identity.pdf,https://files.scholaris.demo.edu/students/at26b124-identity.pdf,verified,Clear copy verified
+AT26B124,marks_card,Class 12 Marks Card,at26b124-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b124-marks_card.pdf,verified,Clear copy verified
+SE26A125,identity,Aadhaar Card,se26a125-identity.pdf,https://files.scholaris.demo.edu/students/se26a125-identity.pdf,pending,Verification pending
+SE26A125,marks_card,Class 12 Marks Card,se26a125-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a125-marks_card.pdf,pending,Verification pending
+SE26A125,transfer_certificate,Transfer Certificate,se26a125-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a125-transfer_certificate.pdf,pending,Verification pending
+SE26B126,identity,Aadhaar Card,se26b126-identity.pdf,https://files.scholaris.demo.edu/students/se26b126-identity.pdf,verified,Clear copy verified
+SE26B126,marks_card,Class 12 Marks Card,se26b126-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b126-marks_card.pdf,verified,Clear copy verified
+SE26A127,identity,Aadhaar Card,se26a127-identity.pdf,https://files.scholaris.demo.edu/students/se26a127-identity.pdf,verified,Clear copy verified
+SE26A127,marks_card,Class 12 Marks Card,se26a127-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a127-marks_card.pdf,verified,Clear copy verified
+SE26A127,transfer_certificate,Transfer Certificate,se26a127-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a127-transfer_certificate.pdf,verified,Clear copy verified
+SE26B128,identity,Aadhaar Card,se26b128-identity.pdf,https://files.scholaris.demo.edu/students/se26b128-identity.pdf,verified,Clear copy verified
+SE26B128,marks_card,Class 12 Marks Card,se26b128-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b128-marks_card.pdf,verified,Clear copy verified
+CSE26A129,identity,Aadhaar Card,cse26a129-identity.pdf,https://files.scholaris.demo.edu/students/cse26a129-identity.pdf,verified,Clear copy verified
+CSE26A129,marks_card,Class 12 Marks Card,cse26a129-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a129-marks_card.pdf,verified,Clear copy verified
+CSE26A129,transfer_certificate,Transfer Certificate,cse26a129-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a129-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B130,identity,Aadhaar Card,cse26b130-identity.pdf,https://files.scholaris.demo.edu/students/cse26b130-identity.pdf,pending,Verification pending
+CSE26B130,marks_card,Class 12 Marks Card,cse26b130-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b130-marks_card.pdf,pending,Verification pending
+CSE26A131,identity,Aadhaar Card,cse26a131-identity.pdf,https://files.scholaris.demo.edu/students/cse26a131-identity.pdf,verified,Clear copy verified
+CSE26A131,marks_card,Class 12 Marks Card,cse26a131-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a131-marks_card.pdf,verified,Clear copy verified
+CSE26A131,transfer_certificate,Transfer Certificate,cse26a131-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a131-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B132,identity,Aadhaar Card,cse26b132-identity.pdf,https://files.scholaris.demo.edu/students/cse26b132-identity.pdf,verified,Clear copy verified
+CSE26B132,marks_card,Class 12 Marks Card,cse26b132-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b132-marks_card.pdf,verified,Clear copy verified
+AIML26A133,identity,Aadhaar Card,aiml26a133-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a133-identity.pdf,verified,Clear copy verified
+AIML26A133,marks_card,Class 12 Marks Card,aiml26a133-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a133-marks_card.pdf,verified,Clear copy verified
+AIML26A133,transfer_certificate,Transfer Certificate,aiml26a133-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a133-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B134,identity,Aadhaar Card,aiml26b134-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b134-identity.pdf,verified,Clear copy verified
+AIML26B134,marks_card,Class 12 Marks Card,aiml26b134-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b134-marks_card.pdf,verified,Clear copy verified
+AIML26A135,identity,Aadhaar Card,aiml26a135-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a135-identity.pdf,pending,Verification pending
+AIML26A135,marks_card,Class 12 Marks Card,aiml26a135-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a135-marks_card.pdf,pending,Verification pending
+AIML26A135,transfer_certificate,Transfer Certificate,aiml26a135-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a135-transfer_certificate.pdf,pending,Verification pending
+AIML26B136,identity,Aadhaar Card,aiml26b136-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b136-identity.pdf,verified,Clear copy verified
+AIML26B136,marks_card,Class 12 Marks Card,aiml26b136-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b136-marks_card.pdf,verified,Clear copy verified
+ECE26A137,identity,Aadhaar Card,ece26a137-identity.pdf,https://files.scholaris.demo.edu/students/ece26a137-identity.pdf,verified,Clear copy verified
+ECE26A137,marks_card,Class 12 Marks Card,ece26a137-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a137-marks_card.pdf,verified,Clear copy verified
+ECE26A137,transfer_certificate,Transfer Certificate,ece26a137-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a137-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B138,identity,Aadhaar Card,ece26b138-identity.pdf,https://files.scholaris.demo.edu/students/ece26b138-identity.pdf,verified,Clear copy verified
+ECE26B138,marks_card,Class 12 Marks Card,ece26b138-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b138-marks_card.pdf,verified,Clear copy verified
+ECE26A139,identity,Aadhaar Card,ece26a139-identity.pdf,https://files.scholaris.demo.edu/students/ece26a139-identity.pdf,verified,Clear copy verified
+ECE26A139,marks_card,Class 12 Marks Card,ece26a139-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a139-marks_card.pdf,verified,Clear copy verified
+ECE26A139,transfer_certificate,Transfer Certificate,ece26a139-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a139-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B140,identity,Aadhaar Card,ece26b140-identity.pdf,https://files.scholaris.demo.edu/students/ece26b140-identity.pdf,pending,Verification pending
+ECE26B140,marks_card,Class 12 Marks Card,ece26b140-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b140-marks_card.pdf,pending,Verification pending
+MECH26A141,identity,Aadhaar Card,mech26a141-identity.pdf,https://files.scholaris.demo.edu/students/mech26a141-identity.pdf,verified,Clear copy verified
+MECH26A141,marks_card,Class 12 Marks Card,mech26a141-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a141-marks_card.pdf,verified,Clear copy verified
+MECH26A141,transfer_certificate,Transfer Certificate,mech26a141-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a141-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B142,identity,Aadhaar Card,mech26b142-identity.pdf,https://files.scholaris.demo.edu/students/mech26b142-identity.pdf,verified,Clear copy verified
+MECH26B142,marks_card,Class 12 Marks Card,mech26b142-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b142-marks_card.pdf,verified,Clear copy verified
+MECH26A143,identity,Aadhaar Card,mech26a143-identity.pdf,https://files.scholaris.demo.edu/students/mech26a143-identity.pdf,verified,Clear copy verified
+MECH26A143,marks_card,Class 12 Marks Card,mech26a143-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a143-marks_card.pdf,verified,Clear copy verified
+MECH26A143,transfer_certificate,Transfer Certificate,mech26a143-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a143-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B144,identity,Aadhaar Card,mech26b144-identity.pdf,https://files.scholaris.demo.edu/students/mech26b144-identity.pdf,verified,Clear copy verified
+MECH26B144,marks_card,Class 12 Marks Card,mech26b144-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b144-marks_card.pdf,verified,Clear copy verified
+CA26A145,identity,Aadhaar Card,ca26a145-identity.pdf,https://files.scholaris.demo.edu/students/ca26a145-identity.pdf,pending,Verification pending
+CA26A145,marks_card,Class 12 Marks Card,ca26a145-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a145-marks_card.pdf,pending,Verification pending
+CA26A145,transfer_certificate,Transfer Certificate,ca26a145-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a145-transfer_certificate.pdf,pending,Verification pending
+CA26B146,identity,Aadhaar Card,ca26b146-identity.pdf,https://files.scholaris.demo.edu/students/ca26b146-identity.pdf,verified,Clear copy verified
+CA26B146,marks_card,Class 12 Marks Card,ca26b146-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b146-marks_card.pdf,verified,Clear copy verified
+CA26A147,identity,Aadhaar Card,ca26a147-identity.pdf,https://files.scholaris.demo.edu/students/ca26a147-identity.pdf,verified,Clear copy verified
+CA26A147,marks_card,Class 12 Marks Card,ca26a147-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a147-marks_card.pdf,verified,Clear copy verified
+CA26A147,transfer_certificate,Transfer Certificate,ca26a147-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a147-transfer_certificate.pdf,verified,Clear copy verified
+CA26B148,identity,Aadhaar Card,ca26b148-identity.pdf,https://files.scholaris.demo.edu/students/ca26b148-identity.pdf,verified,Clear copy verified
+CA26B148,marks_card,Class 12 Marks Card,ca26b148-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b148-marks_card.pdf,verified,Clear copy verified
+BA26A149,identity,Aadhaar Card,ba26a149-identity.pdf,https://files.scholaris.demo.edu/students/ba26a149-identity.pdf,verified,Clear copy verified
+BA26A149,marks_card,Class 12 Marks Card,ba26a149-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a149-marks_card.pdf,verified,Clear copy verified
+BA26A149,transfer_certificate,Transfer Certificate,ba26a149-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a149-transfer_certificate.pdf,verified,Clear copy verified
+BA26B150,identity,Aadhaar Card,ba26b150-identity.pdf,https://files.scholaris.demo.edu/students/ba26b150-identity.pdf,pending,Verification pending
+BA26B150,marks_card,Class 12 Marks Card,ba26b150-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b150-marks_card.pdf,pending,Verification pending
+BA26A151,identity,Aadhaar Card,ba26a151-identity.pdf,https://files.scholaris.demo.edu/students/ba26a151-identity.pdf,verified,Clear copy verified
+BA26A151,marks_card,Class 12 Marks Card,ba26a151-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26a151-marks_card.pdf,verified,Clear copy verified
+BA26A151,transfer_certificate,Transfer Certificate,ba26a151-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ba26a151-transfer_certificate.pdf,verified,Clear copy verified
+BA26B152,identity,Aadhaar Card,ba26b152-identity.pdf,https://files.scholaris.demo.edu/students/ba26b152-identity.pdf,verified,Clear copy verified
+BA26B152,marks_card,Class 12 Marks Card,ba26b152-marks_card.pdf,https://files.scholaris.demo.edu/students/ba26b152-marks_card.pdf,verified,Clear copy verified
+AT26A153,identity,Aadhaar Card,at26a153-identity.pdf,https://files.scholaris.demo.edu/students/at26a153-identity.pdf,verified,Clear copy verified
+AT26A153,marks_card,Class 12 Marks Card,at26a153-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a153-marks_card.pdf,verified,Clear copy verified
+AT26A153,transfer_certificate,Transfer Certificate,at26a153-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a153-transfer_certificate.pdf,verified,Clear copy verified
+AT26B154,identity,Aadhaar Card,at26b154-identity.pdf,https://files.scholaris.demo.edu/students/at26b154-identity.pdf,verified,Clear copy verified
+AT26B154,marks_card,Class 12 Marks Card,at26b154-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b154-marks_card.pdf,verified,Clear copy verified
+AT26A155,identity,Aadhaar Card,at26a155-identity.pdf,https://files.scholaris.demo.edu/students/at26a155-identity.pdf,pending,Verification pending
+AT26A155,marks_card,Class 12 Marks Card,at26a155-marks_card.pdf,https://files.scholaris.demo.edu/students/at26a155-marks_card.pdf,pending,Verification pending
+AT26A155,transfer_certificate,Transfer Certificate,at26a155-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/at26a155-transfer_certificate.pdf,pending,Verification pending
+AT26B156,identity,Aadhaar Card,at26b156-identity.pdf,https://files.scholaris.demo.edu/students/at26b156-identity.pdf,verified,Clear copy verified
+AT26B156,marks_card,Class 12 Marks Card,at26b156-marks_card.pdf,https://files.scholaris.demo.edu/students/at26b156-marks_card.pdf,verified,Clear copy verified
+SE26A157,identity,Aadhaar Card,se26a157-identity.pdf,https://files.scholaris.demo.edu/students/se26a157-identity.pdf,verified,Clear copy verified
+SE26A157,marks_card,Class 12 Marks Card,se26a157-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a157-marks_card.pdf,verified,Clear copy verified
+SE26A157,transfer_certificate,Transfer Certificate,se26a157-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a157-transfer_certificate.pdf,verified,Clear copy verified
+SE26B158,identity,Aadhaar Card,se26b158-identity.pdf,https://files.scholaris.demo.edu/students/se26b158-identity.pdf,verified,Clear copy verified
+SE26B158,marks_card,Class 12 Marks Card,se26b158-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b158-marks_card.pdf,verified,Clear copy verified
+SE26A159,identity,Aadhaar Card,se26a159-identity.pdf,https://files.scholaris.demo.edu/students/se26a159-identity.pdf,verified,Clear copy verified
+SE26A159,marks_card,Class 12 Marks Card,se26a159-marks_card.pdf,https://files.scholaris.demo.edu/students/se26a159-marks_card.pdf,verified,Clear copy verified
+SE26A159,transfer_certificate,Transfer Certificate,se26a159-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/se26a159-transfer_certificate.pdf,verified,Clear copy verified
+SE26B160,identity,Aadhaar Card,se26b160-identity.pdf,https://files.scholaris.demo.edu/students/se26b160-identity.pdf,pending,Verification pending
+SE26B160,marks_card,Class 12 Marks Card,se26b160-marks_card.pdf,https://files.scholaris.demo.edu/students/se26b160-marks_card.pdf,pending,Verification pending
+CSE26A161,identity,Aadhaar Card,cse26a161-identity.pdf,https://files.scholaris.demo.edu/students/cse26a161-identity.pdf,verified,Clear copy verified
+CSE26A161,marks_card,Class 12 Marks Card,cse26a161-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a161-marks_card.pdf,verified,Clear copy verified
+CSE26A161,transfer_certificate,Transfer Certificate,cse26a161-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a161-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B162,identity,Aadhaar Card,cse26b162-identity.pdf,https://files.scholaris.demo.edu/students/cse26b162-identity.pdf,verified,Clear copy verified
+CSE26B162,marks_card,Class 12 Marks Card,cse26b162-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b162-marks_card.pdf,verified,Clear copy verified
+CSE26A163,identity,Aadhaar Card,cse26a163-identity.pdf,https://files.scholaris.demo.edu/students/cse26a163-identity.pdf,verified,Clear copy verified
+CSE26A163,marks_card,Class 12 Marks Card,cse26a163-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26a163-marks_card.pdf,verified,Clear copy verified
+CSE26A163,transfer_certificate,Transfer Certificate,cse26a163-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/cse26a163-transfer_certificate.pdf,verified,Clear copy verified
+CSE26B164,identity,Aadhaar Card,cse26b164-identity.pdf,https://files.scholaris.demo.edu/students/cse26b164-identity.pdf,verified,Clear copy verified
+CSE26B164,marks_card,Class 12 Marks Card,cse26b164-marks_card.pdf,https://files.scholaris.demo.edu/students/cse26b164-marks_card.pdf,verified,Clear copy verified
+AIML26A165,identity,Aadhaar Card,aiml26a165-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a165-identity.pdf,pending,Verification pending
+AIML26A165,marks_card,Class 12 Marks Card,aiml26a165-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a165-marks_card.pdf,pending,Verification pending
+AIML26A165,transfer_certificate,Transfer Certificate,aiml26a165-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a165-transfer_certificate.pdf,pending,Verification pending
+AIML26B166,identity,Aadhaar Card,aiml26b166-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b166-identity.pdf,verified,Clear copy verified
+AIML26B166,marks_card,Class 12 Marks Card,aiml26b166-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b166-marks_card.pdf,verified,Clear copy verified
+AIML26A167,identity,Aadhaar Card,aiml26a167-identity.pdf,https://files.scholaris.demo.edu/students/aiml26a167-identity.pdf,verified,Clear copy verified
+AIML26A167,marks_card,Class 12 Marks Card,aiml26a167-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26a167-marks_card.pdf,verified,Clear copy verified
+AIML26A167,transfer_certificate,Transfer Certificate,aiml26a167-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/aiml26a167-transfer_certificate.pdf,verified,Clear copy verified
+AIML26B168,identity,Aadhaar Card,aiml26b168-identity.pdf,https://files.scholaris.demo.edu/students/aiml26b168-identity.pdf,verified,Clear copy verified
+AIML26B168,marks_card,Class 12 Marks Card,aiml26b168-marks_card.pdf,https://files.scholaris.demo.edu/students/aiml26b168-marks_card.pdf,verified,Clear copy verified
+ECE26A169,identity,Aadhaar Card,ece26a169-identity.pdf,https://files.scholaris.demo.edu/students/ece26a169-identity.pdf,verified,Clear copy verified
+ECE26A169,marks_card,Class 12 Marks Card,ece26a169-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a169-marks_card.pdf,verified,Clear copy verified
+ECE26A169,transfer_certificate,Transfer Certificate,ece26a169-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a169-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B170,identity,Aadhaar Card,ece26b170-identity.pdf,https://files.scholaris.demo.edu/students/ece26b170-identity.pdf,pending,Verification pending
+ECE26B170,marks_card,Class 12 Marks Card,ece26b170-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b170-marks_card.pdf,pending,Verification pending
+ECE26A171,identity,Aadhaar Card,ece26a171-identity.pdf,https://files.scholaris.demo.edu/students/ece26a171-identity.pdf,verified,Clear copy verified
+ECE26A171,marks_card,Class 12 Marks Card,ece26a171-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26a171-marks_card.pdf,verified,Clear copy verified
+ECE26A171,transfer_certificate,Transfer Certificate,ece26a171-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ece26a171-transfer_certificate.pdf,verified,Clear copy verified
+ECE26B172,identity,Aadhaar Card,ece26b172-identity.pdf,https://files.scholaris.demo.edu/students/ece26b172-identity.pdf,verified,Clear copy verified
+ECE26B172,marks_card,Class 12 Marks Card,ece26b172-marks_card.pdf,https://files.scholaris.demo.edu/students/ece26b172-marks_card.pdf,verified,Clear copy verified
+MECH26A173,identity,Aadhaar Card,mech26a173-identity.pdf,https://files.scholaris.demo.edu/students/mech26a173-identity.pdf,verified,Clear copy verified
+MECH26A173,marks_card,Class 12 Marks Card,mech26a173-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a173-marks_card.pdf,verified,Clear copy verified
+MECH26A173,transfer_certificate,Transfer Certificate,mech26a173-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a173-transfer_certificate.pdf,verified,Clear copy verified
+MECH26B174,identity,Aadhaar Card,mech26b174-identity.pdf,https://files.scholaris.demo.edu/students/mech26b174-identity.pdf,verified,Clear copy verified
+MECH26B174,marks_card,Class 12 Marks Card,mech26b174-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b174-marks_card.pdf,verified,Clear copy verified
+MECH26A175,identity,Aadhaar Card,mech26a175-identity.pdf,https://files.scholaris.demo.edu/students/mech26a175-identity.pdf,pending,Verification pending
+MECH26A175,marks_card,Class 12 Marks Card,mech26a175-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26a175-marks_card.pdf,pending,Verification pending
+MECH26A175,transfer_certificate,Transfer Certificate,mech26a175-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/mech26a175-transfer_certificate.pdf,pending,Verification pending
+MECH26B176,identity,Aadhaar Card,mech26b176-identity.pdf,https://files.scholaris.demo.edu/students/mech26b176-identity.pdf,verified,Clear copy verified
+MECH26B176,marks_card,Class 12 Marks Card,mech26b176-marks_card.pdf,https://files.scholaris.demo.edu/students/mech26b176-marks_card.pdf,verified,Clear copy verified
+CA26A177,identity,Aadhaar Card,ca26a177-identity.pdf,https://files.scholaris.demo.edu/students/ca26a177-identity.pdf,verified,Clear copy verified
+CA26A177,marks_card,Class 12 Marks Card,ca26a177-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a177-marks_card.pdf,verified,Clear copy verified
+CA26A177,transfer_certificate,Transfer Certificate,ca26a177-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a177-transfer_certificate.pdf,verified,Clear copy verified
+CA26B178,identity,Aadhaar Card,ca26b178-identity.pdf,https://files.scholaris.demo.edu/students/ca26b178-identity.pdf,verified,Clear copy verified
+CA26B178,marks_card,Class 12 Marks Card,ca26b178-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b178-marks_card.pdf,verified,Clear copy verified
+CA26A179,identity,Aadhaar Card,ca26a179-identity.pdf,https://files.scholaris.demo.edu/students/ca26a179-identity.pdf,verified,Clear copy verified
+CA26A179,marks_card,Class 12 Marks Card,ca26a179-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26a179-marks_card.pdf,verified,Clear copy verified
+CA26A179,transfer_certificate,Transfer Certificate,ca26a179-transfer_certificate.pdf,https://files.scholaris.demo.edu/students/ca26a179-transfer_certificate.pdf,verified,Clear copy verified
+CA26B180,identity,Aadhaar Card,ca26b180-identity.pdf,https://files.scholaris.demo.edu/students/ca26b180-identity.pdf,pending,Verification pending
+CA26B180,marks_card,Class 12 Marks Card,ca26b180-marks_card.pdf,https://files.scholaris.demo.edu/students/ca26b180-marks_card.pdf,pending,Verification pending

@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from app.core.security import decode_token
 from app.core.exceptions import UnauthorizedError, ForbiddenError
+from app.core.role_context import get_user_role_context
 from app.db.session import get_db
 
 bearer_scheme = HTTPBearer()
@@ -29,11 +30,14 @@ async def get_current_user(
     if not user:
         raise UnauthorizedError("User not found or inactive")
 
+    role_context = await get_user_role_context(db, str(user.id))
+
     return {
         "id": str(user.id),
         "institution_id": str(user.institution_id),
         "is_superuser": user.is_superuser,
         "email": user.email,
+        **role_context,
     }
 
 
